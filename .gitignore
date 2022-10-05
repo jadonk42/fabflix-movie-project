@@ -9,3 +9,4 @@
 #Added ignore files
 *.iml
 /out/
+/target/
