@@ -28,7 +28,7 @@ public class SingleStarServlet extends HttpServlet{
          */
 
         // Set the response to be a JSON object
-        response.setContentType("application/json"); // Response mime type
+        response.setContentType("application/json");
 
         // retrieves parameter id from url request
         String id = request.getParameter("id");

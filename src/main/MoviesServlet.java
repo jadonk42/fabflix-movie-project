@@ -22,5 +22,30 @@ public class MoviesServlet extends HttpServlet{
         /**
          * TODO: Implement JDBC to retrieve movies and return in a json format.
          */
+
+        // Establish connection with database and closes connection after being used
+        try (Connection conn = dataSource.getConnection()) {
+
+            // Construct a query with parameter based on ?
+            // ? = parameter
+            final String query = "SELECT";
+
+            // Declare our statement
+        } catch (Exception e) {
+            // Write error message JSON object to output
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", e.getMessage());
+            out.write(jsonObject.toString());
+
+            // Log the error for debugging
+            request.getServletContext().log("Error:", e);
+
+            // Set Error code status to 500(Internal Server Error)
+            response.setStatus(500);
+        } finally {
+            // close the connection
+            out.close();
+        }
+
     }
 }
