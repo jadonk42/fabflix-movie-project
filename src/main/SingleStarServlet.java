@@ -18,9 +18,18 @@ import java.sql.PreparedStatement;
 
 @WebServlet(name = "SingleStarServlet", urlPatterns = "/single-star")
 public class SingleStarServlet extends HttpServlet{
+    private static final long serialVersionUID = 2L;
 
     // Creates a datasource from the web.xml file
     private DataSource dataSource;
+
+    public void init(ServletConfig config) {
+        try {
+            dataSource = (DataSource) new InitialContext().lookup("");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         /**
@@ -47,6 +56,39 @@ public class SingleStarServlet extends HttpServlet{
             final String query = "SELECT";
 
             // Declare our statement
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            // Set parameter represented by "?" in query to if we get from url,
+            // num 1 indicates the first "?" in the query
+            statement.setString(1, id);
+
+            // Perform the query
+            ResultSet rs = statement.executeQuery();
+
+            // create a JSON array to store the results
+            JsonArray jsonArray = new JsonArray();
+
+            // Iterate through each row of rs
+            while (rs.next()) {
+                // Get the attributes from the results
+
+                // Store the attributes into a JSON object
+                JsonObject jsonObject = new JsonObject();
+
+                // Add the JSON Object to the array
+                jsonArray.add(jsonObject);
+            }
+
+            // close the connections
+            rs.close();
+            statement.close();
+
+            // Write JSON string to output
+            out.write(jsonArray.toString());
+
+            // Set response status to 200 (OK)
+            response.setStatus(200);
+
         } catch (Exception e) {
             // Write error message JSON object to output
             JsonObject jsonObject = new JsonObject();
@@ -62,9 +104,5 @@ public class SingleStarServlet extends HttpServlet{
             // close the connection
             out.close();
         }
-
-
-        // Perform the query
-        // ResultSet rs = s
     }
 }

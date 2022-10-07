@@ -14,9 +14,22 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 @WebServlet(name = "SingleMovieServlet", urlPatterns = "/single-movie")
 public class SingleMovieServlet extends HttpServlet{
+    private static final long serialVersionUID = 2L;
+
+    // Create a database which is registered in web.xml
+    private DataSource dataSource;
+
+    public void init(ServletConfig config) {
+        try {
+            dataSource = (DataSource) new InitialContext().lookup("");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         /**
@@ -43,6 +56,39 @@ public class SingleMovieServlet extends HttpServlet{
             final String query = "SELECT";
 
             // Declare our statement
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            // Set the parameter represented by "?" in the query to the id we get from url,
+            // num 1 indicates the first "?" in the query
+            statement.setString(1, id);
+
+            // Perform the query
+            ResultSet rs = statement.executeQuery();
+
+            // create a JSON array to store the results
+            JsonArray jsonArray = new JsonArray();
+
+            // Iterate through each row of rs
+            while (rs.next()) {
+                // Get the attributes from the results
+
+                // Store the attributes into a JSON object
+                JsonObject jsonObject = new JsonObject();
+
+                // Add the JSON Object to the array
+                jsonArray.add(jsonObject);
+            }
+
+            // close the connections
+            rs.close();
+            statement.close();
+
+            // Write JSON string to output
+            out.write(jsonArray.toString());
+
+            // Set response status to 200 (OK)
+            response.setStatus(200);
+
         } catch (Exception e) {
             // Write error message JSON object to output
             JsonObject jsonObject = new JsonObject();

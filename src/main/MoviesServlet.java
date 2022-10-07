@@ -14,14 +14,33 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 @WebServlet(najme = "MoviesServlet", urlPatterns = "/movies")
 public class MoviesServlet extends HttpServlet{
+    private static final long serialVersionUID = 2L;
+
+    // Create a database which is registered in web.xml
+    private DataSource dataSource;
+
+    public void init(ServletConfig config) {
+        try {
+            dataSource = (DataSource) new InitialContext().lookup("");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         /**
          * TODO: Implement JDBC to retrieve movies and return in a json format.
          */
+
+        // Set the response to be a JSON object
+        response.setContentType("application/json");
+
+        // Output stream to STDOUT
+        PrintWriter out = response.getWriter();
 
         // Establish connection with database and closes connection after being used
         try (Connection conn = dataSource.getConnection()) {
@@ -31,6 +50,35 @@ public class MoviesServlet extends HttpServlet{
             final String query = "SELECT";
 
             // Declare our statement
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            // Perform the query
+            ResultSet rs = statement.executeQuery();
+
+            // create a JSON array to store the results
+            JsonArray jsonArray = new JsonArray();
+
+            // Iterate through each row of rs
+            while (rs.next()) {
+                // Get the attributes from the results
+
+                // Store the attributes into a JSON object
+                JsonObject jsonObject = new JsonObject();
+
+                // Add the JSON Object to the array
+                jsonArray.add(jsonObject);
+            }
+
+            // close the connections
+            rs.close();
+            statement.close();
+
+            // Creates a log to localhost
+            request.getServletContext().log("getting " + jsonArray.size() + " results");
+
+            // Set response status to 200 (OK)
+            response.setStatus(200);
+
         } catch (Exception e) {
             // Write error message JSON object to output
             JsonObject jsonObject = new JsonObject();
