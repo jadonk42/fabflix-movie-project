@@ -18,23 +18,20 @@ import java.sql.PreparedStatement;
 
 @WebServlet(najme = "MoviesServlet", urlPatterns = "/movies")
 public class MoviesServlet extends HttpServlet{
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 1L;
 
     // Create a database which is registered in web.xml
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("");
+            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
         } catch (NamingException e) {
             e.printStackTrace();
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        /**
-         * TODO: Implement JDBC to retrieve movies and return in a json format.
-         */
 
         // Set the response to be a JSON object
         response.setContentType("application/json");
