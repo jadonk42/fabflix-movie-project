@@ -53,7 +53,9 @@ public class SingleStarServlet extends HttpServlet{
 
             // Construct a query with parameter based on ?
             // ? = parameter
-            final String query = "SELECT";
+            final String query = "SELECT s.name, s.birthYear, GROUP_CONCAT(m.title) " +
+                    "FROM stars AS s, movies AS m, stars_in_movies AS sm " +
+                    "WHERE s.id = ? AND s.id = sm.starId AND sm.movieId = m.id";
 
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(query);
@@ -71,9 +73,15 @@ public class SingleStarServlet extends HttpServlet{
             // Iterate through each row of rs
             while (rs.next()) {
                 // Get the attributes from the results
+                String starName = rs.getString("s.name");
+                String starDob = rs.getString("s.birthYear");
+                String movieTitles = rs.getString("GROUP_CONCAT(m.title)");
 
                 // Store the attributes into a JSON object
                 JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("star_name", starName);
+                jsonObject.addProperty("star_dob", starDob);
+                jsonObject.addProperty("movie_titles", movieTitles);
 
                 // Add the JSON Object to the array
                 jsonArray.add(jsonObject);

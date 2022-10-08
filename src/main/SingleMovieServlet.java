@@ -53,7 +53,13 @@ public class SingleMovieServlet extends HttpServlet{
 
             // Construct a query with parameter based on ?
             // ? = parameter
-            final String query = "SELECT";
+            final String query = "SELECT m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name), " +
+                    "GROUP_CONCAT(DISTINCT s.name), r.rating " +
+                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm " +
+                    "WHERE m.id = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
+                    "AND m.id = sm.movieId AND sm.starId = s.id " +
+                    "GROUP BY m.title, m.year, m.director, r.rating";
 
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(query);
@@ -71,9 +77,21 @@ public class SingleMovieServlet extends HttpServlet{
             // Iterate through each row of rs
             while (rs.next()) {
                 // Get the attributes from the results
+                String movieTitle = rs.getString("m.title");
+                String movieYear = rs.getString("m.year");
+                String movieDirector = rs.getString("m.director");
+                String movieGenres = rs.getString("GROUP_CONCAT(DISTINCT g.name)");
+                String movieStars = rs.getString("GROUP_CONCAT(DISTINCT s.name)");
+                String movieRating = rs.getString("r.rating");
 
                 // Store the attributes into a JSON object
                 JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("movie_title", movieTitle);
+                jsonObject.addProperty("movie_year", movieYear);
+                jsonObject.addProperty("movie_director", movieDirector);
+                jsonObject.addProperty("movie_genres", movieGenres);
+                jsonObject.addProperty("movie_stars", movieStars);
+                jsonObject.addProperty("movie_rating", movieRating);
 
                 // Add the JSON Object to the array
                 jsonArray.add(jsonObject);
