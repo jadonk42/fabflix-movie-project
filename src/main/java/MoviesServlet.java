@@ -16,9 +16,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 
-@WebServlet(name = "SingleMovieServlet", urlPatterns = "/single-movie")
-public class SingleMovieServlet extends HttpServlet{
-    private static final long serialVersionUID = 2L;
+@WebServlet(name = "MoviesServlet", urlPatterns = "/api/movies")
+public class MoviesServlet extends HttpServlet{
+    private static final long serialVersionUID = 1L;
 
     // Create a database which is registered in web.xml
     private DataSource dataSource;
@@ -36,34 +36,26 @@ public class SingleMovieServlet extends HttpServlet{
         // Set the response to be a JSON object
         response.setContentType("application/json");
 
-        // retrieves parameter id from url request
-        String id = request.getParameter("id");
-
-        // log message for debugging
-        request.getServletContext().log("getting id: " + id);
-
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
         // Establish connection with database and closes connection after being used
         try (Connection conn = dataSource.getConnection()) {
 
-            // Construct a query with parameter based on ?
-            // ? = parameter
-            final String query = "SELECT m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name), " +
-                    "GROUP_CONCAT(DISTINCT s.name), r.rating " +
+            // Construct a query to retrieve the 20 top rated movies
+            final String query = "SELECT m.title, m.year, m.director, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name SEPARATOR ','), ',', 3), " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name SEPARATOR ','), ',', 3), r.rating " +
                     "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
                     "stars_in_movies as sm " +
-                    "WHERE m.id = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
-                    "AND m.id = sm.movieId AND sm.starId = s.id " +
-                    "GROUP BY m.title, m.year, m.director, r.rating";
+                    "WHERE m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND m.id = sm.movieId " +
+                    "AND sm.starId = s.id " +
+                    "GROUP BY m.title, m.year, m.director, r.rating " +
+                    "ORDER BY r.rating DESC " +
+                    "LIMIT 20";
 
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(query);
-
-            // Set the parameter represented by "?" in the query to the id we get from url,
-            // num 1 indicates the first "?" in the query
-            statement.setString(1, id);
 
             // Perform the query
             ResultSet rs = statement.executeQuery();
@@ -77,8 +69,10 @@ public class SingleMovieServlet extends HttpServlet{
                 String movieTitle = rs.getString("m.title");
                 String movieYear = rs.getString("m.year");
                 String movieDirector = rs.getString("m.director");
-                String movieGenres = rs.getString("GROUP_CONCAT(DISTINCT g.name)");
-                String movieStars = rs.getString("GROUP_CONCAT(DISTINCT s.name)");
+                String movieGenres =
+                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name SEPARATOR ','), ',', 3)");
+                String movieStars =
+                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name SEPARATOR ','), ',', 3)");
                 String movieRating = rs.getString("r.rating");
 
                 // Store the attributes into a JSON object
@@ -98,8 +92,8 @@ public class SingleMovieServlet extends HttpServlet{
             rs.close();
             statement.close();
 
-            // Write JSON string to output
-            out.write(jsonArray.toString());
+            // Creates a log to localhost
+            request.getServletContext().log("getting " + jsonArray.size() + " results");
 
             // Set response status to 200 (OK)
             response.setStatus(200);
@@ -119,5 +113,6 @@ public class SingleMovieServlet extends HttpServlet{
             // close the connection
             out.close();
         }
+
     }
 }

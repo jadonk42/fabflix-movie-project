@@ -16,11 +16,11 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 
-@WebServlet(name = "SingleStarServlet", urlPatterns = "/single-star")
-public class SingleStarServlet extends HttpServlet{
+@WebServlet(name = "SingleMovieServlet", urlPatterns = "/api/single-movie")
+public class SingleMovieServlet extends HttpServlet{
     private static final long serialVersionUID = 2L;
 
-    // Creates a datasource from the web.xml file
+    // Create a database which is registered in web.xml
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
@@ -50,14 +50,18 @@ public class SingleStarServlet extends HttpServlet{
 
             // Construct a query with parameter based on ?
             // ? = parameter
-            final String query = "SELECT s.name, s.birthYear, GROUP_CONCAT(m.title) " +
-                    "FROM stars AS s, movies AS m, stars_in_movies AS sm " +
-                    "WHERE s.id = ? AND s.id = sm.starId AND sm.movieId = m.id";
+            final String query = "SELECT m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name), " +
+                    "GROUP_CONCAT(DISTINCT s.name), r.rating " +
+                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm " +
+                    "WHERE m.id = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
+                    "AND m.id = sm.movieId AND sm.starId = s.id " +
+                    "GROUP BY m.title, m.year, m.director, r.rating";
 
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(query);
 
-            // Set parameter represented by "?" in query to if we get from url,
+            // Set the parameter represented by "?" in the query to the id we get from url,
             // num 1 indicates the first "?" in the query
             statement.setString(1, id);
 
@@ -70,15 +74,21 @@ public class SingleStarServlet extends HttpServlet{
             // Iterate through each row of rs
             while (rs.next()) {
                 // Get the attributes from the results
-                String starName = rs.getString("s.name");
-                String starDob = rs.getString("s.birthYear");
-                String movieTitles = rs.getString("GROUP_CONCAT(m.title)");
+                String movieTitle = rs.getString("m.title");
+                String movieYear = rs.getString("m.year");
+                String movieDirector = rs.getString("m.director");
+                String movieGenres = rs.getString("GROUP_CONCAT(DISTINCT g.name)");
+                String movieStars = rs.getString("GROUP_CONCAT(DISTINCT s.name)");
+                String movieRating = rs.getString("r.rating");
 
                 // Store the attributes into a JSON object
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("star_name", starName);
-                jsonObject.addProperty("star_dob", starDob);
-                jsonObject.addProperty("movie_titles", movieTitles);
+                jsonObject.addProperty("movie_title", movieTitle);
+                jsonObject.addProperty("movie_year", movieYear);
+                jsonObject.addProperty("movie_director", movieDirector);
+                jsonObject.addProperty("movie_genres", movieGenres);
+                jsonObject.addProperty("movie_stars", movieStars);
+                jsonObject.addProperty("movie_rating", movieRating);
 
                 // Add the JSON Object to the array
                 jsonArray.add(jsonObject);
