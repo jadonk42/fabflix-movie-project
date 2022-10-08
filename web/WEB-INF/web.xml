@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <!-- Register the DataSource which defined in META-INF/database.xml-->
+    <!-- Register the DataSource which defined in META-INF/content.xml-->
     <resource-ref>
         <description>MySQL FabFlix DataSource</description>
         <res-ref-name>jdbc/moviedb</res-ref-name>
