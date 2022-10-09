@@ -13,8 +13,6 @@ function splitCsvStringToList(csv_string, limit){
  * @param resultData jsonObject
  */
 function populateHTMLWithMovieData(resultData) {
-    console.log("populateHTMLWithMovieData() running")
-
     let movieTableElement = jQuery("#movie_table_body");
     let htmlString = "";
     for(let i =0; i < Math.min(20, resultData.length); ++i){

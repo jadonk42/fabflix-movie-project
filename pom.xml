@@ -41,7 +41,7 @@
     </properties>
 
     <build>
-        <finalName>cs122b-fall22-project1-api-example</finalName>
+        <finalName>cs-122b-group-37</finalName>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
             <plugin>
