@@ -92,6 +92,7 @@ public class MoviesServlet extends HttpServlet{
 
             // Creates a log to localhost
             request.getServletContext().log("getting " + jsonArray.size() + " results");
+            out.write(jsonArray.toString());
 
             // Set response status to 200 (OK)
             response.setStatus(200);
