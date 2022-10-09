@@ -41,7 +41,7 @@ public class MoviesServlet extends HttpServlet{
         try (Connection conn = dataSource.getConnection()) {
 
             // Construct a query to retrieve the 20 top rated movies
-            final String query = "SELECT m.title, m.year, m.director, " +
+            final String query = "SELECT m.id, m.title, m.year, m.director, " +
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name SEPARATOR ','), ',', 3), " +
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name SEPARATOR ','), ',', 3), r.rating " +
                     "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
@@ -64,6 +64,7 @@ public class MoviesServlet extends HttpServlet{
             // Iterate through each row of rs
             while (rs.next()) {
                 // Get the attributes from the results
+                String movieId = rs.getString("m.id");
                 String movieTitle = rs.getString("m.title");
                 String movieYear = rs.getString("m.year");
                 String movieDirector = rs.getString("m.director");
@@ -75,6 +76,7 @@ public class MoviesServlet extends HttpServlet{
 
                 // Store the attributes into a JSON object
                 JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("movie_id", movieId);
                 jsonObject.addProperty("movie_title", movieTitle);
                 jsonObject.addProperty("movie_year", movieYear);
                 jsonObject.addProperty("movie_director", movieDirector);

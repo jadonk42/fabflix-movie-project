@@ -34,7 +34,7 @@ public class SingleMovieServlet extends HttpServlet{
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        System.out.println("DOING GET HERE WE GO");
         // Set the response to be a JSON object
         response.setContentType("application/json");
 
@@ -53,7 +53,7 @@ public class SingleMovieServlet extends HttpServlet{
             // Construct a query with parameter based on ?
             // ? = parameter
             final String query = "SELECT m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name), " +
-                    "GROUP_CONCAT(DISTINCT s.name), r.rating " +
+                    "GROUP_CONCAT(DISTINCT s.name), GROUP_CONCAT(DISTINCT s.id), r.rating " +
                     "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
                     "stars_in_movies as sm " +
                     "WHERE m.id = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
@@ -70,8 +70,8 @@ public class SingleMovieServlet extends HttpServlet{
             // Perform the query
             ResultSet rs = statement.executeQuery();
 
-            // create a JSON array to store the results
-            JsonArray jsonArray = new JsonArray();
+            // Create jsonObject to return
+            JsonObject jsonObject = new JsonObject();
 
             // Iterate through each row of rs
             while (rs.next()) {
@@ -81,19 +81,17 @@ public class SingleMovieServlet extends HttpServlet{
                 String movieDirector = rs.getString("m.director");
                 String movieGenres = rs.getString("GROUP_CONCAT(DISTINCT g.name)");
                 String movieStars = rs.getString("GROUP_CONCAT(DISTINCT s.name)");
+                String movieStarIds = rs.getString( "GROUP_CONCAT(DISTINCT s.id)");
                 String movieRating = rs.getString("r.rating");
 
                 // Store the attributes into a JSON object
-                JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("movie_title", movieTitle);
                 jsonObject.addProperty("movie_year", movieYear);
                 jsonObject.addProperty("movie_director", movieDirector);
                 jsonObject.addProperty("movie_genres", movieGenres);
                 jsonObject.addProperty("movie_stars", movieStars);
+                jsonObject.addProperty("movie_star_ids", movieStarIds);
                 jsonObject.addProperty("movie_rating", movieRating);
-
-                // Add the JSON Object to the array
-                jsonArray.add(jsonObject);
             }
 
             // close the connections
@@ -101,7 +99,7 @@ public class SingleMovieServlet extends HttpServlet{
             statement.close();
 
             // Write JSON string to output
-            out.write(jsonArray.toString());
+            out.write(jsonObject.toString());
 
             // Set response status to 200 (OK)
             response.setStatus(200);

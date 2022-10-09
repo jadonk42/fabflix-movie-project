@@ -19,7 +19,7 @@ function populateHTMLWithMovieData(resultData) {
         htmlString += "<tr>";
         htmlString +=
             "<td>" +
-            "<a href=\"single-movie.html?id=\"" + resultData[i]["movie_id"] + "\">"
+            "<a href=\"single-movie.html?id=" + resultData[i]["movie_id"] + "\">"
             + resultData[i]["movie_title"] +
             "</a>" +
             "</td>";
@@ -34,7 +34,7 @@ function populateHTMLWithMovieData(resultData) {
     movieTableElement.append(htmlString);
 }
 
-console.log('testing');
+console.log('About to send GET request to MoviesServlet');
 
 jQuery.ajax({
     dataType: "json",

@@ -50,7 +50,7 @@ public class SingleStarServlet extends HttpServlet{
 
             // Construct a query with parameter based on ?
             // ? = parameter
-            final String query = "SELECT s.name, s.birthYear, GROUP_CONCAT(m.title) " +
+            final String query = "SELECT s.name, s.birthYear, GROUP_CONCAT(m.title), GROUP_CONCAT(m.id)" +
                     "FROM stars AS s, movies AS m, stars_in_movies AS sm " +
                     "WHERE s.id = ? AND s.id = sm.starId AND sm.movieId = m.id";
 
@@ -64,8 +64,8 @@ public class SingleStarServlet extends HttpServlet{
             // Perform the query
             ResultSet rs = statement.executeQuery();
 
-            // create a JSON array to store the results
-            JsonArray jsonArray = new JsonArray();
+            // create a JSON object to store the results
+            JsonObject jsonObject = new JsonObject();
 
             // Iterate through each row of rs
             while (rs.next()) {
@@ -73,15 +73,13 @@ public class SingleStarServlet extends HttpServlet{
                 String starName = rs.getString("s.name");
                 String starDob = rs.getString("s.birthYear");
                 String movieTitles = rs.getString("GROUP_CONCAT(m.title)");
+                String movieIds = rs.getString("GROUP_CONCAT(m.id)");
 
                 // Store the attributes into a JSON object
-                JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("star_name", starName);
                 jsonObject.addProperty("star_dob", starDob);
                 jsonObject.addProperty("movie_titles", movieTitles);
-
-                // Add the JSON Object to the array
-                jsonArray.add(jsonObject);
+                jsonObject.addProperty("movie_ids", movieIds);
             }
 
             // close the connections
@@ -89,7 +87,7 @@ public class SingleStarServlet extends HttpServlet{
             statement.close();
 
             // Write JSON string to output
-            out.write(jsonArray.toString());
+            out.write(jsonObject.toString());
 
             // Set response status to 200 (OK)
             response.setStatus(200);
