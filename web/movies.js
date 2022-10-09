@@ -8,7 +8,6 @@ function splitCsvStringToList(csv_string, limit){
     return list_string;
 }
 
-
 /**
  * Takes json data about movie and puts the data into the html element.
  * @param resultData jsonObject
@@ -37,10 +36,12 @@ function populateHTMLWithMovieData(resultData) {
     movieTableElement.append(htmlString);
 }
 
+console.log('testing');
 
 jQuery.ajax({
     dataType: "json",
     method: "GET",
-    url: "/api/movies",
-    success: (resultData) => populateHTMLWithMovieData(resultData)
+    url: "api/movies",
+    success: (resultData) => populateHTMLWithMovieData(resultData),
+    error: (resultData) => console.log(resultData)
 });

@@ -5,6 +5,7 @@
          version="4.0">
 
     <!-- Register the DataSource which defined in META-INF/content.xml-->
+
     <resource-ref>
         <description>MySQL FabFlix DataSource</description>
         <res-ref-name>jdbc/moviedb</res-ref-name>
