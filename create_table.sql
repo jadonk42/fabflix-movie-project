@@ -38,7 +38,7 @@ CREATE TABLE genres_in_movies(
 );
 
 
-CREATE TABLE creditCards(
+CREATE TABLE creditcards(
     id varchar(20) NOT NULL,
     firstName varchar(50) NOT NULL,
     lastName varchar(50) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE customers(
     email varchar(50) NOT NULL,
     password varchar(20) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY (ccId) REFERENCES creditCards(id)
+    FOREIGN KEY (ccId) REFERENCES creditcards(id)
 );
 
 
