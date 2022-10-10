@@ -4,7 +4,7 @@ function splitCsvStringToList(csv_string, limit){
     for(let i = 0; i < Math.min(csv_list.length, limit); ++i){
         list_string += "<li>" + csv_list[i] + "</li>"
     }
-    result += "</ol>"
+    list_string += "</ol>"
     return list_string;
 }
 
