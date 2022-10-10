@@ -71,9 +71,9 @@ public class MoviesServlet extends HttpServlet{
                 String movieGenres =
                         rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name SEPARATOR ','), ',', 3)");
                 String movieStars =
-                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name SEPARATOR ','), ',', 3)");
+                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ',')");
                 String movieStarIds =
-                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id SEPARATOR ','), ',', 3)");
+                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3)");
                 String movieRating = rs.getString("r.rating");
 
                 // Store the attributes into a JSON object
