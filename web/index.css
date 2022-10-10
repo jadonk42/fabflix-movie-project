@@ -1,0 +1,21 @@
+h1 {
+    font-family: Comic Sans MS, serif;
+}
+
+/* Dark Mode */
+.dark-mode {
+    background-color: #121212;
+    color: #E1D9D1;
+}
+
+/* HyperLink Color */
+a {
+    color: #795CB2;
+}
+
+/* Dark mode Button */
+button {
+    position:absolute;
+    top:6px;
+    right:6px;
+}

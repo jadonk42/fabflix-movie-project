@@ -27,7 +27,7 @@ function convertMoviesIntoHyperlinks(csv_movie_string, csv_movieId_string){
     for(let i=0; i < csv_star_list.length; ++i){
         result += "<a href=\"single-movie.html?id=" + csv_starId_list[i] + "\">";
         result += csv_star_list[i] +"</a>";
-        if(i != csv_star_list.length-1){
+        if(i !== csv_star_list.length-1){
             result += ", ";
         }
     }
