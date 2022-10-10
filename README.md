@@ -9,7 +9,23 @@
 
 ### Database Setup:
 1. Download the latest version of MySQL if you don't have it
-2. Login to mysql as the root user
+2. Login to mysql as the root user: ```local> mysql -u root -p```
+3. Create user CS122B and grant privileges
+```
+mysql> CREATE USER 'CS122B'@'localhost' IDENTIFIED BY 'FabFlix';
+mysql> GRANT ALL PRIVILEGES ON * . * TO 'CS122B'@'localhost';
+mysql> quit;
+```
+4. Create the moviedb database
+```
+local> mysql -u CS122B -p
+mysql> CREATE DATABASE IF NOT EXISTS moviedb;
+mysql> USE moviedb;
+mysql> quit;
+```
+5. Create the moviedb tables using the create_table.sql file: ```local> mysql -u CS122B-p < create_table.sql```
+6. Populate the database data using the movie-data.sql file: ```local> mysql -u CS122B -p --database=moviedb < PATH/movie-data.sql```
+
 
 ### Option 1: Deploy from AWS instance
 1. SSH into your AWS instance. EX: ```ssh -i My.pem ubuntu@ec2-myipaddress.us-west-2.compute.amazonaws.com```
@@ -21,9 +37,10 @@
 7. Refresh your tomcat manager and deploy the app.
 8. Head to the web page of your AWS instance.
 
-### Option 2: Local
+### Option 2: Local(Intellij)
 1. Clone the github repo using ```git clone https://github.com/uci-jherold2-teaching/cs122b-fall-team-37.git```
 2. Open the Project in Intellij
+3. If you don't have the moviedb database setup, follow the **Database Setup** instructions
 3. If using a different database account, change the username and password in ```web/META_INF/context.xml```
 4. Build project using maven.
 5. Set up tomcat to use your war file (IntelliJ has configuration with Tomcat).
@@ -42,4 +59,5 @@
 - Implemented frontend portion of the movies page, single movie page, and single star page
 - Connected frontend to backend servlets in order to populate pages with info from database.
 - Project 1 demo video
+- README
 
