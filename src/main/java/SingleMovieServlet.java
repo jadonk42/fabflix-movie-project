@@ -26,7 +26,6 @@ public class SingleMovieServlet extends HttpServlet{
 
     public void init(ServletConfig config) {
         try {
-            Context initContext = new InitialContext();
             dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
         } catch (NamingException e) {
             e.printStackTrace();

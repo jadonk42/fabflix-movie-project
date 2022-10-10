@@ -40,7 +40,13 @@ function populateHTMLWithSingleStarData(resultData){
     let htmlString = "";
 
     htmlString += "<h3>" + resultData["star_name"] + "</h3>";
-    htmlString += "<p>Born in " + resultData["star_dob"] + "</p>";
+    if(resultData["star_dob"] != null){
+        htmlString += "<p>Born in " + resultData["star_dob"] + "</p>";
+    }
+    else{
+        htmlString += "Birth Year: N/A"
+    }
+    console.log(resultData["star_dob"])
     htmlString += "<p>Stars in " + convertMoviesIntoHyperlinks(resultData["movie_titles"], resultData["movie_ids"]) + "</p>";
 
     starInformationList.append(htmlString);
