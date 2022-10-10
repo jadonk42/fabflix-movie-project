@@ -19,15 +19,15 @@ function getParameterByName(target) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function convertMoviesIntoHyperlinks(csv_movie_string, csv_movieId_string){
-    let csv_star_list = csv_movie_string.split(",");
-    let csv_starId_list = csv_movieId_string.split(",");
+function convertCSVIntoHyperlinks(csv_string, csv_Id_string){
+    let csv_list = csv_string.split(",");
+    let csvId_list = csv_Id_string.split(",");
     let result = "";
 
-    for(let i=0; i < csv_star_list.length; ++i){
-        result += "<a href=\"single-movie.html?id=" + csv_starId_list[i] + "\">";
-        result += csv_star_list[i] +"</a>";
-        if(i !== csv_star_list.length-1){
+    for(let i=0; i < csv_list.length; ++i){
+        result += "<a href=\"single-movie.html?id=" + csvId_list[i] + "\">";
+        result += csv_list[i] +"</a>";
+        if(i !== csv_list.length-1){
             result += ", ";
         }
     }
@@ -46,7 +46,7 @@ function populateHTMLWithSingleStarData(resultData){
     else{
         htmlString += "Birth Year: N/A"
     }
-    htmlString += "<p>Stars in " + convertMoviesIntoHyperlinks(resultData["movie_titles"], resultData["movie_ids"]) + "</p>";
+    htmlString += "<p>Stars in " + convertCSVIntoHyperlinks(resultData["movie_titles"], resultData["movie_ids"]) + "</p>";
 
     starInformationList.append(htmlString);
 }

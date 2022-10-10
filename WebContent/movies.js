@@ -4,8 +4,24 @@ function splitCsvStringToList(csv_string, limit){
     for(let i = 0; i < Math.min(csv_list.length, limit); ++i){
         list_string += "<li>" + csv_list[i] + "</li>"
     }
-
+    result += "</ol>"
     return list_string;
+}
+
+function convertCSVIntoHyperlinks(csv_string, csv_Id_string){
+    let csv_list = csv_string.split(",");
+    let csvId_list = csv_Id_string.split(",");
+    let result = "<ol>";
+
+    for(let i=0; i < 3; ++i){
+        result += "<li> <a href=\"single-star.html?id=" + csvId_list[i] + "\">";
+        result += csv_list[i] +"</a></li>";
+        if(i !== csv_list.length-1){
+            result += ", ";
+        }
+    }
+    result += "</ol>"
+    return result;
 }
 
 /**
@@ -26,7 +42,7 @@ function populateHTMLWithMovieData(resultData) {
         htmlString += "<td>" + resultData[i]["movie_year"] + "</td>";
         htmlString += "<td>" + resultData[i]["movie_director"] + "</td>";
         htmlString += "<td>" + splitCsvStringToList(resultData[i]["movie_genres"], 3) +"</td>";
-        htmlString += "<td>" + splitCsvStringToList(resultData[i]["movie_stars"], 3)+"</td>";
+        htmlString += "<td>" + convertCSVIntoHyperlinks(resultData[i]["movie_stars"], resultData[i]["movie_star_ids"])+"</td>";
         htmlString += "<td>" + resultData[i]["movie_rating"] + "</td>";
         htmlString += "</tr>";
     }
