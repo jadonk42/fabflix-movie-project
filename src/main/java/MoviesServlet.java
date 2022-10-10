@@ -42,8 +42,8 @@ public class MoviesServlet extends HttpServlet{
             // Construct a query to retrieve the 20 top rated movies
             final String query = "SELECT m.id, m.title, m.year, m.director, " +
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name SEPARATOR ','), ',', 3), " +
-                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name SEPARATOR ','), ',', 3), " +
-                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id SEPARATOR ','), ',', 3), r.rating " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3), " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3), r.rating " +
                     "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
                     "stars_in_movies as sm " +
                     "WHERE m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND m.id = sm.movieId " +

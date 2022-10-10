@@ -13,12 +13,9 @@ function convertCSVIntoHyperlinks(csv_string, csv_Id_string){
     let csvId_list = csv_Id_string.split(",");
     let result = "<ol>";
 
-    for(let i=0; i < 3; ++i){
+    for(let i=0; i < Math.min(csv_list.length, 3); ++i){
         result += "<li> <a href=\"single-star.html?id=" + csvId_list[i] + "\">";
         result += csv_list[i] +"</a></li>";
-        if(i !== csv_list.length-1){
-            result += ", ";
-        }
     }
     result += "</ol>"
     return result;
