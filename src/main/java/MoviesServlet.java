@@ -71,7 +71,7 @@ public class MoviesServlet extends HttpServlet{
                 String movieGenres =
                         rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name SEPARATOR ','), ',', 3)");
                 String movieStars =
-                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ',')");
+                        rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3)");
                 String movieStarIds =
                         rs.getString("SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3)");
                 String movieRating = rs.getString("r.rating");
