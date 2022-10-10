@@ -11,21 +11,21 @@ https://drive.google.com/file/d/1FotQA1gxqtqJZssnmm1z-wYQLJvLQ9ut/view?usp=shari
 ### Database Setup:
 1. Download the latest version of MySQL if you don't have it
 2. Login to mysql as the root user: ```local> mysql -u root -p```
-3. Create user mytestuser and grant privileges
+3. Create user CS122B and grant privileges
 ```
-mysql> CREATE USER 'mytestuser'@'localhost' IDENTIFIED BY 'FabFlix';
-mysql> GRANT ALL PRIVILEGES ON * . * TO 'mytestuser'@'localhost';
+mysql> CREATE USER 'CS122B'@'localhost' IDENTIFIED BY 'FabFlix';
+mysql> GRANT ALL PRIVILEGES ON * . * TO 'CS122B'@'localhost';
 mysql> quit;
 ```
 4. Create the moviedb database
 ```
-local> mysql -u mytestuser -p
+local> mysql -u CS122B -p
 mysql> CREATE DATABASE IF NOT EXISTS moviedb;
 mysql> USE moviedb;
 mysql> quit;
 ```
-5. Create the moviedb tables using the create_table.sql file: ```local> mysql -u mytestuser-p < create_table.sql```
-6. Populate the database data using the movie-data.sql file: ```local> mysql -u mytestuser -p --database=moviedb < PATH/movie-data.sql```
+5. Create the moviedb tables using the create_table.sql file: ```local> mysql -u CS122B -p < create_table.sql```
+6. Populate the database data using the movie-data.sql file: ```local> mysql -u CS122B -p --database=moviedb < PATH/movie-data.sql```
 
 
 ### Option 1: Deploy from AWS instance
