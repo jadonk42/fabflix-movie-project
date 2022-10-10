@@ -47,7 +47,7 @@ public class MoviesServlet extends HttpServlet{
                     "stars_in_movies as sm " +
                     "WHERE m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND m.id = sm.movieId " +
                     "AND sm.starId = s.id " +
-                    "GROUP BY m.title, m.year, m.director, r.rating " +
+                    "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                     "ORDER BY r.rating DESC " +
                     "LIMIT 20";
 
