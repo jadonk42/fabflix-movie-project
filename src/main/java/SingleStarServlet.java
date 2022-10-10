@@ -87,6 +87,7 @@ public class SingleStarServlet extends HttpServlet{
             statement.close();
 
             // Write JSON string to output
+            System.out.println(jsonObject);
             out.write(jsonObject.toString());
 
             // Set response status to 200 (OK)

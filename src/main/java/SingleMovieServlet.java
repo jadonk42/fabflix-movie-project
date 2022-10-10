@@ -33,7 +33,6 @@ public class SingleMovieServlet extends HttpServlet{
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("DOING GET HERE WE GO");
         // Set the response to be a JSON object
         response.setContentType("application/json");
 

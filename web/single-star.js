@@ -46,7 +46,6 @@ function populateHTMLWithSingleStarData(resultData){
     else{
         htmlString += "Birth Year: N/A"
     }
-    console.log(resultData["star_dob"])
     htmlString += "<p>Stars in " + convertMoviesIntoHyperlinks(resultData["movie_titles"], resultData["movie_ids"]) + "</p>";
 
     starInformationList.append(htmlString);
