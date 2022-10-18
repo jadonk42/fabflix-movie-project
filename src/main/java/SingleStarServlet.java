@@ -50,7 +50,8 @@ public class SingleStarServlet extends HttpServlet{
 
             // Construct a query with parameter based on ?
             // ? = parameter
-            final String query = "SELECT s.name, s.birthYear, GROUP_CONCAT(m.title), GROUP_CONCAT(m.id)" +
+            final String query = "SELECT s.name, s.birthYear, GROUP_CONCAT(m.title ORDER BY m.year DESC) as movie_years, " +
+                    "GROUP_CONCAT(m.id ORDER BY m.year DESC) as movie_ids " +
                     "FROM stars AS s, movies AS m, stars_in_movies AS sm " +
                     "WHERE s.id = ? AND s.id = sm.starId AND sm.movieId = m.id";
 
@@ -72,8 +73,8 @@ public class SingleStarServlet extends HttpServlet{
                 // Get the attributes from the results
                 String starName = rs.getString("s.name");
                 String starDob = rs.getString("s.birthYear");
-                String movieTitles = rs.getString("GROUP_CONCAT(m.title)");
-                String movieIds = rs.getString("GROUP_CONCAT(m.id)");
+                String movieTitles = rs.getString("movie_years");
+                String movieIds = rs.getString("movie_ids");
 
                 // Store the attributes into a JSON object
                 jsonObject.addProperty("star_name", starName);

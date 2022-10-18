@@ -50,8 +50,8 @@ public class SingleMovieServlet extends HttpServlet{
 
             // Construct a query with parameter based on ?
             // ? = parameter
-            final String query = "SELECT m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name), " +
-                    "GROUP_CONCAT(DISTINCT s.name ORDER BY s.id), GROUP_CONCAT(DISTINCT s.id ORDER BY s.id), r.rating " +
+            final String query = "SELECT m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name) as movie_genres, " +
+                    "GROUP_CONCAT(DISTINCT s.name ORDER BY s.id) as movie_starrings, GROUP_CONCAT(DISTINCT s.id ORDER BY s.id) as movie_starring_ids, r.rating " +
                     "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
                     "stars_in_movies as sm " +
                     "WHERE m.id = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
@@ -77,9 +77,9 @@ public class SingleMovieServlet extends HttpServlet{
                 String movieTitle = rs.getString("m.title");
                 String movieYear = rs.getString("m.year");
                 String movieDirector = rs.getString("m.director");
-                String movieGenres = rs.getString("GROUP_CONCAT(DISTINCT g.name)");
-                String movieStars = rs.getString("GROUP_CONCAT(DISTINCT s.name ORDER BY s.id)");
-                String movieStarIds = rs.getString( "GROUP_CONCAT(DISTINCT s.id ORDER BY s.id)");
+                String movieGenres = rs.getString("movie_genres");
+                String movieStars = rs.getString("movie_starrings");
+                String movieStarIds = rs.getString( "movie_starring_ids");
                 String movieRating = rs.getString("r.rating");
 
                 // Store the attributes into a JSON object

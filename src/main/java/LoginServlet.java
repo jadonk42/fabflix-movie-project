@@ -40,9 +40,15 @@ public class LoginServlet extends HttpServlet{
 
         // Establish connection with database and closes connection after being used
         try (Connection conn = dataSource.getConnection()) {
-            final String query = "SELECT EXISTS (SELECT *  FROM customers AS c " +
+
+            /**
+             * Two criteria for login:
+             * 1.Username exists (for the correct message to show if not)
+             * 2.Password matches password for the given username (both must exist).
+             */
+            final String query = "SELECT EXISTS (SELECT c.email  FROM customers AS c " +
                     "WHERE c.email = ?) AS user_exists, " +
-                    "EXISTS (SELECT *  FROM customers AS c " +
+                    "EXISTS (SELECT c.email, c.password  FROM customers AS c " +
                     "WHERE c.email = ? AND c.password = ?) AS password_correct";
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(query);
@@ -64,11 +70,17 @@ public class LoginServlet extends HttpServlet{
                 pass_correct = rs.getString("password_correct");
             }
 
+
             if (Integer.parseInt(user_exists) == 1 && Integer.parseInt(pass_correct) == 1) {
                 request.getSession().setAttribute("user",  new User(username));
                 jsonObject.addProperty("status", "success");
             } else{
                 jsonObject.addProperty("status", "fail");
+                if (Integer.parseInt(user_exists) != 1) {
+                    jsonObject.addProperty("message", "Username does not exist");
+                } else {
+                    jsonObject.addProperty("message", "Incorrect password");
+                }
             }
             // close the connections
             rs.close();
