@@ -1,3 +1,25 @@
+/**
+ * Retrieve parameter from request URL, matching by parameter name
+ * @param target String
+ * @returns {*}
+ */
+function getParameterByName(target) {
+    // Get request URL
+    let url = window.location.href;
+    // Encode target parameter name to url encoding
+    target = target.replace(/[\[\]]/g, "\\$&");
+
+    // Ues regular expression to find matched parameter value
+    let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+
+    // Return the decoded parameter value
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+
 function splitCsvStringToList(csv_string, limit){
     let csv_list = csv_string.split(",")
     let list_string = "<ol>"
@@ -47,12 +69,37 @@ function populateHTMLWithMovieData(resultData) {
     movieTableElement.append(htmlString);
 }
 
-console.log('About to send GET request to MoviesServlet');
+let method = getParameterByName('method');
+let sort = getParameterByName('sort');
+if (sort == null){
+    sort = "rating"
+}
 
-jQuery.ajax({
-    dataType: "json",
-    method: "GET",
-    url: "api/movies",
-    success: (resultData) => populateHTMLWithMovieData(resultData),
-    error: (resultData) => console.log(resultData)
-});
+console.log('About to send GET request to MoviesServlet!');
+//if no method, default is top movies of a certain kind
+if (method == null) {
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: "api/movies?sort=" + sort,
+        success: (resultData) => populateHTMLWithMovieData(resultData),
+        error: (resultData) => console.log(resultData)
+    });
+}
+else if (method =="search") {
+    let name = getParameterByName('method');
+    let year = getParameterByName('year');
+    let director = getParameterByName('director');
+    let star = getParameterByName('star');
+
+    let url = `api/movies?method=search&name={name}&year={year}&director={director}&star={star}&sort={sort}`;
+
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: url,
+        success: (resultData) => populateHTMLWithMovieData(resultData),
+        error: (resultData) => console.log(resultData)
+    });
+}
+

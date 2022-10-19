@@ -17,25 +17,20 @@ import java.sql.*;
 @WebServlet(name = "MoviesServlet", urlPatterns = "/api/movies")
 public class MoviesServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
-    private static final String getMoviesQuery = "SELECT m.id, m.title, m.year, m.director, " +
+    private static final String getAllMoviesQuery = "SELECT m.id, m.title, m.year, m.director, " +
             "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
             "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
             "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
             "r.rating " +
-            "FROM Top20Movies as T, movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+            "FROM TopMovies as T, movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
             "stars_in_movies as sm " +
             "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
             "m.id = sm.movieId AND sm.starId = s.id " +
             "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
             "ORDER BY r.rating DESC " +
             "LIMIT 20";
-    private static final String top20Movies = "WITH Top20Movies AS ( " +
-            "SELECT movieId, rating " +
-            "FROM ratings " +
-            "ORDER BY rating DESC " +
-            "LIMIT 20)";
 
-    private static final String getTop20MoviesQuery = top20Movies + "\n" + getMoviesQuery;
+    //private static final String getAllMoviesQuery = topMoviesRated + "\n" + getMoviesQuery;
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
@@ -48,15 +43,27 @@ public class MoviesServlet extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
+        String sort = request.getParameter("sort");
+        String method = request.getParameter("method");
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(getTop20MoviesQuery);
+            PreparedStatement statement;
+            if(method == null) {
+                if(sort.equals("rating")) {
+                    statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating());
+                } else {
+                    statement = conn.prepareStatement(getQueryStatementForAllMoviesByName());
+                }
+            } else {
+                statement = conn.prepareStatement("");
+            }
+
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
             while (rs.next()) {
-                jsonArray.add(getTop20MoviesAsJson(rs));
+                jsonArray.add(getMoviesAsJson(rs));
             }
             rs.close();
             statement.close();
@@ -77,7 +84,7 @@ public class MoviesServlet extends HttpServlet{
         }
     }
 
-    private JsonObject getTop20MoviesAsJson(ResultSet rs) throws SQLException {
+    private JsonObject getMoviesAsJson(ResultSet rs) throws SQLException {
         String movieId = rs.getString("m.id");
         String movieTitle = rs.getString("m.title");
         String movieYear = rs.getString("m.year");
@@ -101,5 +108,23 @@ public class MoviesServlet extends HttpServlet{
         jsonObject.addProperty("movie_star_ids", movieStarIds);
 
         return jsonObject;
+    }
+
+    private String getQueryStatementForAllMoviesByRating() {
+        String topMoviesRated = "WITH TopMovies AS ( " +
+                "SELECT movieId, rating " +
+                "FROM ratings " +
+                "ORDER BY rating DESC " +
+                "LIMIT 20)";
+        return topMoviesRated + "\n" + getAllMoviesQuery;
+    }
+
+    private String getQueryStatementForAllMoviesByName() {
+        String topMoviesAlphabetical = "WITH TopMovies AS ( " +
+                "SELECT id as movieId " +
+                "FROM movies " +
+                "ORDER BY title ASC " +
+                "LIMIT 20)";
+        return topMoviesAlphabetical + "\n" + getAllMoviesQuery;
     }
 }
