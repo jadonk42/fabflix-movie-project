@@ -1,7 +1,6 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletConfig;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.sql.DataSource;
+import java.net.HttpURLConnection;
 import java.sql.*;
 
 @WebServlet(name = "MoviesServlet", urlPatterns = "/api/movies")
@@ -58,14 +58,12 @@ public class MoviesServlet extends HttpServlet{
             while (rs.next()) {
                 jsonArray.add(getTop20MoviesAsJson(rs));
             }
-
             rs.close();
             statement.close();
-
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
 
-            response.setStatus(200);
+            response.setStatus(HttpURLConnection.HTTP_OK);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
@@ -73,7 +71,7 @@ public class MoviesServlet extends HttpServlet{
             out.write(jsonObject.toString());
 
             request.getServletContext().log("Error:", e);
-            response.setStatus(500);
+            response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
         } finally {
             out.close();
         }
