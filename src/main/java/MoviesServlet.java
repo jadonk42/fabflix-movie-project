@@ -17,8 +17,25 @@ import java.sql.*;
 @WebServlet(name = "MoviesServlet", urlPatterns = "/api/movies")
 public class MoviesServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
+    private static final String getMoviesQuery = "SELECT m.id, m.title, m.year, m.director, " +
+            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+            "r.rating " +
+            "FROM Top20Movies as T, movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+            "stars_in_movies as sm " +
+            "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+            "m.id = sm.movieId AND sm.starId = s.id " +
+            "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+            "ORDER BY r.rating DESC " +
+            "LIMIT 20";
+    private static final String top20Movies = "WITH Top20Movies AS ( " +
+            "SELECT movieId, rating " +
+            "FROM ratings " +
+            "ORDER BY rating DESC " +
+            "LIMIT 20)";
 
-    // Create a database which is registered in web.xml
+    private static final String getTop20MoviesQuery = top20Movies + "\n" + getMoviesQuery;
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
@@ -30,93 +47,61 @@ public class MoviesServlet extends HttpServlet{
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Set the response to be a JSON object
         response.setContentType("application/json");
-
-        // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
-        // Establish connection with database and closes connection after being used
         try (Connection conn = dataSource.getConnection()) {
-
-            // Construct a query to retrieve the 20 top rated movies
-            final String query = "SELECT m.id, m.title, m.year, m.director, " +
-                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
-                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
-                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, r.rating " +
-                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                    "stars_in_movies as sm " +
-                    "WHERE m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND m.id = sm.movieId " +
-                    "AND sm.starId = s.id " +
-                    "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                    "ORDER BY r.rating DESC " +
-                    "LIMIT 20";
-
-            // Declare our statement
-            PreparedStatement statement = conn.prepareStatement(query);
-
-            // Perform the query
+            PreparedStatement statement = conn.prepareStatement(getTop20MoviesQuery);
             ResultSet rs = statement.executeQuery();
-
-            // create a JSON array to store the results
             JsonArray jsonArray = new JsonArray();
 
-            // Iterate through each row of rs
             while (rs.next()) {
-                // Get the attributes from the results
-                String movieId = rs.getString("m.id");
-                String movieTitle = rs.getString("m.title");
-                String movieYear = rs.getString("m.year");
-                String movieDirector = rs.getString("m.director");
-                String movieGenres =
-                        rs.getString("movie_genres");
-                String movieStars =
-                        rs.getString("movie_starrings");
-                String movieStarIds =
-                        rs.getString("movie_starring_ids");
-                String movieRating = rs.getString("r.rating");
-
-                // Store the attributes into a JSON object
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("movie_id", movieId);
-                jsonObject.addProperty("movie_title", movieTitle);
-                jsonObject.addProperty("movie_year", movieYear);
-                jsonObject.addProperty("movie_director", movieDirector);
-                jsonObject.addProperty("movie_genres", movieGenres);
-                jsonObject.addProperty("movie_stars", movieStars);
-                jsonObject.addProperty("movie_rating", movieRating);
-                jsonObject.addProperty("movie_star_ids", movieStarIds);
-
-                // Add the JSON Object to the array
-                jsonArray.add(jsonObject);
+                jsonArray.add(getTop20MoviesAsJson(rs));
             }
 
-            // close the connections
             rs.close();
             statement.close();
 
-            // Creates a log to localhost
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
 
-            // Set response status to 200 (OK)
             response.setStatus(200);
 
         } catch (Exception e) {
-            // Write error message JSON object to output
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
             out.write(jsonObject.toString());
 
-            // Log the error for debugging
             request.getServletContext().log("Error:", e);
-
-            // Set Error code status to 500(Internal Server Error)
             response.setStatus(500);
         } finally {
-            // close the connection
             out.close();
         }
+    }
 
+    private JsonObject getTop20MoviesAsJson(ResultSet rs) throws SQLException {
+        String movieId = rs.getString("m.id");
+        String movieTitle = rs.getString("m.title");
+        String movieYear = rs.getString("m.year");
+        String movieDirector = rs.getString("m.director");
+        String movieGenres =
+                rs.getString("movie_genres");
+        String movieStars =
+                rs.getString("movie_starrings");
+        String movieStarIds =
+                rs.getString("movie_starring_ids");
+        String movieRating = rs.getString("r.rating");
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("movie_id", movieId);
+        jsonObject.addProperty("movie_title", movieTitle);
+        jsonObject.addProperty("movie_year", movieYear);
+        jsonObject.addProperty("movie_director", movieDirector);
+        jsonObject.addProperty("movie_genres", movieGenres);
+        jsonObject.addProperty("movie_stars", movieStars);
+        jsonObject.addProperty("movie_rating", movieRating);
+        jsonObject.addProperty("movie_star_ids", movieStarIds);
+
+        return jsonObject;
     }
 }
