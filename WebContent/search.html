@@ -18,20 +18,24 @@
 </div>
 <br><br>
 
-<label>Movie name:</label>
-<input type="text" class="searchBar" placeholder="Search.."><br><br>
-<label>Year:</label>
-<input type="text" class="searchBar" placeholder="Search.."><br><br>
-<label>Director:</label>
-<input type="text" class="searchBar" placeholder="Search.."><br><br>
-<label>Stars:</label>
-<input type="text" class="searchBar" placeholder="Search.."><br><br>
+<form action="movies.html">
+    <input type="hidden" name="method" value="search" />
 
-<button onclick="handleSearch()">Search</button>
+    <label>Movie name:</label>
+    <input type="text" name = "name" class="searchBar" placeholder="Search.."><br><br>
+    <label>Year:      </label>
+    <input type="text" name = "year" class="searchBar" placeholder="Search.."><br><br>
+    <label>Director:  </label>
+    <input type="text" name = "director" class="searchBar" placeholder="Search.."><br><br>
+    <label>Star:     </label>
+    <input type="text" name = "star" class="searchBar" placeholder="Search.."><br><br>
+
+    <input type="submit" value="Search" class="sortButton">
+</form>
 
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="movies.js"></script>
+<script src="search.js"></script>
 
 </html>

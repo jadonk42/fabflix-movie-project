@@ -2,19 +2,6 @@ h1 {
     font-family: Comic Sans MS, serif;
 }
 
-/* Dark mode Button */
-button {
-    position:absolute;
-    top:6px;
-    right:6px;
-}
-
-/* Dark Mode */
-.dark-mode {
-    background-color: #141d26;
-    color: #E1D9D1;
-}
-
 /* Movie table */
 table {
     border: 1px solid;

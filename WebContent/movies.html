@@ -21,7 +21,7 @@
 <h1>Movies</h1>
 <br>
 
-<form action="movies.html">
+<form id="sort_form">
     <label>Sort by: </label>
     <select id="sortBy" name="sortBy">
         <option value="ratingDesc">Rating (High to Low)</option>
@@ -29,8 +29,8 @@
         <option value="alphaAsc">Name (A to Z)</option>
         <option value="alphaDesc">Name (Z to A)</option>
     </select>
-    <input type="submit" value="Sort" class="sortButton">
 </form>
+<button onclick="handleSort()">Sort</button>
 
 <br>
 

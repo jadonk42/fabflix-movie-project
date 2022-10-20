@@ -20,6 +20,23 @@ function getParameterByName(target) {
 }
 
 
+function removeSortByFromQueryString(queryString) {
+    queryString = queryString.replace("&sortBy=ratingAsc", "");
+    queryString = queryString.replace("&sortBy=ratingDesc", "");
+    queryString = queryString.replace("&sortBy=alphaAsc", "");
+    queryString = queryString.replace("&sortBy=alphaDesc", "");
+    return queryString;
+}
+
+let sort_form = jQuery("#sort_form");
+function handleSort() {
+    //need to remove because otherwise, the sortBy param will stay and never be updated
+    let queryString = removeSortByFromQueryString(window.location.search);
+    window.location.replace("movies.html" + queryString + "&" +sort_form.serialize());
+}
+sort_form.submit(handleSort);
+
+
 function splitCsvStringToList(csv_string, limit){
     let csv_list = csv_string.split(",")
     let list_string = "<ol>"
@@ -87,12 +104,12 @@ if (method == null) {
     });
 }
 else if (method =="search") {
-    let name = getParameterByName('method');
+    let name = getParameterByName('name');
     let year = getParameterByName('year');
     let director = getParameterByName('director');
     let star = getParameterByName('star');
 
-    let url = `api/movies?method=search&name={name}&year={year}&director={director}&star={star}&sort={sort}`;
+    let url = `api/movies/search?name=${name}&year=${year}&director=${director}&star=${star}&sortBy=${sortBy}`;
 
     jQuery.ajax({
         dataType: "json",

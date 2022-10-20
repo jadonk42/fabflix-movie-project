@@ -14,8 +14,8 @@ import javax.sql.DataSource;
 import java.net.HttpURLConnection;
 import java.sql.*;
 
-@WebServlet(name = "MoviesServlet", urlPatterns = "/api/movies")
-public class MoviesServlet extends HttpServlet{
+@WebServlet(name = "SearchMovieServlet", urlPatterns = "/api/movies/search")
+public class SearchMovieServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
 
     private DataSource dataSource;
@@ -31,27 +31,33 @@ public class MoviesServlet extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         String sortBy = request.getParameter("sortBy");
+        String name = request.getParameter("name");
+        String year = request.getParameter("year");
+        String director = request.getParameter("director");
+        String star = request.getParameter("star");
 
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating(sortBy));
+                statement = conn.prepareStatement(getQueryStatementForMoviesByRating(sortBy, name, year, director, star));
             }
             else if (sortBy.equals("alphaDesc") || sortBy.equals("alphaAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(sortBy));
+                statement = conn.prepareStatement(getQueryStatementForMoviesByName(sortBy, name, year, director, star));
             }
             else {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(sortBy));
+                return;
             }
 
+            System.out.println(statement);
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
             while (rs.next()) {
                 jsonArray.add(getMoviesAsJson(rs));
             }
+
             rs.close();
             statement.close();
             request.getServletContext().log("getting " + jsonArray.size() + " results");
@@ -97,7 +103,7 @@ public class MoviesServlet extends HttpServlet{
         return jsonObject;
     }
 
-    private String getQueryStatementForAllMoviesByRating(String sortBy) {
+    private String getQueryStatementForMoviesByRating(String sortBy, String name, String year, String director, String star) {
         String mode;
         if (sortBy.equals("ratingDesc")) {
             mode = "desc";
@@ -118,22 +124,38 @@ public class MoviesServlet extends HttpServlet{
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY r.rating " + mode + " " +
                 "LIMIT 20";
-        String topMoviesRated = "WITH TopMovies AS ( " +
-                "SELECT movieId, rating " +
-                "FROM ratings " +
-                "ORDER BY rating " + mode + " " +
+        String topMoviesResults = "WITH TopMovies AS ( " +
+                "SELECT DISTINCT(m.id) as movieId " +
+                "FROM ratings as r, movies as m, stars_in_movies as sm, stars as s " +
+                "WHERE m.id = sm.movieId AND r.movieId = m.id AND s.id = sm.starId ";
+        if (name != "" && name != null) {
+            topMoviesResults += "AND m.title LIKE '" + name +  "%' ";
+        }
+        if (isNumeric(year)) {
+            topMoviesResults += "AND m.year = " + year + " ";
+        }
+        if (director != "" && director != null) {
+            topMoviesResults += "AND m.director LIKE '" + director +  "%' ";
+        }
+        if (star != "" && star != null) {
+            topMoviesResults += "AND s.name LIKE '" + star +  "%' ";
+        }
+
+        topMoviesResults += "ORDER BY r.rating " + mode + " " +
                 "LIMIT 20)";
-        return topMoviesRated + "\n" + getAllMoviesQuery;
+
+        return topMoviesResults + "\n" + getAllMoviesQuery;
     }
 
-    private String getQueryStatementForAllMoviesByName(String sortBy) {
+    private String getQueryStatementForMoviesByName(String sortBy, String name, String year, String director, String star) {
         String mode;
-        if (sortBy.equals("alphaDesc")) {
+        if (sortBy.equals("ratingDesc")) {
             mode = "desc";
         }
         else {
             mode = "asc";
         }
+
         String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
@@ -144,14 +166,37 @@ public class MoviesServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY m.title " + mode + " " +
+                "ORDER BY r.rating " + mode + " " +
                 "LIMIT 20";
-
-        String topMoviesAlphabetical = "WITH TopMovies AS ( " +
-                "SELECT id as movieId " +
-                "FROM movies " +
-                "ORDER BY title " + mode + " " +
+        String topMoviesResults = "WITH TopMovies AS ( " +
+                "SELECT DISTINCT(m.id) as movieId " +
+                "FROM movies as m, stars_in_movies as sm, stars as s " +
+                "WHERE m.id = sm.movieId AND s.id = sm.starId ";
+        if (name != "" && name != null) {
+            topMoviesResults += "AND m.title LIKE '" + name +  "%' ";
+        }
+        if (isNumeric(year)) {
+            topMoviesResults += "AND m.year = " + year + " ";
+        }
+        if (director != "" && director != null) {
+            topMoviesResults += "AND m.director LIKE '" + director +  "%' ";
+        }
+        if (star != "" && star != null) {
+            topMoviesResults += "AND s.name LIKE '" + star +  "%' ";
+        }
+        topMoviesResults += "ORDER BY m.title " + mode + " " +
                 "LIMIT 20)";
-        return topMoviesAlphabetical + "\n" + getAllMoviesQuery;
+
+        return topMoviesResults + "\n" + getAllMoviesQuery;
+    }
+
+    private boolean isNumeric(String year) {
+        try {
+            Integer.parseInt(year);
+            return true;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
     }
 }
