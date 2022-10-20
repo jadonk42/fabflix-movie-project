@@ -119,4 +119,7 @@ else if (method =="search") {
         error: (resultData) => console.log(resultData)
     });
 }
+else if (method =="browse") {
+    
+}
 
