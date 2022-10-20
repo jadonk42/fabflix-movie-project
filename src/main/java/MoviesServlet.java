@@ -17,6 +17,7 @@ import java.sql.*;
 @WebServlet(name = "MoviesServlet", urlPatterns = "/api/movies")
 public class MoviesServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
+    /*
     private static final String getAllMoviesQuery = "SELECT m.id, m.title, m.year, m.director, " +
             "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
             "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
@@ -28,7 +29,7 @@ public class MoviesServlet extends HttpServlet{
             "m.id = sm.movieId AND sm.starId = s.id " +
             "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
             "ORDER BY r.rating DESC " +
-            "LIMIT 20";
+            "LIMIT 20";*/
 
     //private static final String getAllMoviesQuery = topMoviesRated + "\n" + getMoviesQuery;
     private DataSource dataSource;
@@ -43,19 +44,24 @@ public class MoviesServlet extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
-        String sort = request.getParameter("sort");
+        String sortBy = request.getParameter("sortBy");
         String method = request.getParameter("method");
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
-            if(method == null) {
-                if(sort.equals("rating")) {
-                    statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating());
-                } else {
-                    statement = conn.prepareStatement(getQueryStatementForAllMoviesByName());
+            if (method == null) {
+                if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
+                    statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating(sortBy));
                 }
-            } else {
+                else if (sortBy.equals("alphaDesc") || sortBy.equals("alphaAsc")) {
+                    statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(sortBy));
+                }
+                else {
+                    return;
+                }
+            }
+            else {
                 statement = conn.prepareStatement("");
             }
 
@@ -110,20 +116,60 @@ public class MoviesServlet extends HttpServlet{
         return jsonObject;
     }
 
-    private String getQueryStatementForAllMoviesByRating() {
+    private String getQueryStatementForAllMoviesByRating(String sortBy) {
+        String mode;
+        if (sortBy.equals("ratingDesc")) {
+            mode = "desc";
+        }
+        else {
+            mode = "asc";
+        }
+
+        String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM TopMovies as T, movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm " +
+                "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "m.id = sm.movieId AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY r.rating " + mode + " " +
+                "LIMIT 20";
         String topMoviesRated = "WITH TopMovies AS ( " +
                 "SELECT movieId, rating " +
                 "FROM ratings " +
-                "ORDER BY rating DESC " +
+                "ORDER BY rating " + mode + " " +
                 "LIMIT 20)";
         return topMoviesRated + "\n" + getAllMoviesQuery;
     }
 
-    private String getQueryStatementForAllMoviesByName() {
+    private String getQueryStatementForAllMoviesByName(String sortBy) {
+        String mode;
+        if (sortBy.equals("alphaDesc")) {
+            mode = "desc";
+        }
+        else {
+            mode = "asc";
+        }
+        String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM TopMovies as T, movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm " +
+                "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "m.id = sm.movieId AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY r.rating " + mode + " " +
+                "LIMIT 20";
+
         String topMoviesAlphabetical = "WITH TopMovies AS ( " +
                 "SELECT id as movieId " +
                 "FROM movies " +
-                "ORDER BY title ASC " +
+                "ORDER BY title " + mode + " " +
                 "LIMIT 20)";
         return topMoviesAlphabetical + "\n" + getAllMoviesQuery;
     }

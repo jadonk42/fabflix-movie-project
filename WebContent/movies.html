@@ -19,6 +19,21 @@
 <br>
 
 <h1>Movies</h1>
+<br>
+
+<form action="movies.html">
+    <label>Sort by: </label>
+    <select id="sortBy" name="sortBy">
+        <option value="ratingDesc">Rating (High to Low)</option>
+        <option value="ratingAsc">Rating (Low to High)</option>
+        <option value="alphaAsc">Name (A to Z)</option>
+        <option value="alphaDesc">Name (Z to A)</option>
+    </select>
+    <input type="submit" value="Sort" class="sortButton">
+</form>
+
+<br>
+
 
 <!-- Add CSS later-->
 <table id=movies_table border="1">

@@ -70,9 +70,9 @@ function populateHTMLWithMovieData(resultData) {
 }
 
 let method = getParameterByName('method');
-let sort = getParameterByName('sort');
-if (sort == null){
-    sort = "rating"
+let sortBy = getParameterByName('sortBy');
+if (sortBy == null){
+    sortBy = "ratingDesc";
 }
 
 console.log('About to send GET request to MoviesServlet!');
@@ -81,7 +81,7 @@ if (method == null) {
     jQuery.ajax({
         dataType: "json",
         method: "GET",
-        url: "api/movies?sort=" + sort,
+        url: "api/movies?sortBy=" + sortBy,
         success: (resultData) => populateHTMLWithMovieData(resultData),
         error: (resultData) => console.log(resultData)
     });
