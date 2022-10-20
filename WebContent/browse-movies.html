@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Browse Movies</title>
+    <link rel="stylesheet" href="css/browse-movies.css">
+</head>
+<body>
+
+<div class="topNavigationBar">
+    <a href="index.html">Home </a>
+    <a href="login.html">Login </a>
+    <a href="movies.html">Movies</a>
+    <a href="search.html">Search</a>
+    <a href="browse.html">Browse</a>
+
+</div>
+
+<h1>Movie Browse Results</h1>
+<br>
+
+<!-- Add CSS later-->
+<table id=movies_browse_table border="1">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Year</th>
+        <th>Director</th>
+        <th>Genres</th>
+        <th>Starring</th>
+        <th>Rating</th>
+    </tr>
+    </thead>
+
+    <tbody id=movie_browse_table_body></tbody>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="browse-movies.js"></script>
+
+</body>
+</html>

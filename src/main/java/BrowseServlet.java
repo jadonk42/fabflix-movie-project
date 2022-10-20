@@ -16,7 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 @WebServlet(name = "BrowseMovieServlet", value = "/api/browse")
-public class BrowseMovieServlet extends HttpServlet {
+public class BrowseServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private static final String genreQuery = "SELECT DISTINCT name as genre_types FROM genres ORDER BY name ASC";
