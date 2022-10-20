@@ -61,8 +61,14 @@ public class MoviesServlet extends HttpServlet{
                     return;
                 }
             }
-            else {
+            else if (method.equals("search")){
                 statement = conn.prepareStatement("");
+            }
+            else if(method.equals("browse")) {
+                statement = conn.prepareStatement("");
+            }
+            else{
+                return; //invalid parameters
             }
 
             ResultSet rs = statement.executeQuery();
@@ -163,7 +169,7 @@ public class MoviesServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode + " " +
+                "ORDER BY m.title " + mode + " " +
                 "LIMIT 20";
 
         String topMoviesAlphabetical = "WITH TopMovies AS ( " +
