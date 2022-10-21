@@ -120,6 +120,6 @@ else if (method =="search") {
     });
 }
 else if (method =="browse") {
-    
+
 }
 

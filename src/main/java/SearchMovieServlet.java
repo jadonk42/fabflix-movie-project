@@ -58,6 +58,7 @@ public class SearchMovieServlet extends HttpServlet{
                 jsonArray.add(getMoviesAsJson(rs));
             }
 
+            System.out.println("done getting json");
             rs.close();
             statement.close();
             request.getServletContext().log("getting " + jsonArray.size() + " results");
@@ -129,20 +130,20 @@ public class SearchMovieServlet extends HttpServlet{
                 "FROM ratings as r, movies as m, stars_in_movies as sm, stars as s " +
                 "WHERE m.id = sm.movieId AND r.movieId = m.id AND s.id = sm.starId ";
         if (name != "" && name != null) {
-            topMoviesResults += "AND m.title LIKE '" + name +  "%' ";
+            topMoviesResults += "AND (m.title = '" + name + "' OR m.title LIKE '" + name +  "%' OR m.title LIKE '" + "% " + name + "%') " ;
         }
         if (isNumeric(year)) {
             topMoviesResults += "AND m.year = " + year + " ";
         }
         if (director != "" && director != null) {
-            topMoviesResults += "AND m.director LIKE '" + director +  "%' ";
+            topMoviesResults += "AND (m.director = '" + director + "' OR m.director LIKE '" + director +  "%' OR m.director LIKE '" + "% " + director + "%') " ;
         }
         if (star != "" && star != null) {
-            topMoviesResults += "AND s.name LIKE '" + star +  "%' ";
+            topMoviesResults += "AND (s.name = '" + star + "' OR s.name LIKE '" + star +  "%' OR s.name LIKE '" + "% " + star + "%') " ;
         }
 
         topMoviesResults += "ORDER BY r.rating " + mode + " " +
-                "LIMIT 20)";
+                "LIMIT 20) ";
 
         return topMoviesResults + "\n" + getAllMoviesQuery;
     }
@@ -179,13 +180,14 @@ public class SearchMovieServlet extends HttpServlet{
             topMoviesResults += "AND m.year = " + year + " ";
         }
         if (director != "" && director != null) {
-            topMoviesResults += "AND m.director LIKE '" + director +  "%' ";
+            topMoviesResults += "AND (m.director LIKE '" + director +  "%' OR m.director LIKE '" + "% " + director + "%') " ;
         }
         if (star != "" && star != null) {
-            topMoviesResults += "AND s.name LIKE '" + star +  "%' ";
+            topMoviesResults += "AND (s.name LIKE '" + star +  "%' OR s.name LIKE '" + "% " + star + "%') " ;
         }
+
         topMoviesResults += "ORDER BY m.title " + mode + " " +
-                "LIMIT 20)";
+                "LIMIT 20) ";
 
         return topMoviesResults + "\n" + getAllMoviesQuery;
     }
