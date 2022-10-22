@@ -114,7 +114,7 @@ public class BrowseMoviesServlet extends HttpServlet {
     }
 
     private String getMoviesByCharacterSortedByRating(String sortBy, String movieCharacter) {
-        String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
+        String mode = (sortBy.equals("ratingDesc")) ? "DESC" : "ASC";
         String moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
