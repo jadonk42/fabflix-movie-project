@@ -17,38 +17,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@WebServlet(name = "BrowseMoviesServlet", value = "/api/browse-movies")
+@WebServlet(name = "BrowseMoviesServlet", value = "/api/movies/browse")
 public class BrowseMoviesServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
     private DataSource dataSource;
-
-    private static final String getMoviesByGenre = "SELECT m.id, m.title, m.year, m.director, " +
-            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
-            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
-            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
-            "r.rating " +
-            "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-            "stars_in_movies as sm " +
-            "WHERE g.name = ? AND gm.genreId = g.id AND m.id = gm.movieId AND r.movieId = m.id AND " +
-            "sm.movieId = m.id AND sm.starId = s.id " +
-            "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-            "ORDER BY m.title ASC " +
-            "LIMIT 20";
-
-
-    private static final String getMoviesByFirstCharacter = "SELECT m.id, m.title, m.year, m.director, " +
-            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
-            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
-            "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
-            "r.rating " +
-            "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-            "stars_in_movies as sm " +
-            "WHERE LEFT(m.title, 1) = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
-            "m.id = sm.movieId AND sm.starId = s.id " +
-            "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-            "ORDER BY m.title ASC " +
-            "LIMIT 20";
-
     public void init(ServletConfig config) {
         try {
             dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
@@ -58,73 +30,47 @@ public class BrowseMoviesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
         String movieGenre = request.getParameter("genre");
         String movieTitle = request.getParameter("character");
+        String sortBy = request.getParameter("sortBy");
 
-        if ((movieGenre == null && movieTitle == null) || (movieGenre != null && movieTitle != null)) {
-            throw new IllegalArgumentException("only 'genre' or 'character' must be specified");
-        }
-        else if (movieGenre != null) {
-            getMoviesByGenre(request, response, movieGenre);
-        }
-        else {
-            getMoviesByCharacter(request, response, movieTitle);
-        }
-    }
-
-    protected void getMoviesByGenre(HttpServletRequest request, HttpServletResponse response, String movieGenre)
-            throws IOException {
-        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(getMoviesByGenre);
-            statement.setString(1, movieGenre);
-            ResultSet rs = statement.executeQuery();
-            JsonArray jsonArray = new JsonArray();
-
-            while (rs.next()) {
-                getMoviesAsJson(rs);
+            PreparedStatement statement;
+            if ((movieGenre == null && movieTitle == null) || (movieGenre != null && movieTitle != null)) {
+                throw new IllegalArgumentException("only 'genre' or 'character' must be specified");
             }
-            rs.close();
-            statement.close();
+            else if (movieGenre != null && (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc"))) {
+                statement = conn.prepareStatement(getMoviesByGenreSortedByRating(sortBy, movieGenre));
+            }
+            else if (movieGenre != null) {
+                statement = conn.prepareStatement(getMoviesByGenreSortedByName(sortBy, movieGenre));
+            }
+            else if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
+                statement = conn.prepareStatement(getMoviesByCharacterSortedByRating(sortBy, movieTitle));
+            }
+            else {
+                statement = conn.prepareStatement(getMoviesByCharacterSortedByName(sortBy, movieTitle));
+            }
 
-            request.getServletContext().log("getting " + jsonArray.size() + " results");
-            out.write(jsonArray.toString());
-            response.setStatus(HttpURLConnection.HTTP_OK);
-
-        } catch (Exception e) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("errorMessage", e.getMessage());
-            out.write(jsonObject.toString());
-
-            request.getServletContext().log("Error:", e);
-            response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
-        } finally {
-            out.close();
-        }
-    }
-
-    protected void getMoviesByCharacter(HttpServletRequest request, HttpServletResponse response, String movieTitle)
-            throws IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-
-        try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(getMoviesByFirstCharacter);
-            statement.setString(1, movieTitle);
+            System.out.println(statement);
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
             while (rs.next()) {
                 jsonArray.add(getMoviesAsJson(rs));
             }
+
+            System.out.println("done getting json");
             rs.close();
             statement.close();
-
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
+
             response.setStatus(HttpURLConnection.HTTP_OK);
 
         } catch (Exception e) {
@@ -137,6 +83,80 @@ public class BrowseMoviesServlet extends HttpServlet {
         } finally {
             out.close();
         }
+    }
+
+    private String getMoviesByGenreSortedByRating(String sortBy, String movieGenre) {
+        String mode = (sortBy.equals("ratingDesc")) ? "DESC" : "ASC";
+
+        String moviesByGenre = "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm " +
+                "WHERE g.name = '" + movieGenre + "' AND gm.genreId = g.id AND m.id = gm.movieId AND r.movieId = m.id " +
+                "AND " +
+                "sm.movieId = m.id AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY r.rating " + mode
+                + " LIMIT 20";
+
+        return moviesByGenre;
+    }
+
+    private String getMoviesByCharacterSortedByRating(String sortBy, String movieCharacter) {
+        String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
+        String moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm " +
+                "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "m.id = sm.movieId AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY r.rating " + mode +
+                " LIMIT 20";
+        return moviesByChar;
+    }
+
+    private String getMoviesByGenreSortedByName(String sortBy, String movieGenre) {
+        String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
+
+        String moviesByGenre = "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm " +
+                "WHERE g.name = '" + movieGenre + "' AND gm.genreId = g.id AND m.id = gm.movieId AND r.movieId = m.id " +
+                "AND " +
+                "sm.movieId = m.id AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY m.title " + mode
+                + " LIMIT 20";
+
+        return moviesByGenre;
+    }
+
+    private String getMoviesByCharacterSortedByName(String sortBy, String movieCharacter) {
+        String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
+        String moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm " +
+                "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "m.id = sm.movieId AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY m.title " + mode +
+                " LIMIT 20";
+        return moviesByChar;
     }
 
     private JsonObject getMoviesAsJson(ResultSet rs) throws SQLException {

@@ -119,7 +119,18 @@ else if (method =="search") {
         error: (resultData) => console.log(resultData)
     });
 }
-else if (method =="browse") {
+else if (method === "browse") {
+    let genre = getParameterByName('genre');
+    let character = getParameterByName('character');
 
+    let url = `api/movies/browse?genre=${genre}&character=${character}&sortBy=${sortBy}`;
+
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: url,
+        success: (resultData) => populateHTMLWithMovieData(resultData),
+        error: (resultData) => console.log(resultData)
+    });
 }
 
