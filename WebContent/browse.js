@@ -1,16 +1,15 @@
-function convertGenreToHyperlink(genres) {
-    return "<a href=\"movies.html?genre=" + genres + "character&=null" +  "\">" + "</a>"
+function convertGenreToHyperlink(genre) {
+    return "<a href=\"movies.html?method=browse&genre=" + genre + "&character=null" +  "\">" + genre + "</a>"
 }
 
 function convertCharacterToHyperlink(character) {
-    return "<a href=\"movies.html?genre=null&character=" + character + "\">" + "</a>"
+    return "<a href=\"movies.html?method=browse&genre=null&character=" + character + "\">" + character + "</a>"
 }
 
 function populateHTMLWithGenreData(resultData) {
     console.log(resultData);
     let genreList = jQuery("#genre-list");
     let htmlString = "";
-    htmlString += "<h3>Movie Genres: </h3>";
     for (let i = 0; i < resultData.length; ++i) {
         htmlString += "<p>" + convertGenreToHyperlink(resultData[i]["movie_genres"]) + "</p>";
     }
@@ -21,7 +20,6 @@ function populateHTMLWithCharacterData(resultData) {
     console.log(resultData);
     let characterList = jQuery("#character-list");
     let htmlString = "";
-    htmlString += "<h3>First Characters: </h3>";
     for (let i = 0; i < resultData.length; ++i) {
         htmlString += "<p>" + convertCharacterToHyperlink(resultData[i]["movie_characters"]) + "</p>";
     }

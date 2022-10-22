@@ -36,12 +36,20 @@ public class BrowseMoviesServlet extends HttpServlet {
         String movieGenre = request.getParameter("genre");
         String movieTitle = request.getParameter("character");
         String sortBy = request.getParameter("sortBy");
-
+        System.out.println(movieGenre);
+        System.out.println(movieGenre.equals("null"));
+        if (movieTitle.equals("null")) {
+            movieTitle = null;
+        }
+        if (movieGenre.equals("null")) {
+            movieGenre = null;
+        }
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
-            if ((movieGenre == null && movieTitle == null) || (movieGenre != null && movieTitle != null)) {
+            System.out.println(movieGenre);
+            if ((movieGenre == null && movieTitle ==null) || (movieGenre != null && movieTitle != null)) {
                 throw new IllegalArgumentException("only 'genre' or 'character' must be specified");
             }
             else if (movieGenre != null && (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc"))) {
