@@ -21,10 +21,11 @@ public class BrowseServlet extends HttpServlet {
 
     private static final String genreQuery = "SELECT DISTINCT name as genre_types FROM genres ORDER BY name ASC";
 
-    private static final String movieCharactersQuery = "SELECT DISTINCT LEFT(title, 1) as " +
-            "movie_character_categories " +
+    private static final String movieAlphaNumericQuery = "SELECT DISTINCT LEFT(title, 1) as " +
+            "movie_categories " +
             "FROM movies " +
-            "ORDER BY movie_character_categories ASC";
+            "WHERE LEFT(title, 1) REGEXP '^[A-Za-z0-9]+$' " +
+            "ORDER BY movie_categories ASC";
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
@@ -88,16 +89,20 @@ public class BrowseServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(movieCharactersQuery);
+            PreparedStatement statement = conn.prepareStatement(movieAlphaNumericQuery);
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
+            JsonObject nonAlphaNumeric = new JsonObject();
+            nonAlphaNumeric.addProperty("movie_characters", "*");
 
             while (rs.next()) {
-                String movieCharacters = rs.getString("movie_character_categories");
+                String movieCharacters = rs.getString("movie_categories");
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("movie_characters", movieCharacters);
                 jsonArray.add(jsonObject);
             }
+            jsonArray.add(nonAlphaNumeric);
+
             rs.close();
             statement.close();
 

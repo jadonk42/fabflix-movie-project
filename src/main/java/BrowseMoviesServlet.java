@@ -115,18 +115,35 @@ public class BrowseMoviesServlet extends HttpServlet {
 
     private String getMoviesByCharacterSortedByRating(String sortBy, String movieCharacter) {
         String mode = (sortBy.equals("ratingDesc")) ? "DESC" : "ASC";
-        String moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
-                "r.rating " +
-                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm " +
-                "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
-                "m.id = sm.movieId AND sm.starId = s.id " +
-                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode +
-                " LIMIT 20";
+        String moviesByChar = "";
+        if (movieCharacter.equals("*")) {
+            moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                    "r.rating " +
+                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm " +
+                    "WHERE m.title REGEXP '^[^0-9A-Za-z]' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                    "m.id = sm.movieId AND sm.starId = s.id " +
+                    "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                    "ORDER BY r.rating " + mode +
+                    " LIMIT 20";
+        }
+        else {
+            moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                    "r.rating " +
+                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm " +
+                    "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                    "m.id = sm.movieId AND sm.starId = s.id " +
+                    "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                    "ORDER BY r.rating " + mode +
+                    " LIMIT 20";
+        }
         return moviesByChar;
     }
 
@@ -152,18 +169,36 @@ public class BrowseMoviesServlet extends HttpServlet {
 
     private String getMoviesByCharacterSortedByName(String sortBy, String movieCharacter) {
         String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
-        String moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
-                "r.rating " +
-                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm " +
-                "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
-                "m.id = sm.movieId AND sm.starId = s.id " +
-                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY m.title " + mode +
-                " LIMIT 20";
+
+        String moviesByChar = "";
+        if (movieCharacter.equals("*")) {
+            moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                    "r.rating " +
+                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm " +
+                    "WHERE m.title REGEXP '^[^0-9A-Za-z]' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                    "m.id = sm.movieId AND sm.starId = s.id " +
+                    "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                    "ORDER BY m.title " + mode +
+                    " LIMIT 20";
+        }
+        else {
+            moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                    "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                    "r.rating " +
+                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm " +
+                    "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                    "m.id = sm.movieId AND sm.starId = s.id " +
+                    "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                    "ORDER BY m.title " + mode +
+                    " LIMIT 20";
+        }
         return moviesByChar;
     }
 
