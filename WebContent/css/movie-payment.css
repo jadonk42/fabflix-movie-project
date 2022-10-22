@@ -14,3 +14,9 @@
     font-size: 17px;
     font-family: Arial, Helvetica;
 }
+
+.paymentBar {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
