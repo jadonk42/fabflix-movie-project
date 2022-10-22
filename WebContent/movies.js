@@ -41,7 +41,8 @@ function splitCsvStringToList(csv_string, limit){
     let csv_list = csv_string.split(",")
     let list_string = "<ol>"
     for(let i = 0; i < Math.min(csv_list.length, limit); ++i){
-        list_string += "<li>" + csv_list[i] + "</li>"
+        list_string += "<li> <a href=\"movies.html?method=browse&genre=" + csv_list[i] +  "&character=null" +  "\">";
+        list_string += csv_list[i] + "</a></li>"
     }
     list_string += "</ol>"
     return list_string;
