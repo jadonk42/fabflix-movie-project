@@ -34,6 +34,20 @@ function convertStarsIntoHyperlinks(csv_stars_string, csv_starId_string){
     return result;
 }
 
+function convertGenreToHyperlink(csv_genre_string) {
+    let csv_genre_list = csv_genre_string.split(",");
+    let result = "";
+
+    for(let i = 0; i < csv_genre_list.length; ++i){
+        result += "<a href=\"movies.html?method=browse&genre=" + csv_genre_list[i] + "&character=null" + "\">";
+        result += csv_genre_list[i] + "</a>";
+        if(i !== csv_genre_list.length-1){
+            result += ", ";
+        }
+    }
+    return result;
+}
+
 /**
  * Takes json data about movie and puts the data into the html element.
  * @param resultData jsonObject
@@ -45,9 +59,10 @@ function populateHTMLWithSingleMovieData(resultData) {
     htmlString += "<h3>" + resultData["movie_title"] + "</h3>";
     htmlString += "<p>" + resultData["movie_year"] + "</p>";
     htmlString += "<p>Directed by " + resultData["movie_director"] + "</p>";
-    htmlString += "<p>Genres: " + resultData["movie_genres"].replace(",", ", ") + "</p>";
+    htmlString += "<p>Genres: " + convertGenreToHyperlink(resultData["movie_genres"]) + "</p>";
     htmlString += "<p>Starring: " + convertStarsIntoHyperlinks(resultData["movie_stars"], resultData["movie_star_ids"])+ "</p>";
-    htmlString += "<p>" + resultData["movie_rating"] + "</p>";
+    htmlString += "<p>" + resultData["movie_rating"] + "</p>"
+    htmlString += "<p>Price: $20 </p>";
 
     movieInformationList.append(htmlString);
 }
