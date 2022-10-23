@@ -61,7 +61,7 @@ function populateHTMLWithSingleMovieData(resultData) {
     htmlString += "<p>Directed by " + resultData["movie_director"] + "</p>";
     htmlString += "<p>Genres: " + convertGenreToHyperlink(resultData["movie_genres"]) + "</p>";
     htmlString += "<p>Starring: " + convertStarsIntoHyperlinks(resultData["movie_stars"], resultData["movie_star_ids"])+ "</p>";
-    htmlString += "<p>" + resultData["movie_rating"] + "</p>"
+    htmlString += "<p>" + resultData["movie_rating"] + "</p>";
     htmlString += "<p>Price: $20 </p>";
 
     movieInformationList.append(htmlString);
