@@ -96,8 +96,8 @@ public class BrowseMoviesServlet extends HttpServlet {
     private String getMoviesByGenreSortedByRating(String sortBy, String movieGenre) {
         String mode = (sortBy.equals("ratingDesc")) ? "DESC" : "ASC";
 
-        String moviesByGenre = "SELECT m.id, m.title, m.year, m.director, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+        String moviesByGenre = "WITH MoviesByGenre AS ( " +
+                "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                 "r.rating " +
@@ -108,9 +108,18 @@ public class BrowseMoviesServlet extends HttpServlet {
                 "sm.movieId = m.id AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY r.rating " + mode
-                + " LIMIT 20";
+                + " LIMIT 20 )";
 
-        return moviesByGenre;
+        String getAllGenres = "SELECT mg.id, mg.title, mg.year, mg.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name ASC SEPARATOR ','), ',', 3) " +
+                "as movie_genres, mg.movie_starrings, mg.movie_starring_ids, mg.rating " +
+                "FROM MoviesByGenre as mg, genres as g, genres_in_movies as gm " +
+                "WHERE mg.id = gm.movieId AND gm.genreId = g.id " +
+                "GROUP BY mg.id, mg.title, mg.year, mg.director, mg.rating";
+
+        String genreQuery = moviesByGenre + "\n" + getAllGenres;
+
+        return genreQuery;
     }
 
     private String getMoviesByCharacterSortedByRating(String sortBy, String movieCharacter) {
@@ -150,8 +159,7 @@ public class BrowseMoviesServlet extends HttpServlet {
     private String getMoviesByGenreSortedByName(String sortBy, String movieGenre) {
         String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
 
-        String moviesByGenre = "SELECT m.id, m.title, m.year, m.director, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+        String moviesByGenre = "WITH MoviesByGenre AS ( SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                 "r.rating " +
@@ -162,9 +170,18 @@ public class BrowseMoviesServlet extends HttpServlet {
                 "sm.movieId = m.id AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY m.title " + mode
-                + " LIMIT 20";
+                + " LIMIT 20 )";
 
-        return moviesByGenre;
+        String getAllGenres = "SELECT mg.id, mg.title, mg.year, mg.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name ASC SEPARATOR ','), ',', 3) " +
+                "as movie_genres, mg.movie_starrings, mg.movie_starring_ids, mg.rating " +
+                "FROM MoviesByGenre as mg, genres as g, genres_in_movies as gm " +
+                "WHERE mg.id = gm.movieId AND gm.genreId = g.id " +
+                "GROUP BY mg.id, mg.title, mg.year, mg.director, mg.rating";
+
+        String genreQuery = moviesByGenre + "\n" + getAllGenres;
+
+        return genreQuery;
     }
 
     private String getMoviesByCharacterSortedByName(String sortBy, String movieCharacter) {
@@ -203,17 +220,17 @@ public class BrowseMoviesServlet extends HttpServlet {
     }
 
     private JsonObject getMoviesAsJson(ResultSet rs) throws SQLException {
-        String movieId = rs.getString("m.id");
-        String movieTitle = rs.getString("m.title");
-        String movieYear = rs.getString("m.year");
-        String movieDirector = rs.getString("m.director");
+        String movieId = rs.getString("id");
+        String movieTitle = rs.getString("title");
+        String movieYear = rs.getString("year");
+        String movieDirector = rs.getString("director");
         String movieGenres =
                 rs.getString("movie_genres");
         String movieStars =
                 rs.getString("movie_starrings");
         String movieStarIds =
                 rs.getString("movie_starring_ids");
-        String movieRating = rs.getString("r.rating");
+        String movieRating = rs.getString("rating");
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("movie_id", movieId);
