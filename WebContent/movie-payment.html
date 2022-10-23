@@ -19,20 +19,25 @@
 
 <h1>Enter your Payment Information</h1>
 
-<form action="order-confirmation.html">
+<form id="payment_form" method="post">
     <input type="hidden" name="method" value="search" />
 
     <label>First Name:</label>
-    <input type="text" name = "name" class="paymentBar" placeholder="John.."><br><br>
+    <input type="text" name = "firstName" id="firstName" placeholder="John.."><br><br>
     <label>Last Name:      </label>
-    <input type="text" name = "year" class="paymentBar" placeholder="Doe.."><br><br>
+    <input type="text" name = "lastName" id="lastName" placeholder="Doe.."><br><br>
     <label>Credit Card Number:  </label>
-    <input type="text" name = "director" class="paymentBar" placeholder="12346 44222 ..."><br><br>
+    <input type="text" name = "creditCardNum" id="creditCardNum" placeholder="12346 44222 ..."><br><br>
     <label>Expiration Date:     </label>
-    <input type="text" name = "star" class="paymentBar" placeholder="09/26 ..."><br><br>
+    <input type="text" name = "expirationDate" id="expirationDate" placeholder="09/26 ..."><br><br>
 
-    <input type="submit" value="Place Order" class="paymentButton">
+    <input type="submit" value="Place Order">
 </form>
+
+<div id="payment_error_message"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="movie-payment.js"></script>
 
 </body>
 </html>
