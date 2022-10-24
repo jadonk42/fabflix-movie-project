@@ -134,7 +134,7 @@ public class SearchMovieServlet extends HttpServlet{
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY r.rating " + mode;
         String topMoviesResults = "WITH TopMovies AS ( " +
-                "SELECT DISTINCT(m.id) as movieId " +
+                "SELECT DISTINCT(m.id) as movieId, r.rating " +
                 "FROM ratings as r, movies as m, stars_in_movies as sm, stars as s " +
                 "WHERE m.id = sm.movieId AND r.movieId = m.id AND s.id = sm.starId ";
         if (name != "" && name != null) {
@@ -179,7 +179,7 @@ public class SearchMovieServlet extends HttpServlet{
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY m.title " + mode;
         String topMoviesResults = "WITH TopMovies AS ( " +
-                "SELECT DISTINCT(m.id) as movieId " +
+                "SELECT DISTINCT(m.id) as movieId, m.title " +
                 "FROM movies as m, stars_in_movies as sm, stars as s " +
                 "WHERE m.id = sm.movieId AND s.id = sm.starId ";
         if (name != "" && name != null) {
