@@ -39,7 +39,7 @@ function convertGenreToHyperlink(csv_genre_string) {
     let result = "";
 
     for(let i = 0; i < csv_genre_list.length; ++i){
-        result += "<a href=\"movies.html?method=browse&genre=" + csv_genre_list[i] + "&character=null" + "\">";
+        result += "<a href=\"movies.html?method=browse&genre=" + csv_genre_list[i] + "&character=null&sortBy=ratingDesc&limit=10&page=1" + "\">";
         result += csv_genre_list[i] + "</a>";
         if(i !== csv_genre_list.length-1){
             result += ", ";

@@ -162,7 +162,7 @@ public class SearchMovieServlet extends HttpServlet{
 
     private String getQueryStatementForMoviesByName(String sortBy, String name, String year, String director, String star, int limit, int page) {
         String mode;
-        if (sortBy.equals("ratingDesc")) {
+        if (sortBy.equals("alphaDesc")) {
             mode = "desc";
         }
         else {

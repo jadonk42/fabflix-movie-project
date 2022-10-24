@@ -47,7 +47,7 @@ function splitCsvStringToList(csv_string, limit){
     let csv_list = csv_string.split(",")
     let list_string = "<ol>"
     for(let i = 0; i < Math.min(csv_list.length, limit); ++i){
-        list_string += "<li> <a href=\"movies.html?method=browse&genre=" + csv_list[i] +  "&character=null" +  "\">";
+        list_string += "<li> <a href=\"movies.html?method=browse&genre=" + csv_list[i] +  "&character=null&sortBy=ratingDesc&limit=10&page=1" +  "\">";
         list_string += csv_list[i] + "</a></li>"
     }
     list_string += "</ol>"
@@ -103,10 +103,16 @@ let page = getParameterByName('page');
 if (sortBy == null){
     sortBy = "ratingDesc";
 }
+if (limit == null){
+    limit = "10";
+}
+if (page == null){
+    page = "1";
+}
 //changes default selections
 jQuery("#sortBy").val(sortBy);
 jQuery("#limit").val(limit);
-jQuery("#current").append("Page " + page);
+jQuery("#current-page-span").append("Page " + page);
 
 /**
  * next and previous buttons
@@ -128,7 +134,6 @@ function handleNext() {
     window.location.replace(queryString);
 }
 
-console.log('About to send GET request to MoviesServlet!');
 //if no method, default is top movies of a certain kind
 if (method == null) {
     jQuery.ajax({
@@ -147,6 +152,7 @@ else if (method =="search") {
 
     let url = `api/movies/search?method=${method}&name=${name}&year=${year}&director=${director}&star=${star}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
 
+    console.log('About to send GET request to SearchMoviesServlet!');
     jQuery.ajax({
         dataType: "json",
         method: "GET",
@@ -161,6 +167,7 @@ else if (method === "browse") {
 
     let url = `api/movies/browse?method=${method}&genre=${genre}&character=${character}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
 
+    console.log('About to send GET request to BrowseMoviesServlet!');
     jQuery.ajax({
         dataType: "json",
         method: "GET",

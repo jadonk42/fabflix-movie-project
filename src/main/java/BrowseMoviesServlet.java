@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +35,9 @@ public class BrowseMoviesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //SAVE THE LAST SEEN MOVIE SEARCH IN THE SESSION
-
+        HttpSession session = request.getSession(true);
+        session.setAttribute("lastQueryString", request.getQueryString());
+        System.out.println("JUST SAVED: " + (String)session.getAttribute("lastQueryString"));
 
         response.setContentType("application/json");
         String movieGenre = request.getParameter("genre");

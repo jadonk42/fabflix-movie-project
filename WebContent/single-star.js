@@ -39,7 +39,7 @@ function handleBackToMovies() {
         dataType: "json",
         method: "GET",
         url: "api/backToMovies",
-        success: (lastURL) => window.location.replace("movies.html?" + lastURL)
+        success: (lastURL) => window.location.replace("movies.html?" + lastURL["lastQueryString"])
     });
 }
 
