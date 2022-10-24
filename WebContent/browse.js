@@ -1,9 +1,9 @@
 function convertGenreToHyperlink(genre) {
-    return "<a href=\"movies.html?method=browse&genre=" + genre + "&character=null" +  "\">" + genre + "</a>"
+    return "<a href=\"movies.html?method=browse&genre=" + genre + "&character=null&limit=10&page=1&sortBy=ratingDesc" +  "\">" + genre + "</a>";
 }
 
 function convertCharacterToHyperlink(character) {
-    return "<a href=\"movies.html?method=browse&genre=null&character=" + character + "\">" + character + "</a>"
+    return "<a href=\"movies.html?method=browse&genre=null&character=" + character + "&limit=10&page=1&sortBy=ratingDesc\">" + character + "</a>";
 }
 
 function populateHTMLWithGenreData(resultData) {

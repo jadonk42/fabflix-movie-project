@@ -11,7 +11,6 @@
 <div class="topNavigationBar">
     <a href="index.html">Home </a>
     <a href="login.html">Login </a>
-    <a href="movies.html">Movies</a>
     <a href="search.html">Search</a>
     <a href="browse.html">Browse</a>
     <a href="shopping-cart.html">Checkout</a>
@@ -30,8 +29,19 @@
         <option value="alphaAsc">Name (A to Z)</option>
         <option value="alphaDesc">Name (Z to A)</option>
     </select>
+
+    <label>Results per page: </label>
+    <select id="limit" name="limit">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>
 </form>
 <button onclick="handleSort()">Sort</button>
+<br><br>
+
+<button>Previous</button><div></div><button>Next</button>
 
 <br>
 
@@ -52,6 +62,8 @@
 
     <tbody id=movie_table_body></tbody>
 </table>
+
+<button>Previous</button><div></div><button>Next</button>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="movies.js"></script>

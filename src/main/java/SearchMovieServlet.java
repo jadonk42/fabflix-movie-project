@@ -30,21 +30,26 @@ public class SearchMovieServlet extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
+
+        System.out.println(request.getQueryString());
         String sortBy = request.getParameter("sortBy");
         String name = request.getParameter("name");
         String year = request.getParameter("year");
         String director = request.getParameter("director");
         String star = request.getParameter("star");
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        int page = Integer.parseInt(request.getParameter("page"));
+        System.out.println(limit);
 
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForMoviesByRating(sortBy, name, year, director, star));
+                statement = conn.prepareStatement(getQueryStatementForMoviesByRating(sortBy, name, year, director, star, limit, page));
             }
             else if (sortBy.equals("alphaDesc") || sortBy.equals("alphaAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForMoviesByName(sortBy, name, year, director, star));
+                statement = conn.prepareStatement(getQueryStatementForMoviesByName(sortBy, name, year, director, star, limit, page));
             }
             else {
                 return;
@@ -104,7 +109,7 @@ public class SearchMovieServlet extends HttpServlet{
         return jsonObject;
     }
 
-    private String getQueryStatementForMoviesByRating(String sortBy, String name, String year, String director, String star) {
+    private String getQueryStatementForMoviesByRating(String sortBy, String name, String year, String director, String star, int limit, int page) {
         String mode;
         if (sortBy.equals("ratingDesc")) {
             mode = "desc";
@@ -112,6 +117,7 @@ public class SearchMovieServlet extends HttpServlet{
         else {
             mode = "asc";
         }
+        int offset = (page-1)*limit;
 
         String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
@@ -123,8 +129,7 @@ public class SearchMovieServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode + " " +
-                "LIMIT 20";
+                "ORDER BY r.rating " + mode;;
         String topMoviesResults = "WITH TopMovies AS ( " +
                 "SELECT DISTINCT(m.id) as movieId " +
                 "FROM ratings as r, movies as m, stars_in_movies as sm, stars as s " +
@@ -143,12 +148,13 @@ public class SearchMovieServlet extends HttpServlet{
         }
 
         topMoviesResults += "ORDER BY r.rating " + mode + " " +
-                "LIMIT 20) ";
+                "LIMIT " + limit + " " +
+                "OFFSET " + offset + ") ";
 
         return topMoviesResults + "\n" + getAllMoviesQuery;
     }
 
-    private String getQueryStatementForMoviesByName(String sortBy, String name, String year, String director, String star) {
+    private String getQueryStatementForMoviesByName(String sortBy, String name, String year, String director, String star, int limit, int page) {
         String mode;
         if (sortBy.equals("ratingDesc")) {
             mode = "desc";
@@ -156,6 +162,7 @@ public class SearchMovieServlet extends HttpServlet{
         else {
             mode = "asc";
         }
+        int offset = (page-1)*limit;
 
         String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
@@ -167,8 +174,7 @@ public class SearchMovieServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode + " " +
-                "LIMIT 20";
+                "ORDER BY r.rating " + mode;
         String topMoviesResults = "WITH TopMovies AS ( " +
                 "SELECT DISTINCT(m.id) as movieId " +
                 "FROM movies as m, stars_in_movies as sm, stars as s " +
@@ -187,7 +193,8 @@ public class SearchMovieServlet extends HttpServlet{
         }
 
         topMoviesResults += "ORDER BY m.title " + mode + " " +
-                "LIMIT 20) ";
+                "LIMIT " + limit + " " +
+                "OFFSET " + offset + ") ";
 
         return topMoviesResults + "\n" + getAllMoviesQuery;
     }

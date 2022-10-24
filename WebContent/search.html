@@ -11,7 +11,6 @@
 <div class="topNavigationBar">
     <a href="index.html">Home </a>
     <a href="login.html">Login </a>
-    <a href="movies.html">Movies</a>
     <a href="search.html">Search</a>
     <a href="browse.html">Browse</a>
     <a href="shopping-cart.html">Checkout</a>
@@ -21,6 +20,9 @@
 
 <form action="movies.html">
     <input type="hidden" name="method" value="search" />
+    <input type="hidden" name="sortBy" value="ratingDesc" />
+    <input type="hidden" name="limit" value="10" />
+    <input type="hidden" name="page" value="1" />
 
     <label>Movie name:</label>
     <input type="text" name = "name" class="searchBar" placeholder="Search.."><br><br>

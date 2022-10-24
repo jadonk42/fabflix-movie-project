@@ -31,21 +31,23 @@ public class MoviesServlet extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         String sortBy = request.getParameter("sortBy");
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        int page = Integer.parseInt(request.getParameter("page"));
 
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating(sortBy));
+                statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating(sortBy, limit, page));
             }
             else if (sortBy.equals("alphaDesc") || sortBy.equals("alphaAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(sortBy));
+                statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(sortBy, limit, page));
             }
             else {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(sortBy));
+                return;
             }
-
+            System.out.println(statement);
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
@@ -97,7 +99,7 @@ public class MoviesServlet extends HttpServlet{
         return jsonObject;
     }
 
-    private String getQueryStatementForAllMoviesByRating(String sortBy) {
+    private String getQueryStatementForAllMoviesByRating(String sortBy, int limit, int page) {
         String mode;
         if (sortBy.equals("ratingDesc")) {
             mode = "desc";
@@ -105,6 +107,7 @@ public class MoviesServlet extends HttpServlet{
         else {
             mode = "asc";
         }
+        int offset = (page-1)*limit;
 
         String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
@@ -116,17 +119,16 @@ public class MoviesServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode + " " +
-                "LIMIT 20";
+                "ORDER BY r.rating " + mode + " ";
         String topMoviesRated = "WITH TopMovies AS ( " +
                 "SELECT movieId, rating " +
                 "FROM ratings " +
                 "ORDER BY rating " + mode + " " +
-                "LIMIT 20)";
+                "LIMIT " + limit +")";
         return topMoviesRated + "\n" + getAllMoviesQuery;
     }
 
-    private String getQueryStatementForAllMoviesByName(String sortBy) {
+    private String getQueryStatementForAllMoviesByName(String sortBy, int limit, int page) {
         String mode;
         if (sortBy.equals("alphaDesc")) {
             mode = "desc";
@@ -144,14 +146,13 @@ public class MoviesServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY m.title " + mode + " " +
-                "LIMIT 20";
+                "ORDER BY m.title " + mode + " ";
 
         String topMoviesAlphabetical = "WITH TopMovies AS ( " +
                 "SELECT id as movieId " +
                 "FROM movies " +
                 "ORDER BY title " + mode + " " +
-                "LIMIT 20)";
+                "LIMIT " + limit +")";
         return topMoviesAlphabetical + "\n" + getAllMoviesQuery;
     }
 }

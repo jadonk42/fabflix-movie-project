@@ -36,8 +36,8 @@ public class BrowseMoviesServlet extends HttpServlet {
         String movieGenre = request.getParameter("genre");
         String movieTitle = request.getParameter("character");
         String sortBy = request.getParameter("sortBy");
-        System.out.println(movieGenre);
-        System.out.println(movieGenre.equals("null"));
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        int page = Integer.parseInt(request.getParameter("page"));
         if (movieTitle.equals("null")) {
             movieTitle = null;
         }
@@ -53,16 +53,16 @@ public class BrowseMoviesServlet extends HttpServlet {
                 throw new IllegalArgumentException("only 'genre' or 'character' must be specified");
             }
             else if (movieGenre != null && (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc"))) {
-                statement = conn.prepareStatement(getMoviesByGenreSortedByRating(sortBy, movieGenre));
+                statement = conn.prepareStatement(getMoviesByGenreSortedByRating(sortBy, movieGenre, limit, page));
             }
             else if (movieGenre != null) {
-                statement = conn.prepareStatement(getMoviesByGenreSortedByName(sortBy, movieGenre));
+                statement = conn.prepareStatement(getMoviesByGenreSortedByName(sortBy, movieGenre, limit, page));
             }
             else if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
-                statement = conn.prepareStatement(getMoviesByCharacterSortedByRating(sortBy, movieTitle));
+                statement = conn.prepareStatement(getMoviesByCharacterSortedByRating(sortBy, movieTitle, limit, page));
             }
             else {
-                statement = conn.prepareStatement(getMoviesByCharacterSortedByName(sortBy, movieTitle));
+                statement = conn.prepareStatement(getMoviesByCharacterSortedByName(sortBy, movieTitle, limit, page));
             }
 
             System.out.println(statement);
@@ -93,8 +93,9 @@ public class BrowseMoviesServlet extends HttpServlet {
         }
     }
 
-    private String getMoviesByGenreSortedByRating(String sortBy, String movieGenre) {
+    private String getMoviesByGenreSortedByRating(String sortBy, String movieGenre, int limit, int page) {
         String mode = (sortBy.equals("ratingDesc")) ? "DESC" : "ASC";
+        int offset = (page-1)*limit;
 
         String moviesByGenre = "WITH MoviesByGenre AS ( " +
                 "SELECT m.id, m.title, m.year, m.director, " +
@@ -107,24 +108,27 @@ public class BrowseMoviesServlet extends HttpServlet {
                 "AND " +
                 "sm.movieId = m.id AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode
-                + " LIMIT 20 )";
+                "ORDER BY r.rating " + mode + " " +
+                "LIMIT " + limit + " " +
+                "OFFSET " + offset + ") ";
 
         String getAllGenres = "SELECT mg.id, mg.title, mg.year, mg.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name ASC SEPARATOR ','), ',', 3) " +
                 "as movie_genres, mg.movie_starrings, mg.movie_starring_ids, mg.rating " +
                 "FROM MoviesByGenre as mg, genres as g, genres_in_movies as gm " +
                 "WHERE mg.id = gm.movieId AND gm.genreId = g.id " +
-                "GROUP BY mg.id, mg.title, mg.year, mg.director, mg.rating";
+                "GROUP BY mg.id, mg.title, mg.year, mg.director, mg.rating " +
+                "ORDER BY mg.rating " + mode + " ";
 
         String genreQuery = moviesByGenre + "\n" + getAllGenres;
 
         return genreQuery;
     }
 
-    private String getMoviesByCharacterSortedByRating(String sortBy, String movieCharacter) {
+    private String getMoviesByCharacterSortedByRating(String sortBy, String movieCharacter, int limit, int page) {
         String mode = (sortBy.equals("ratingDesc")) ? "DESC" : "ASC";
         String moviesByChar = "";
+        int offset = (page-1)*limit;
         if (movieCharacter.equals("*")) {
             moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
@@ -136,8 +140,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                     "WHERE m.title REGEXP '^[^0-9A-Za-z]' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                     "m.id = sm.movieId AND sm.starId = s.id " +
                     "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                    "ORDER BY r.rating " + mode +
-                    " LIMIT 20";
+                    "ORDER BY r.rating " + mode + " " +
+                    "LIMIT " + limit + " " +
+                    "OFFSET " + offset + "";
         }
         else {
             moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
@@ -150,14 +155,16 @@ public class BrowseMoviesServlet extends HttpServlet {
                     "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                     "m.id = sm.movieId AND sm.starId = s.id " +
                     "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                    "ORDER BY r.rating " + mode +
-                    " LIMIT 20";
+                    "ORDER BY r.rating " + mode + " " +
+                    "LIMIT " + limit + " " +
+                    "OFFSET " + offset + "";
         }
         return moviesByChar;
     }
 
-    private String getMoviesByGenreSortedByName(String sortBy, String movieGenre) {
+    private String getMoviesByGenreSortedByName(String sortBy, String movieGenre, int limit, int page) {
         String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
+        int offset = (page-1)*limit;
 
         String moviesByGenre = "WITH MoviesByGenre AS ( SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
@@ -169,23 +176,26 @@ public class BrowseMoviesServlet extends HttpServlet {
                 "AND " +
                 "sm.movieId = m.id AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY m.title " + mode
-                + " LIMIT 20 )";
+                "ORDER BY m.title " + mode + " " +
+                "LIMIT " + limit + " " +
+                "OFFSET " + offset + ") ";
 
         String getAllGenres = "SELECT mg.id, mg.title, mg.year, mg.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name ASC SEPARATOR ','), ',', 3) " +
                 "as movie_genres, mg.movie_starrings, mg.movie_starring_ids, mg.rating " +
                 "FROM MoviesByGenre as mg, genres as g, genres_in_movies as gm " +
                 "WHERE mg.id = gm.movieId AND gm.genreId = g.id " +
-                "GROUP BY mg.id, mg.title, mg.year, mg.director, mg.rating";
+                "GROUP BY mg.id, mg.title, mg.year, mg.director, mg.rating " +
+                "ORDER BY mg.rating " + mode + " ";;
 
         String genreQuery = moviesByGenre + "\n" + getAllGenres;
 
         return genreQuery;
     }
 
-    private String getMoviesByCharacterSortedByName(String sortBy, String movieCharacter) {
+    private String getMoviesByCharacterSortedByName(String sortBy, String movieCharacter, int limit, int page) {
         String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
+        int offset = (page-1)*limit;
 
         String moviesByChar = "";
         if (movieCharacter.equals("*")) {
@@ -199,8 +209,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                     "WHERE m.title REGEXP '^[^0-9A-Za-z]' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                     "m.id = sm.movieId AND sm.starId = s.id " +
                     "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                    "ORDER BY m.title " + mode +
-                    " LIMIT 20";
+                    "ORDER BY m.title " + mode + " " +
+                    "LIMIT " + limit + " " +
+                    "OFFSET " + offset;
         }
         else {
             moviesByChar = "SELECT m.id, m.title, m.year, m.director, " +
@@ -213,8 +224,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                     "WHERE LEFT(m.title, 1) = '" + movieCharacter + "' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                     "m.id = sm.movieId AND sm.starId = s.id " +
                     "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                    "ORDER BY m.title " + mode +
-                    " LIMIT 20";
+                    "ORDER BY m.title " + mode + " " +
+                    "LIMIT " + limit + " " +
+                    "OFFSET " + offset;
         }
         return moviesByChar;
     }

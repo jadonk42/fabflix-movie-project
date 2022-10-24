@@ -20,18 +20,21 @@ function getParameterByName(target) {
 }
 
 
-function removeSortByFromQueryString(queryString) {
+function resetFromQueryString(queryString) {
+    let limitRegExp = /&limit=[0-9]+/;
     queryString = queryString.replace("&sortBy=ratingAsc", "");
     queryString = queryString.replace("&sortBy=ratingDesc", "");
     queryString = queryString.replace("&sortBy=alphaAsc", "");
     queryString = queryString.replace("&sortBy=alphaDesc", "");
+    queryString = queryString.replace(limitRegExp, "");
+
     return queryString;
 }
 
 let sort_form = jQuery("#sort_form");
 function handleSort() {
     //need to remove because otherwise, the sortBy param will stay and never be updated
-    let queryString = removeSortByFromQueryString(window.location.search);
+    let queryString = resetFromQueryString(window.location.search);
     window.location.replace("movies.html" + queryString + "&" +sort_form.serialize());
 }
 sort_form.submit(handleSort);
@@ -65,10 +68,11 @@ function convertCSVIntoHyperlinks(csv_string, csv_Id_string){
  * Takes json data about movie and puts the data into the html element.
  * @param resultData jsonObject
  */
-function populateHTMLWithMovieData(resultData) {
+function populateHTMLWithMovieData(resultData, limit) {
+    console.log("received " + resultData.length + " items");
     let movieTableElement = jQuery("#movie_table_body");
     let htmlString = "";
-    for(let i =0; i < Math.min(20, resultData.length); ++i){
+    for(let i =0; i < Math.min(limit, resultData.length); ++i){
         htmlString += "<tr>";
         htmlString +=
             "<td>" +
@@ -91,6 +95,8 @@ function populateHTMLWithMovieData(resultData) {
 
 let method = getParameterByName('method');
 let sortBy = getParameterByName('sortBy');
+let limit = getParameterByName('limit');
+let page = getParameterByName('page');
 if (sortBy == null){
     sortBy = "ratingDesc";
 }
@@ -112,13 +118,13 @@ else if (method =="search") {
     let director = getParameterByName('director');
     let star = getParameterByName('star');
 
-    let url = `api/movies/search?name=${name}&year=${year}&director=${director}&star=${star}&sortBy=${sortBy}`;
+    let url = `api/movies/search?name=${name}&year=${year}&director=${director}&star=${star}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
 
     jQuery.ajax({
         dataType: "json",
         method: "GET",
         url: url,
-        success: (resultData) => populateHTMLWithMovieData(resultData),
+        success: (resultData) => populateHTMLWithMovieData(resultData, limit),
         error: (resultData) => console.log(resultData)
     });
 }
@@ -126,13 +132,13 @@ else if (method === "browse") {
     let genre = getParameterByName('genre');
     let character = getParameterByName('character');
 
-    let url = `api/movies/browse?genre=${genre}&character=${character}&sortBy=${sortBy}`;
+    let url = `api/movies/browse?genre=${genre}&character=${character}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
 
     jQuery.ajax({
         dataType: "json",
         method: "GET",
         url: url,
-        success: (resultData) => populateHTMLWithMovieData(resultData),
+        success: (resultData) => populateHTMLWithMovieData(resultData, limit),
         error: (resultData) => console.log(resultData)
     });
 }
