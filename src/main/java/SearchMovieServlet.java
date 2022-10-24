@@ -59,7 +59,6 @@ public class SearchMovieServlet extends HttpServlet{
                 return;
             }
 
-            log(statement.toString());
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
@@ -133,7 +132,7 @@ public class SearchMovieServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode;;
+                "ORDER BY r.rating " + mode;
         String topMoviesResults = "WITH TopMovies AS ( " +
                 "SELECT DISTINCT(m.id) as movieId " +
                 "FROM ratings as r, movies as m, stars_in_movies as sm, stars as s " +

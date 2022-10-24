@@ -73,7 +73,6 @@ public class BrowseMoviesServlet extends HttpServlet {
                 statement = conn.prepareStatement(getMoviesByCharacterSortedByName(sortBy, movieTitle, limit, page));
             }
 
-            log(statement.toString());
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
