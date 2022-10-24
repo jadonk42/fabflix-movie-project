@@ -16,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.sql.*;
 
 @WebServlet(name = "BackToMoviesButtonServlet", urlPatterns = "/api/backToMovies")
-public class BackToMoviesButtonServlet extends HttpServlet{
+public class ResultsCacheServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

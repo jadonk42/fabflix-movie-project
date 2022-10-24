@@ -67,6 +67,7 @@ public class SearchMovieServlet extends HttpServlet{
             }
 
             System.out.println("done getting json");
+
             rs.close();
             statement.close();
             request.getServletContext().log("getting " + jsonArray.size() + " results");

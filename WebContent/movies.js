@@ -112,7 +112,7 @@ if (page == null){
 //changes default selections
 jQuery("#sortBy").val(sortBy);
 jQuery("#limit").val(limit);
-jQuery("#current-page-span").append("Page " + page);
+jQuery("#current-page-span").append(" Page " + page + " ");
 
 /**
  * next and previous buttons
