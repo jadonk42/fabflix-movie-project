@@ -34,6 +34,15 @@ function convertCSVIntoHyperlinks(csv_string, csv_Id_string){
     return result;
 }
 
+function handleBackToMovies() {
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: "api/backToMovies",
+        success: (lastURL) => window.location.replace("movies.html?" + lastURL)
+    });
+}
+
 function populateHTMLWithSingleStarData(resultData){
     console.log(resultData);
     let starInformationList = jQuery("#single-star-info-list");
@@ -50,6 +59,8 @@ function populateHTMLWithSingleStarData(resultData){
 
     starInformationList.append(htmlString);
 }
+
+
 
 console.log('About to send GET request to SingleStarServlet');
 

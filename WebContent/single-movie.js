@@ -67,6 +67,15 @@ function populateHTMLWithSingleMovieData(resultData) {
     movieInformationList.append(htmlString);
 }
 
+function handleBackToMovies() {
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: "api/backToMovies",
+        success: (lastURL) => window.location.replace("movies.html?" + lastURL["lastQueryString"])
+    });
+}
+
 console.log('About to send GET request to SingleMovieServlet');
 
 let movieId = getParameterByName('id');

@@ -31,6 +31,9 @@ function resetFromQueryString(queryString) {
     return queryString;
 }
 
+/**
+ * how the button to handle sort and pagination will work
+ */
 let sort_form = jQuery("#sort_form");
 function handleSort() {
     //need to remove because otherwise, the sortBy param will stay and never be updated
@@ -100,6 +103,30 @@ let page = getParameterByName('page');
 if (sortBy == null){
     sortBy = "ratingDesc";
 }
+//changes default selections
+jQuery("#sortBy").val(sortBy);
+jQuery("#limit").val(limit);
+jQuery("#current").append("Page " + page);
+
+/**
+ * next and previous buttons
+ */
+function handlePrev() {
+    let pageRegExp = /&page=[0-9]+/;
+    let queryString = window.location.search;
+    if (page != 1) {
+        queryString = queryString.replace(pageRegExp, "&page=" + (parseInt(page)-1));
+    }
+    window.location.replace(queryString);
+}
+
+
+function handleNext() {
+    let pageRegExp = /&page=[0-9]+/;
+    let queryString = window.location.search;
+    queryString = queryString.replace(pageRegExp, "&page=" + (parseInt(page)+1));
+    window.location.replace(queryString);
+}
 
 console.log('About to send GET request to MoviesServlet!');
 //if no method, default is top movies of a certain kind
@@ -118,7 +145,7 @@ else if (method =="search") {
     let director = getParameterByName('director');
     let star = getParameterByName('star');
 
-    let url = `api/movies/search?name=${name}&year=${year}&director=${director}&star=${star}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
+    let url = `api/movies/search?method=${method}&name=${name}&year=${year}&director=${director}&star=${star}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
 
     jQuery.ajax({
         dataType: "json",
@@ -132,7 +159,7 @@ else if (method === "browse") {
     let genre = getParameterByName('genre');
     let character = getParameterByName('character');
 
-    let url = `api/movies/browse?genre=${genre}&character=${character}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
+    let url = `api/movies/browse?method=${method}&genre=${genre}&character=${character}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
 
     jQuery.ajax({
         dataType: "json",

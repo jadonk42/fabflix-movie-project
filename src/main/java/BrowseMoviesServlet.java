@@ -7,6 +7,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.*;
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -32,12 +33,16 @@ public class BrowseMoviesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //SAVE THE LAST SEEN MOVIE SEARCH IN THE SESSION
+
+
         response.setContentType("application/json");
         String movieGenre = request.getParameter("genre");
         String movieTitle = request.getParameter("character");
         String sortBy = request.getParameter("sortBy");
         int limit = Integer.parseInt(request.getParameter("limit"));
         int page = Integer.parseInt(request.getParameter("page"));
+
         if (movieTitle.equals("null")) {
             movieTitle = null;
         }

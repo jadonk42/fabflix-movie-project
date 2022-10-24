@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.sql.DataSource;
@@ -28,9 +29,14 @@ public class SearchMovieServlet extends HttpServlet{
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        //SAVE THE LAST SEEN MOVIE SEARCH IN THE SESSION
+        HttpSession session = request.getSession(true);
+        session.setAttribute("lastQueryString", request.getQueryString());
+        System.out.println("JUST SAVED: " + (String)session.getAttribute("lastQueryString"));
 
+        response.setContentType("application/json");
         System.out.println(request.getQueryString());
         String sortBy = request.getParameter("sortBy");
         String name = request.getParameter("name");
