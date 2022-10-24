@@ -37,7 +37,6 @@ public class SearchMovieServlet extends HttpServlet{
         System.out.println("JUST SAVED: " + (String)session.getAttribute("lastQueryString"));
 
         response.setContentType("application/json");
-        System.out.println(request.getQueryString());
         String sortBy = request.getParameter("sortBy");
         String name = request.getParameter("name");
         String year = request.getParameter("year");
@@ -45,7 +44,6 @@ public class SearchMovieServlet extends HttpServlet{
         String star = request.getParameter("star");
         int limit = Integer.parseInt(request.getParameter("limit"));
         int page = Integer.parseInt(request.getParameter("page"));
-        System.out.println(limit);
 
         PrintWriter out = response.getWriter();
 
@@ -61,7 +59,7 @@ public class SearchMovieServlet extends HttpServlet{
                 return;
             }
 
-            System.out.println(statement);
+            log(statement.toString());
             ResultSet rs = statement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
@@ -180,13 +178,13 @@ public class SearchMovieServlet extends HttpServlet{
                 "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode;
+                "ORDER BY m.title " + mode;
         String topMoviesResults = "WITH TopMovies AS ( " +
                 "SELECT DISTINCT(m.id) as movieId " +
                 "FROM movies as m, stars_in_movies as sm, stars as s " +
                 "WHERE m.id = sm.movieId AND s.id = sm.starId ";
         if (name != "" && name != null) {
-            topMoviesResults += "AND m.title LIKE '" + name +  "%' ";
+            topMoviesResults += "AND (m.title = '" + name + "' OR m.title LIKE '" + name +  "%' OR m.title LIKE '" + "% " + name + "%') " ;
         }
         if (isNumeric(year)) {
             topMoviesResults += "AND m.year = " + year + " ";
