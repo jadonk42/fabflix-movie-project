@@ -2,8 +2,13 @@ h3 {
     font-family: Comic Sans MS, serif;
 }
 
-.topNavigationBar {
+body {
     background-color: #333;
+    color: #E1D9D1;
+}
+
+.topNavigationBar {
+    background-color: #57544e;
     overflow: hidden;
     outline: 5px;
 }
@@ -25,18 +30,40 @@ div p {
 
 #genre-list {
     display: grid;
+    background-color: #57544e;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     grid-auto-rows: 16px;
     padding-left: 5%;
     padding-right: 20%;
+    padding-bottom: 4%;
+    height: auto;
 }
 
 #character-list {
     display: grid;
+    background-color: #57544e;
     grid-template-columns: repeat(6, 1fr);
     gap: 0px;
     grid-auto-rows: 16px;
     padding-left: 5%;
     padding-right:60%;
+    padding-bottom: 4%;
+    height: auto;
+}
+
+.item-list a:link {
+    color: #45adf7;
+}
+
+.item-list a:visited {
+    color: #45adf7;
+}
+
+#back-to-movies:visited {
+    color: #45adf7;
+}
+
+#back-to-movies:link {
+    color: #45adf7;
 }

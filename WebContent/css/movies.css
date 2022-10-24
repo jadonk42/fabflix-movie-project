@@ -12,18 +12,18 @@ th, td {
     border: 1px solid;
 }
 
-/* Zebra-Striped Rows */
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
 /* Changes row color when you hover over it */
 tr:hover {
-    background-color: coral;
+    background-color: #5e0f05;
+}
+
+body {
+    background-color: #333;
+    color: #E1D9D1;
 }
 
 .topNavigationBar {
-    background-color: #333;
+    background-color: #57544e;
     overflow: hidden;
     outline: 5px;
 }
@@ -41,4 +41,12 @@ tr:hover {
 
 .searchBar {
 
+}
+
+.redirect-link a:link {
+    color: #45adf7;
+}
+
+.redirect-link a:visited {
+    color: #45adf7;
 }

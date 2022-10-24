@@ -4,7 +4,7 @@
 - Jadon Kwan(jadonk@uci.edu)
 
 ## 1. Demo Video Link: 
-https://drive.google.com/file/d/1FotQA1gxqtqJZssnmm1z-wYQLJvLQ9ut/view?usp=sharing
+TO BE ADDED
 
 ## 2. How to deploy application:
 
@@ -47,18 +47,27 @@ mysql> quit;
 5. Set up tomcat to use your war file (IntelliJ has configuration with Tomcat).
 6. Open your localhost to the correct port.
 
-## 3. Member Contributions:
+## 3. Substring Matching Design:
+For title, director, and stars: ```LIKE 'substring%' OR LIKE '% substring'```. 
+This would catch titles beginning with the substring, 
+or catching another word that began with the substring.
+It would also catch both first and last names for directors and stars.
+
+
+## 4. Member Contributions:
 ## Yaseen Khan
-- Connected moviedb database to project
-- Wrote SQL queries to extract movies and stars information from moviedb database
-- Implemented backend servlets of the movies page, single movie page, and single star page
-- CSS styling of all pages
-- README
+- Implemented Browse functionality
+- Implemented Shopping Cart
+- Implemented Checkout and Payment functionality.
+- Helped with hyperlinks to Browse Page.
+- Styling with CSS.
 
 ## Jadon Kwan
-- Project structure initial setup
-- Implemented frontend portion of the movies page, single movie page, and single star page
-- Connected frontend to backend servlets in order to populate pages with info from database.
-- Project 1 demo video
-- README
+- Implemented Search functionality.
+- Implemented Login functionality.
+- Implemented Sorting functionality.
+- Added pagination support.
+- Added support to maintain sorting/pagination/search results when jumping back to 
+movies page
+- Styling with CSS.
 

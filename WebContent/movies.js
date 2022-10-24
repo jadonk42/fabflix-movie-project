@@ -47,7 +47,7 @@ function splitCsvStringToList(csv_string, limit){
     let csv_list = csv_string.split(",")
     let list_string = "<ol>"
     for(let i = 0; i < Math.min(csv_list.length, limit); ++i){
-        list_string += "<li> <a href=\"movies.html?method=browse&genre=" + csv_list[i] +  "&character=null&sortBy=ratingDesc&limit=10&page=1" +  "\">";
+        list_string += "<li  class=\"redirect-link\"> <a href=\"movies.html?method=browse&genre=" + csv_list[i] +  "&character=null&sortBy=ratingDesc&limit=10&page=1" +  "\">";
         list_string += csv_list[i] + "</a></li>"
     }
     list_string += "</ol>"
@@ -60,7 +60,7 @@ function convertCSVIntoHyperlinks(csv_string, csv_Id_string){
     let result = "<ol>";
 
     for(let i=0; i < Math.min(csv_list.length, 3); ++i){
-        result += "<li> <a href=\"single-star.html?id=" + csvId_list[i] + "\">";
+        result += "<li  class=\"redirect-link\"> <a href=\"single-star.html?id=" + csvId_list[i] + "\">";
         result += csv_list[i] +"</a></li>";
     }
     result += "</ol>"
@@ -78,7 +78,7 @@ function populateHTMLWithMovieData(resultData, limit) {
     for(let i =0; i < Math.min(limit, resultData.length); ++i){
         htmlString += "<tr>";
         htmlString +=
-            "<td>" +
+            "<td class=\"redirect-link\">" +
             "<a href=\"single-movie.html?id=" + resultData[i]["movie_id"] + "\">"
             + resultData[i]["movie_title"] +
             "</a>" +
@@ -112,7 +112,7 @@ if (page == null){
 //changes default selections
 jQuery("#sortBy").val(sortBy);
 jQuery("#limit").val(limit);
-jQuery("#current-page-span").append(" Page " + page + " ");
+jQuery(".current-page-span").append(" Page " + page + " ");
 
 /**
  * next and previous buttons

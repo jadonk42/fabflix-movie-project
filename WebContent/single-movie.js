@@ -56,7 +56,7 @@ function populateHTMLWithSingleMovieData(resultData) {
     console.log(resultData);
     let movieInformationList = jQuery("#single-movie-info-list");
     let htmlString = "";
-    htmlString += "<h3>" + resultData["movie_title"] + "</h3>";
+    htmlString += "<h1>" + resultData["movie_title"] + "</h1>";
     htmlString += "<p>" + resultData["movie_year"] + "</p>";
     htmlString += "<p>Directed by " + resultData["movie_director"] + "</p>";
     htmlString += "<p>Genres: " + convertGenreToHyperlink(resultData["movie_genres"]) + "</p>";

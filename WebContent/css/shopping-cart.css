@@ -1,9 +1,13 @@
-.topNavigationBar {
+body {
     background-color: #333;
+    color: #E1D9D1;
+}
+
+.topNavigationBar {
+    background-color: #57544e;
     overflow: hidden;
     outline: 5px;
 }
-
 /* Style the links inside the navigation bar */
 .topNavigationBar a {
     float: left;

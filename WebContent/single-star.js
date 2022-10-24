@@ -48,7 +48,7 @@ function populateHTMLWithSingleStarData(resultData){
     let starInformationList = jQuery("#single-star-info-list");
     let htmlString = "";
 
-    htmlString += "<h3>" + resultData["star_name"] + "</h3>";
+    htmlString += "<h1>" + resultData["star_name"] + "</h1>";
     if(resultData["star_dob"] != null){
         htmlString += "<p>Born in " + resultData["star_dob"] + "</p>";
     }

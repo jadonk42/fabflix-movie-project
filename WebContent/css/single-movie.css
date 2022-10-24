@@ -1,10 +1,16 @@
 
-h3 {
-    font-family: Comic Sans MS, serif;
+h1 {
+    font-family: Sans-serif, Comic Sans MS, serif;
+    color: #bd0300;
+}
+
+body {
+    background-color: #333;
+    color: #E1D9D1;
 }
 
 .topNavigationBar {
-    background-color: #333;
+    background-color: #57544e;
     overflow: hidden;
     outline: 5px;
 }
@@ -18,4 +24,12 @@ h3 {
     text-decoration: none;
     font-size: 17px;
     font-family: Arial, Helvetica;
+}
+
+.item-list a:link {
+    color: #45adf7;
+}
+
+.item-list a:visited {
+    color: #45adf7;
 }

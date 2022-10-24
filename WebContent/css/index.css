@@ -2,21 +2,13 @@ h1 {
     font-family: Comic Sans MS, serif;
 }
 
-/* Dark Mode */
-.dark-mode {
-    background-color: #141d26;
+body {
+    background-color: #333;
     color: #E1D9D1;
 }
 
-/* Dark mode Button */
-button {
-    position:absolute;
-    top:6px;
-    right:6px;
-}
-
 .topNavigationBar {
-    background-color: #333;
+    background-color: #57544e;
     overflow: hidden;
     outline: 5px;
 }
