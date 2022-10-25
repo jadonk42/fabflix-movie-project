@@ -1,4 +1,4 @@
-# Project 1 
+# Project 2 
 ## Team #37 Members
 - Yaseen Khan(yaseenk@uci.edu)
 - Jadon Kwan(jadonk@uci.edu)
@@ -57,15 +57,17 @@ It would also catch both first and last names for directors and stars.
 ## 4. Member Contributions:
 ## Yaseen Khan
 - Implemented Browse functionality
-- Implemented Shopping Cart
 - Implemented Checkout and Payment functionality.
+- Implemented Order Confirmation Page
 - Helped with hyperlinks to Browse Page.
+- Query Optimizations and Code Refactoring
 - Styling with CSS.
 
 ## Jadon Kwan
 - Implemented Search functionality.
 - Implemented Login functionality.
 - Implemented Sorting functionality.
+- Implemented Shopping Cart
 - Added pagination support.
 - Added support to maintain sorting/pagination/search results when jumping back to 
 movies page
