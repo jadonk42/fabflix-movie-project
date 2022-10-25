@@ -19,19 +19,20 @@
 
 <h1>Welcome to the Shopping Cart Page</h1>
 
-<div class="movies-row">
-    <span class="movie-item  movie-header movie-column">Movie Title</span>
-    <span class="movie-price movie-header movie-column">Movie Price</span>
-    <span class="movie-quantity movie-header movie-column">Quantity</span>
-</div>
-<div class="movie-items">
-</div>
-<div class="movie-total">
-    <strong class="movie-total-title">Total</strong>
-    <span class="movie-total-price">$0</span>
-</div>
+<table id="movies-table">
+    <thead id="movie-header">
+    <tr>
+        <th>Movie Title</th>
+        <th>Movie Price</th>
+        <th>Quantity</th>
+    </tr>
+    </thead>
 
+    <tbody id="movie-items"></tbody>
+</table>
 
+<br><br>
+<button onclick="handleBackToMovies()">Back to Movies Page</button>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="shopping-cart.js"></script>

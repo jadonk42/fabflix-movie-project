@@ -18,33 +18,30 @@ import static java.lang.Integer.parseInt;
 public class ShoppingCartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("in shopping cart servlet");
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         JsonArray jsonArray = new JsonArray();
-        String movieTitle = request.getParameter("movieToBuy");
 
         try {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             HashMap<String, Integer> cart = (HashMap<String, Integer>) session.getAttribute("shoppingCart");
 
             if (cart == null) {
-                cart = new HashMap<>();
-                session.setAttribute("shoppingCart", cart);
+                System.out.println("there is no cart");
+                out.write(jsonArray.toString());
+                response.setStatus(HttpURLConnection.HTTP_OK);
+                return;
             }
 
+            System.out.println("there is a cart");
             request.getServletContext().log("getting " + cart.size() + " movies");
 
-            synchronized (cart) {
-                if (cart.containsKey(movieTitle)) {
-                    cart.put(movieTitle, cart.get(movieTitle) + 1);
-                }
-                else if (movieTitle != null && !movieTitle.equals("null")) {
-                    cart.put(movieTitle, 1);
-                }
-            }
 
             // Populate JSON object
             for (Map.Entry<String, Integer> movie : cart.entrySet()) {
+                System.out.println(movie.getKey());
+                System.out.println(movie.getValue());
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("movie_name", movie.getKey());
                 jsonObject.addProperty("movie_quantity", movie.getValue().toString());
@@ -77,35 +74,38 @@ public class ShoppingCartServlet extends HttpServlet {
 
         if (action.equals("addToCart")) {
             int quantity = 1;
-            String movieID = request.getParameter("movie");
+            String movie = request.getParameter("movie");
             //update K, V pair for the movie by adding the quantity
-            if(shoppingCart.get(movieID) == null){
-                shoppingCart.put(movieID, quantity);
+            if(shoppingCart.get(movie) == null){
+                System.out.println("just added " + movie + " amount=" + quantity);
+                shoppingCart.put(movie, quantity);
             }
             else {
-                shoppingCart.put(movieID, shoppingCart.get(movieID)+ quantity);
+                shoppingCart.put(movie, shoppingCart.get(movie)+ quantity);
+                System.out.println("just added " + movie + " amount=" + quantity);
             }
         }
         else if (action.equals("removeFromCart")) {
-            String movieID = request.getParameter("movie");
+            String movie = request.getParameter("movie");
             //update K, V pair for the movie by subtracting the quantity
-            if(shoppingCart.get(movieID) == null){
+            if(shoppingCart.get(movie) == null){
                 response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR); //item was never in shopping cart, bad call
             }
             else {
-                shoppingCart.remove(movieID);
+                shoppingCart.remove(movie);
             }
         }
         else if (action.equals("modifyQuantity")) {
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            String movieID = request.getParameter("movie");
-            if(shoppingCart.get(movieID) == null){
+            String movie = request.getParameter("movie");
+            if(shoppingCart.get(movie) == null){
                 response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR); //item was never in shopping cart, bad call
             }
             else {
-                shoppingCart.put(movieID, quantity);
+                shoppingCart.put(movie, quantity);
             }
         }
+        session.setAttribute("shoppingCart", shoppingCart);
 
         response.setStatus(HttpURLConnection.HTTP_OK);
     }

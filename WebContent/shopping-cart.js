@@ -1,5 +1,3 @@
-
-
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -16,6 +14,46 @@ function getParameterByName(target) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+function handleBackToMovies() {
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: "api/backToMovies",
+        success: (lastURL) => window.location.replace("movies.html?" + lastURL["lastQueryString"])
+    });
+}
+
+let total = 0;
+function populateShoppingCartPage(resultData) {
+    console.log("received " + resultData.length + " items");
+    let cartItems = jQuery("#movie-items");
+    let htmlString = "";
+    if(resultData.length == 0) {
+        htmlString += "<tr>"
+        htmlString += "<td> class =\"movie-item\">No Moves in Cart</td>";
+        htmlString += "</tr>"
+        cartItems.append(htmlString);
+        document.getElementsByClassName('movie-total-price')[0].innerText = '$' + total;
+        return;
+    }
+
+
+    for(let i =0; i <resultData.length; ++i){
+        htmlString += "<tr>"
+        htmlString += "<td class =\"movie-item\">" + resultData[i]['movie_name'] + "</td>";
+        htmlString += "<td class =\"movie-price\">" + "20" + "</td>";
+        htmlString += "<td class =\"movie-quantity\">" + resultData[i]['movie_quantity'] + "</td>";
+        htmlString += "</tr>"
+        total += resultData[i]['movie_quantity'] * 20;
+    }
+
+    cartItems.append(htmlString);
+    document.getElementsByClassName('movie-total-price')[0].innerText = '$' + total;
+
+}
+
+
+/*
 function ready(resultData) {
     var removeCartItemButtons = document.getElementsByClassName('remove-movie')
     for (let i = 0; i < removeCartItemButtons.length; i++) {
@@ -28,9 +66,8 @@ function ready(resultData) {
         var input = quantityInputs[i];
         input.addEventListener('change', changeMovieQuantity);
     }
-
-    addToCartClicked(resultData);
 }
+
 
 let title = getParameterByName("movieToBuy");
 function addToCartClicked(resultData) {
@@ -45,9 +82,9 @@ function addToCartClicked(resultData) {
             updateCartTotal();
         }
     }
-}
+}*/
 
-function removeMovieFromCart(event) {
+function handleRemoveMovieFromCart(movieToRemove) {
     let removeMovie = event.target;
     // jQuery.ajax(
     //     "api/shopping-cart?movieToBuy=" + title, {
@@ -80,21 +117,8 @@ function changeMovieQuantity(event) {
     updateCartTotal();
 }
 
-function updateCartTotal() {
-    let movieContainer = document.getElementsByClassName('movie-items')[0];
-    let movieRows = movieContainer.getElementsByClassName('movies-row');
-    var movieTotal = 0;
-    for (let i = 0; i < movieRows.length; i++) {
-        let movieRow = movieRows[i];
-        let moviePrice = movieRow.getElementsByClassName('movie-price')[0];
-        let movieQuantity = movieRow.getElementsByClassName('movie-quantity-input')[0];
-        let currPrice = parseInt(moviePrice.innerText.replace("$", ''));
-        let currQuantity = movieQuantity.value;
-        movieTotal = movieTotal + (currPrice * currQuantity);
-    }
-    document.getElementsByClassName('movie-total-price')[0].innerText = '$' + movieTotal;
-}
 
+/*
 function addMovieToCart(title, price, quantity) {
     let movieRow = document.createElement("div");
     movieRow.classList.add('movies-row')
@@ -113,13 +137,13 @@ function addMovieToCart(title, price, quantity) {
     movieItems.append(movieRow)
     movieRow.getElementsByClassName('remove-movie')[0].addEventListener('click', removeMovieFromCart)
     movieRow.getElementsByClassName('movie-quantity-input')[0].addEventListener('change', changeMovieQuantity)
-}
+}*/
 
-let url = "api/shopping-cart?movieToBuy=" + title;
+let url = "api/shopping-cart";
 jQuery.ajax({
     dataType: "json",
     method: "GET",
     url: url,
-    success: (resultData) => ready(resultData),
+    success: (resultData) => populateShoppingCartPage(resultData),
     error: (resultData) => console.log(resultData)
 });
