@@ -49,13 +49,3 @@ jQuery.ajax({
     success: (resultData) => populateHTMLWithMovieData(resultData),
     error: (resultData) => console.log(resultData)
 });
-
-jQuery.ajax(
-    "api/shopping-cart", {
-        method: "POST",
-        // Serialize the login form to the data sent by POST request
-        data: "action=clear",
-        success: window.location.replace("order-confirmation.html"),
-        error: (resultData) => console.log(resultData)
-    }
-);

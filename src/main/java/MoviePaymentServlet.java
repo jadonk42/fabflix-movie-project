@@ -90,6 +90,7 @@ public class MoviePaymentServlet extends HttpServlet {
         catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
+            jsonObject.addProperty("status", "failure");
             out.write(jsonObject.toString());
 
             request.getServletContext().log("Error here:", e);
