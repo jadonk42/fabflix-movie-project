@@ -102,6 +102,9 @@ public class ShoppingCartServlet extends HttpServlet {
                 shoppingCart.put(movie, quantity);
             }
         }
+        else if (action.equals("clear")) {
+            shoppingCart.clear();
+        }
         session.setAttribute("shoppingCart", shoppingCart);
 
         response.setStatus(HttpURLConnection.HTTP_OK);

@@ -74,7 +74,7 @@ function populateHTMLWithSingleMovieData(resultData) {
     htmlString += "<p>Genres: " + convertGenreToHyperlink(resultData["movie_genres"]) + "</p>";
     htmlString += "<p>Starring: " + convertStarsIntoHyperlinks(resultData["movie_stars"], resultData["movie_star_ids"])+ "</p>";
     htmlString += "<p>Rating: " + resultData["movie_rating"] + "</p>";
-    htmlString += "<div>" + "$20" + "<br><br><button onclick='handleAddToCart(\"" + resultData["movie_title"] +"\")'>";
+    htmlString += "<div>Price: $20" + "<br><br><button onclick='handleAddToCart(\"" + resultData["movie_title"] +"\")'>";
     htmlString += "Add Movie </button></div>";
 
     movieInformationList.append(htmlString);
