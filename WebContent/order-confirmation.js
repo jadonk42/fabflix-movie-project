@@ -2,23 +2,27 @@ function populateHTMLWithMovieData(resultData) {
     let movieTableElement = jQuery("#confirmation_table_body");
     let htmlString = "";
     for (let i = 0; i < resultData.length; i++) {
-        console.log(resultData[i]);
         htmlString += "<tr>";
 
-        htmlString += "<td>" + resultData[i]["movie_name"] + "</td>";
-        htmlString += "<td>" + resultData[i]["movie_price"] + "</td>";
-        htmlString += "<td>" + resultData[i]["movie_quantity"] + "</td>";
+        let movieTitle = resultData[i]["movie_name"];
+        let quantity = resultData[i]["movie_quantity"];
+
+        htmlString += "<td>" + "Test" + "</td>";
+        htmlString += "<td> $20 </td>";
+        htmlString += "<td>" + "Test" + "</td>";
         htmlString += "</tr>";
     }
     movieTableElement.append(htmlString);
 }
 
-let url = `api/movie-confirmation`;
+populateHTMLWithMovieData([1, 2, 3]);
 
-jQuery.ajax({
-    dataType: "json",
-    method: "GET",
-    url: url,
-    success: (resultData) => populateHTMLWithMovieData(resultData),
-    error: (resultData) => console.log(resultData)
-});
+// let url = `api/movie-confirmation`;
+//
+// jQuery.ajax({
+//     dataType: "json",
+//     method: "GET",
+//     url: url,
+//     success: (resultData) => populateHTMLWithMovieData(resultData),
+//     error: (resultData) => console.log(resultData)
+// });
