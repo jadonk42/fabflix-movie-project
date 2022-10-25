@@ -43,10 +43,12 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
         HashMap<String, Integer> cart = (HashMap) session.getAttribute("shoppingCart");
 
         for (Map.Entry<String, Integer> movie : cart.entrySet()) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("movie_name", movie.getKey());
-            jsonObject.addProperty("movie_quantity", movie.getValue().toString());
-            jsonArray.add(jsonObject);
+            if (!movie.getKey().equals("null")) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("movie_name", movie.getKey());
+                jsonObject.addProperty("movie_quantity", movie.getValue().toString());
+                jsonArray.add(jsonObject);
+            }
         }
 
 //        User getUserEmail = (User) session.getAttribute("user");

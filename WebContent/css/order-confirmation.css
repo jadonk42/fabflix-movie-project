@@ -19,3 +19,7 @@ body {
     font-size: 17px;
     font-family: Arial, Helvetica;
 }
+
+#confirmation_table {
+    width: 100%;
+}

@@ -102,14 +102,14 @@ public class MoviePaymentServlet extends HttpServlet {
 
     private String confirmCardQuery(String firstName, String lastName, String creditCardNum, String expirationDate) {
 
-        String getCardQuery = "SELECT EXISTS (SELECT c.firstName FROM creditCards as c " +
+        String getCardQuery = "SELECT EXISTS (SELECT c.firstName FROM creditcards as c " +
                 "WHERE c.firstName = '" + firstName + "') AS first_name_exists, " +
-                "EXISTS (SELECT c.firstName, c.lastName FROM creditCards as c " +
+                "EXISTS (SELECT c.firstName, c.lastName FROM creditcards as c " +
                 "WHERE c.firstName = '" + firstName + "' AND c.lastName = '" + lastName + "') AS last_name_exists, " +
-                "EXISTS (SELECT c.firstName, c.lastName, c.id FROM creditCards as c " +
+                "EXISTS (SELECT c.firstName, c.lastName, c.id FROM creditcards as c " +
                 "WHERE c.firstName = '" + firstName + "' AND c.lastName = '" + lastName + "' AND c.id = '" +
                 creditCardNum + "') AS credit_card_exists, " +
-                "EXISTS (SELECT c.firstName, c.lastName, c.id, c.expiration FROM creditCards as c " +
+                "EXISTS (SELECT c.firstName, c.lastName, c.id, c.expiration FROM creditcards as c " +
                 "WHERE c.firstName = '" + firstName + "' AND c.lastName = '" + lastName + "' AND c.id = '" +
                 creditCardNum + "' AND c.expiration = '" + expirationDate + "') AS expiration_exists";
 
