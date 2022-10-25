@@ -12,6 +12,11 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,26 +44,63 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         JsonArray jsonArray = new JsonArray();
 
+        LocalDate dateObj = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String saleDate = dateObj.format(formatter);
+
         HttpSession session = request.getSession();
         HashMap<String, Integer> cart = (HashMap) session.getAttribute("shoppingCart");
 
-        for (Map.Entry<String, Integer> movie : cart.entrySet()) {
-            if (!movie.getKey().equals("null")) {
+        User getUserEmail = (User) session.getAttribute("user");
+        String customerIdQuery = getCustomerId(getUserEmail.username);
+
+        try(Connection conn = dataSource.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(customerIdQuery);
+            ResultSet rs = statement.executeQuery();
+            String customerId = "";
+            String movieId = "";
+            while (rs.next()) {
+                customerId = rs.getString("id");
+            }
+            rs.close();
+            statement.close();
+
+            for (Map.Entry<String, Integer> movie : cart.entrySet()) {
+                if (!movie.getKey().equals("null")) {
+                    PreparedStatement movieStatement = conn.prepareStatement(getMovieId(movie.getKey()));
+                    ResultSet movieRs = movieStatement.executeQuery();
+                    while (movieRs.next()) {
+                        movieId = movieRs.getString("id");
+                    }
+                    movieRs.close();
+                    movieStatement.close();
+
+                    PreparedStatement insertMovieStatement = conn.prepareStatement(insertMovieSale(movieId, saleDate, customerId));
+                    insertMovieStatement.executeUpdate();
+                    insertMovieStatement.close();
+
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("movie_name", movie.getKey());
+                    jsonObject.addProperty("movie_quantity", movie.getValue().toString());
+                    jsonArray.add(jsonObject);
+                }
+            }
+
+            // Retrieve the sale id by the customer
+            PreparedStatement transactionsStatement = conn.prepareStatement(getAllTransactions(saleDate, customerId));
+            ResultSet transactionsRs = transactionsStatement.executeQuery();
+
+            while (transactionsRs.next()) {
+                String sales = transactionsRs.getString("id");
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("movie_name", movie.getKey());
-                jsonObject.addProperty("movie_quantity", movie.getValue().toString());
+                jsonObject.addProperty("saleId", sales);
                 jsonArray.add(jsonObject);
             }
-        }
+            transactionsRs.close();
+            transactionsStatement.close();
 
-//        User getUserEmail = (User) session.getAttribute("user");
-//
-//        String customerId = getCustomerId(getUserEmail.username);
-
-        out.write(jsonArray.toString());
-        response.setStatus(HttpURLConnection.HTTP_OK);
-
-        try {
+            out.write(jsonArray.toString());
+            response.setStatus(HttpURLConnection.HTTP_OK);
 
 
         } catch(Exception e) {
@@ -93,5 +135,11 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
         String insertIntoSalesTable = "INSERT INTO sales (customerId, movieId, saleDate) " +
                 "VALUES('" + customerId + "', '" + movieId + "', '" + saleDate + "')";
         return insertIntoSalesTable;
+    }
+
+    private String getAllTransactions(String saleDate, String customerId) {
+        String transactions = "SELECT GROUP_CONCAT(id) as id FROM sales " +
+                "WHERE customerId = '" + customerId + "' AND saleDate = '" + saleDate + "'";
+        return transactions;
     }
 }

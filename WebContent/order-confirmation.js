@@ -2,7 +2,7 @@ function populateHTMLWithMovieData(resultData) {
     let movieTableElement = jQuery("#confirmation_table_body");
     let htmlString = "";
     let totalPrice = 0;
-    for (let i = 0; i < resultData.length; i++) {
+    for (let i = 0; i < resultData.length - 1; i++) {
         htmlString += "<tr>";
 
         let movieTitle = resultData[i]["movie_name"];
@@ -17,9 +17,27 @@ function populateHTMLWithMovieData(resultData) {
     }
     movieTableElement.append(htmlString);
 
-    let totalPriceTable = jQuery("#totalPrice")
+    let totalPriceTable = jQuery("#totalPrice");
     let totalPriceString = "Total Price: $" + totalPrice.toString();
     totalPriceTable.append(totalPriceString);
+
+    let saleIdElement = jQuery("#saleId");
+    let saleIdString = "SaleId: ";
+    saleIdString = saleIdString + populateSales(resultData[resultData.length - 1]["saleId"]);
+    saleIdElement.append(saleIdString);
+}
+
+function populateSales(salesIdCSV) {
+    let sales_list = salesIdCSV.split(",");
+    let result = "";
+
+    for (let i = 0; i < sales_list.length; i++) {
+        result += sales_list[i];
+        if(i !== sales_list.length-1){
+            result += ", ";
+        }
+    }
+    return result;
 }
 
 let url = `api/movie-confirmation`;
