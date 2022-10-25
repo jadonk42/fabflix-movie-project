@@ -88,8 +88,9 @@ function populateHTMLWithMovieData(resultData, limit) {
         htmlString += "<td>" + splitCsvStringToList(resultData[i]["movie_genres"], 3) +"</td>";
         htmlString += "<td>" + convertCSVIntoHyperlinks(resultData[i]["movie_stars"], resultData[i]["movie_star_ids"])+"</td>";
         htmlString += "<td>" + resultData[i]["movie_rating"] + "</td>";
-        htmlString += "<td>" + "$20" + "<br><br><form action='shopping-cart.html'> <input type='submit' value='Add Movie' class='AddMovie'> </form>"
-            + "</td>";
+        htmlString += "<td>" + "$20" + "<br><br><form action='shopping-cart.html'>";
+        htmlString += "<input type='hidden' name='movieToBuy' value='" + resultData[i]["movie_title"];
+        htmlString += "'/> <input type='submit' value='Add Movie' class='AddMovie'> </form>" + "</td>";
         htmlString += "</tr>";
     }
 
