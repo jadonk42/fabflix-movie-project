@@ -30,7 +30,7 @@ function populateShoppingCartPage(resultData) {
     let htmlString = "";
     if(resultData.length == 0) {
         htmlString += "<tr>"
-        htmlString += "<td> class =\"movie-item\">No Moves in Cart</td>";
+        htmlString += "<td class =\"movie-item\">No Movies in Cart</td>";
         htmlString += "</tr>"
         cartItems.append(htmlString);
         document.getElementsByClassName('movie-total-price')[0].innerText = '$' + total;
@@ -39,10 +39,13 @@ function populateShoppingCartPage(resultData) {
 
 
     for(let i =0; i <resultData.length; ++i){
+        let updateButtonID = "updateForm" + i;
         htmlString += "<tr>"
         htmlString += "<td class =\"movie-item\">" + resultData[i]['movie_name'] + "</td>";
         htmlString += "<td class =\"movie-price\">" + "20" + "</td>";
-        htmlString += "<td class =\"movie-quantity\">" + resultData[i]['movie_quantity'] + "</td>";
+        htmlString += `<td><form id=\"${updateButtonID}\"><input className="movie-quantity-input" type="number" name="quantity" value=\"${resultData[i]['movie_quantity']}\"></form>`;
+        htmlString += `<button onclick="updateQuantities(\'${ resultData[i]['movie_name']}\', \'${updateButtonID}\')"` + ') className="remove-movie" type="button">Update</button>';
+        htmlString += `<button className="remove-movie" onclick="handleRemoveMovieFromCart('` + resultData[i]['movie_name']+ `')" type="button">Remove</button>` +"</td>";
         htmlString += "</tr>"
         total += resultData[i]['movie_quantity'] * 20;
     }
@@ -52,92 +55,33 @@ function populateShoppingCartPage(resultData) {
 
 }
 
-
-/*
-function ready(resultData) {
-    var removeCartItemButtons = document.getElementsByClassName('remove-movie')
-    for (let i = 0; i < removeCartItemButtons.length; i++) {
-        var button = removeCartItemButtons[i];
-        button.addEventListener('click', removeMovieFromCart);
-    }
-
-    var quantityInputs = document.getElementsByClassName('movie-quantity-input')
-    for (var i = 0; i < quantityInputs.length; i++) {
-        var input = quantityInputs[i];
-        input.addEventListener('change', changeMovieQuantity);
-    }
+function updateQuantities(movie, updateButtonID) {
+    let queryString = jQuery("#" + updateButtonID).serialize();
+    queryString += `&action=modifyQuantity&movie=${movie}`
+    jQuery.ajax(
+        "api/shopping-cart", {
+            method: "POST",
+            // Serialize the login form to the data sent by POST request
+            data: queryString,
+            success: window.location.replace("shopping-cart.html"),
+            error: (resultData) => console.log(resultData)
+        }
+    );
 }
 
-
-let title = getParameterByName("movieToBuy");
-function addToCartClicked(resultData) {
-    var price = "$20";
-
-    for (let i = 0; i < resultData.length; i++) {
-        let movieTitle = resultData[i]["movie_name"];
-        let quantity = resultData[i]["movie_quantity"];
-
-        if (movieTitle !== null) {
-            addMovieToCart(movieTitle, price, quantity);
-            updateCartTotal();
-        }
-    }
-}*/
 
 function handleRemoveMovieFromCart(movieToRemove) {
-    let removeMovie = event.target;
-    // jQuery.ajax(
-    //     "api/shopping-cart?movieToBuy=" + title, {
-    //         method: "POST",
-    //         // Serialize the login form to the data sent by POST request
-    //         data: event.serialize(),
-    //         success: (resultData) => ready(resultData),
-    //         error: (resultData) => console.log(resultData)
-    //     }
-    // );
-    removeMovie.parentElement.parentElement.remove();
-    updateCartTotal();
+    jQuery.ajax(
+        "api/shopping-cart", {
+            method: "POST",
+            // Serialize the login form to the data sent by POST request
+            data: `action=removeFromCart&movie=${movieToRemove}`,
+            success: window.location.replace("shopping-cart.html"),
+            error: (resultData) => console.log(resultData)
+        }
+    );
 }
 
-function changeMovieQuantity(event) {
-    let quantity = event.target;
-    if (isNaN(quantity.value) || quantity.value <= 0) {
-        quantity.value = 1;
-    }
-
-    // jQuery.ajax(
-    //     "api/shopping-cart?movieToBuy=" + title + "&quantity=" + quantity, {
-    //         method: "POST",
-    //         // Serialize the login form to the data sent by POST request
-    //         data: event.serialize(),
-    //         success: (resultData) => ready(resultData),
-    //         error: (resultData) => console.log(resultData)
-    //     }
-    // );
-    updateCartTotal();
-}
-
-
-/*
-function addMovieToCart(title, price, quantity) {
-    let movieRow = document.createElement("div");
-    movieRow.classList.add('movies-row')
-    var movieItems = document.getElementsByClassName('movie-items')[0]
-    var movieItemNames = movieItems.getElementsByClassName('movie-item-title')
-    var movieRowContents = `
-        <div class="movie-item movie-column">
-            <span class="movie-item-title">${title}</span>
-        </div>
-        <span class="movie-price movie-column">${price}</span>
-        <div class="movie-quantity movie-column">
-            <input class="movie-quantity-input" type="number" value=${quantity}>
-            <button class="btn remove-movie" type="button">REMOVE</button>
-        </div>`
-    movieRow.innerHTML = movieRowContents
-    movieItems.append(movieRow)
-    movieRow.getElementsByClassName('remove-movie')[0].addEventListener('click', removeMovieFromCart)
-    movieRow.getElementsByClassName('movie-quantity-input')[0].addEventListener('change', changeMovieQuantity)
-}*/
 
 let url = "api/shopping-cart";
 jQuery.ajax({

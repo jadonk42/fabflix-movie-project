@@ -40,8 +40,6 @@ public class ShoppingCartServlet extends HttpServlet {
 
             // Populate JSON object
             for (Map.Entry<String, Integer> movie : cart.entrySet()) {
-                System.out.println(movie.getKey());
-                System.out.println(movie.getValue());
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("movie_name", movie.getKey());
                 jsonObject.addProperty("movie_quantity", movie.getValue().toString());
@@ -87,7 +85,6 @@ public class ShoppingCartServlet extends HttpServlet {
         }
         else if (action.equals("removeFromCart")) {
             String movie = request.getParameter("movie");
-            //update K, V pair for the movie by subtracting the quantity
             if(shoppingCart.get(movie) == null){
                 response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR); //item was never in shopping cart, bad call
             }

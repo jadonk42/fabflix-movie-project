@@ -48,6 +48,18 @@ function convertGenreToHyperlink(csv_genre_string) {
     return result;
 }
 
+function handleAddToCart(movie) {
+    jQuery.ajax(
+        "api/shopping-cart", {
+            method: "POST",
+            // Serialize the login form to the data sent by POST request
+            data: `action=addToCart&movie=${movie}`,
+            success: window.location.replace("shopping-cart.html"),
+            error: (resultData) => console.log(resultData)
+        }
+    );
+}
+
 /**
  * Takes json data about movie and puts the data into the html element.
  * @param resultData jsonObject
@@ -61,8 +73,9 @@ function populateHTMLWithSingleMovieData(resultData) {
     htmlString += "<p>Directed by " + resultData["movie_director"] + "</p>";
     htmlString += "<p>Genres: " + convertGenreToHyperlink(resultData["movie_genres"]) + "</p>";
     htmlString += "<p>Starring: " + convertStarsIntoHyperlinks(resultData["movie_stars"], resultData["movie_star_ids"])+ "</p>";
-    htmlString += "<p>" + resultData["movie_rating"] + "</p>";
-    htmlString += "<p>Price: $20 </p>";
+    htmlString += "<p>Rating: " + resultData["movie_rating"] + "</p>";
+    htmlString += "<div>" + "$20" + "<br><br><button onclick='handleAddToCart(\"" + resultData["movie_title"] +"\")'>";
+    htmlString += "Add Movie </button></div>";
 
     movieInformationList.append(htmlString);
 }

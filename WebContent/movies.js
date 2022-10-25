@@ -89,7 +89,7 @@ function populateHTMLWithMovieData(resultData, limit) {
         htmlString += "<td>" + convertCSVIntoHyperlinks(resultData[i]["movie_stars"], resultData[i]["movie_star_ids"])+"</td>";
         htmlString += "<td>" + resultData[i]["movie_rating"] + "</td>";
         htmlString += "<td>" + "$20" + "<br><br><button onclick='handleAddToCart(\"" + resultData[i]["movie_title"] +"\")'>";
-        htmlString += "Add Movie </button>";
+        htmlString += "Add Movie </button></td>";
         htmlString += "</tr>";
     }
 

@@ -45,6 +45,7 @@ body {
 
 .movie-item {
     width: 45%;
+    font-size: 1.2em;
 }
 
 .movie-item-title {
@@ -73,12 +74,13 @@ body {
 .movie-total-title {
     font-weight: bold;
     font-size: 1.5em;
-    color: black;
+    color: f2f2f2;
     margin-right: 20px;
+    text-align: left;
 }
 
 .movie-total-price {
-    color: #333;
+    color: #f2f2f2;
     font-size: 1.1em;
 }
 
