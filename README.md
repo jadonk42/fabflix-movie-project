@@ -4,7 +4,7 @@
 - Jadon Kwan(jadonk@uci.edu)
 
 ## 1. Demo Video Link: 
-TO BE ADDED
+https://drive.google.com/file/d/1RPK_vJizaxvTwn9-aLwVdnJSFAUT09GQ/view?usp=sharing
 
 ## 2. How to deploy application:
 
