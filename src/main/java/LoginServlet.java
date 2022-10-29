@@ -1,5 +1,6 @@
 import com.google.gson.JsonObject;
 import main.java.User;
+import main.java.RecaptchaVerifyUtils;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -31,6 +32,7 @@ public class LoginServlet extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
         // Set the response to be a JSON object
         response.setContentType("application/json");
@@ -38,6 +40,18 @@ public class LoginServlet extends HttpServlet{
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
+        // Verify reCAPTCHA
+        try {
+            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+        } catch (Exception e) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("message", "Recaptcha incorrect, please try again.");
+            jsonObject.addProperty("status", "fail");
+
+            out.write(jsonObject.toString());
+            out.close();
+            return;
+        }
         // Establish connection with database and closes connection after being used
         try (Connection conn = dataSource.getConnection()) {
 
