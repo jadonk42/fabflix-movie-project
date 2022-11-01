@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.sql.DataSource;
 import java.sql.*;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet{
@@ -62,30 +63,29 @@ public class LoginServlet extends HttpServlet{
              */
             final String query = "SELECT EXISTS (SELECT c.email  FROM customers AS c " +
                     "WHERE c.email = ?) AS user_exists, " +
-                    "EXISTS (SELECT c.email, c.password  FROM customers AS c " +
-                    "WHERE c.email = ? AND c.password = ?) AS password_correct";
+                    "c.password AS encrypted_pass FROM customers AS c " +
+                    "WHERE c.email = ?";
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(query);
 
             // Set the parameter represented by "?" in the query to the user and password
             statement.setString(1, username);
             statement.setString(2, username);
-            statement.setString(3, password);
 
             ResultSet rs = statement.executeQuery();
 
             // Create jsonObject to return
             JsonObject jsonObject = new JsonObject();
             String user_exists = "0";
-            String pass_correct = "0";
+            String encrypted_pass = " ";
 
             while(rs.next()){
                 user_exists = rs.getString("user_exists");
-                pass_correct = rs.getString("password_correct");
+                encrypted_pass = rs.getString("encrypted_pass");
             }
+            boolean password_success = new StrongPasswordEncryptor().checkPassword(password, encrypted_pass);
 
-
-            if (Integer.parseInt(user_exists) == 1 && Integer.parseInt(pass_correct) == 1) {
+            if (Integer.parseInt(user_exists) == 1 && password_success) {
                 request.getSession().setAttribute("user",  new User(username));
                 jsonObject.addProperty("status", "success");
             } else{
@@ -108,6 +108,7 @@ public class LoginServlet extends HttpServlet{
         }
         catch (Exception e) {
             // Write error message JSON object to output
+            System.out.println("exception thrown");
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
             out.write(jsonObject.toString());

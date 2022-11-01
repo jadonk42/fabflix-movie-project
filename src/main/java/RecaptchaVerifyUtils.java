@@ -24,7 +24,7 @@ public class RecaptchaVerifyUtils {
         conn.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
         // Data will be sent to the server.
-        String postParams = "secret=" + "SECRET_KEY HERE" + "&response=" + gRecaptchaResponse;
+        String postParams = "secret=" + "6LdJLsQiAAAAAMFzBHa3aWl9kKYXRcB4QNBIKH-E" + "&response=" + gRecaptchaResponse;
 
         // Send Request
         conn.setDoOutput(true);
