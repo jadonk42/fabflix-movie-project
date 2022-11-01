@@ -27,10 +27,6 @@ public class MoviePaymentServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,7 +44,17 @@ public class MoviePaymentServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(confirmCardQuery(firstName, lastName, creditCardNum, expirationDate));
+            PreparedStatement statement = conn.prepareStatement(confirmCardQuery());
+            statement.setString(1, firstName);
+            statement.setString(2, firstName);
+            statement.setString(3, lastName);
+            statement.setString(4, firstName);
+            statement.setString(5, lastName);
+            statement.setString(6, creditCardNum);
+            statement.setString(7, firstName);
+            statement.setString(8, lastName);
+            statement.setString(9, creditCardNum);
+            statement.setString(10, expirationDate);
 
             ResultSet rs = statement.executeQuery();
             JsonObject jsonObject = new JsonObject();
@@ -101,18 +107,15 @@ public class MoviePaymentServlet extends HttpServlet {
         }
     }
 
-    private String confirmCardQuery(String firstName, String lastName, String creditCardNum, String expirationDate) {
-
-        String getCardQuery = "SELECT EXISTS (SELECT c.firstName FROM creditcards as c " +
-                "WHERE c.firstName = '" + firstName + "') AS first_name_exists, " +
+    private String confirmCardQuery() {
+        final String getCardQuery = "SELECT EXISTS (SELECT c.firstName FROM creditcards as c " +
+                "WHERE c.firstName = ?) AS first_name_exists, " +
                 "EXISTS (SELECT c.firstName, c.lastName FROM creditcards as c " +
-                "WHERE c.firstName = '" + firstName + "' AND c.lastName = '" + lastName + "') AS last_name_exists, " +
+                "WHERE c.firstName = ? AND c.lastName = ?) AS last_name_exists, " +
                 "EXISTS (SELECT c.firstName, c.lastName, c.id FROM creditcards as c " +
-                "WHERE c.firstName = '" + firstName + "' AND c.lastName = '" + lastName + "' AND c.id = '" +
-                creditCardNum + "') AS credit_card_exists, " +
+                "WHERE c.firstName = ? AND c.lastName = ? AND c.id = ?) AS credit_card_exists, " +
                 "EXISTS (SELECT c.firstName, c.lastName, c.id, c.expiration FROM creditcards as c " +
-                "WHERE c.firstName = '" + firstName + "' AND c.lastName = '" + lastName + "' AND c.id = '" +
-                creditCardNum + "' AND c.expiration = '" + expirationDate + "') AS expiration_exists";
+                "WHERE c.firstName = ? AND c.lastName = ? AND c.id = ? AND c.expiration = ?) AS expiration_exists";
 
         return getCardQuery;
     }

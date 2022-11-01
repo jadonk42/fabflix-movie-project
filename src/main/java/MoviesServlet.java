@@ -33,16 +33,21 @@ public class MoviesServlet extends HttpServlet{
         String sortBy = request.getParameter("sortBy");
         int limit = Integer.parseInt(request.getParameter("limit"));
         int page = Integer.parseInt(request.getParameter("page"));
+        int offset = (page-1)*limit;
 
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating(sortBy, limit, page));
+                String mode = (sortBy.equals("ratingDesc")) ? "DESC" : "ASC";
+                statement = conn.prepareStatement(getQueryStatementForAllMoviesByRating(mode));
+                statement.setInt(1, limit);
             }
             else if (sortBy.equals("alphaDesc") || sortBy.equals("alphaAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(sortBy, limit, page));
+                String mode = (sortBy.equals("alphaDesc")) ? "DESC" : "ASC";
+                statement = conn.prepareStatement(getQueryStatementForAllMoviesByName(mode));
+                statement.setInt(1, limit);
             }
             else {
                 return;
@@ -99,16 +104,7 @@ public class MoviesServlet extends HttpServlet{
         return jsonObject;
     }
 
-    private String getQueryStatementForAllMoviesByRating(String sortBy, int limit, int page) {
-        String mode;
-        if (sortBy.equals("ratingDesc")) {
-            mode = "desc";
-        }
-        else {
-            mode = "asc";
-        }
-        int offset = (page-1)*limit;
-
+    private String getQueryStatementForAllMoviesByRating(String mode) {
         String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
@@ -124,18 +120,11 @@ public class MoviesServlet extends HttpServlet{
                 "SELECT movieId, rating " +
                 "FROM ratings " +
                 "ORDER BY rating " + mode + " " +
-                "LIMIT " + limit +")";
+                "LIMIT ?)";
         return topMoviesRated + "\n" + getAllMoviesQuery;
     }
 
-    private String getQueryStatementForAllMoviesByName(String sortBy, int limit, int page) {
-        String mode;
-        if (sortBy.equals("alphaDesc")) {
-            mode = "desc";
-        }
-        else {
-            mode = "asc";
-        }
+    private String getQueryStatementForAllMoviesByName(String mode) {
         String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
@@ -152,7 +141,7 @@ public class MoviesServlet extends HttpServlet{
                 "SELECT id as movieId " +
                 "FROM movies " +
                 "ORDER BY title " + mode + " " +
-                "LIMIT " + limit +")";
+                "LIMIT ?)";
         return topMoviesAlphabetical + "\n" + getAllMoviesQuery;
     }
 }

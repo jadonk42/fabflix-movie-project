@@ -18,34 +18,6 @@ import java.sql.PreparedStatement;
 @WebServlet(name = "SingleMovieServlet", urlPatterns = "/api/single-movie")
 public class SingleMovieServlet extends HttpServlet{
     private static final long serialVersionUID = 2L;
-
-    private static final String findMovieActorsQuery = "WITH findActors AS ( " +
-            "SELECT s.id, s.name, m.id as movie_id " +
-            "FROM movies as m, stars as s, stars_in_movies as sm " +
-            "WHERE m.id = ? AND m.id = sm.movieId AND sm.starId = s.id " +
-            "ORDER BY s.id, s.name),";
-
-    private static final String countActorMoviesQuery = "countMovies AS ( " +
-            "SELECT fa.id, fa.name, COUNT(sm.movieId) AS actor_starred " +
-            "FROM findActors as fa, stars_in_movies as sm " +
-            "WHERE fa.id = sm.starId " +
-            "GROUP BY fa.id, fa.name " +
-            "ORDER BY actor_starred DESC, fa.name ASC)";
-    private static final String singleMovieQuery = "SELECT m.title, m.year, m.director, " +
-            "GROUP_CONCAT(DISTINCT g.name ORDER BY g.name ASC) as movie_genres, " +
-            "GROUP_CONCAT(DISTINCT s.name ORDER BY cm.actor_starred DESC, s.name ASC) as movie_starrings, " +
-            "GROUP_CONCAT(DISTINCT s.id ORDER BY cm.actor_starred DESC, s.name ASC) as movie_starring_ids, " +
-            "r.rating " +
-            "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-            "stars_in_movies as sm, countMovies as cm, findActors as fa " +
-            "WHERE m.id = fa.movie_id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
-            "AND m.id = sm.movieId AND sm.starId = s.id AND cm.id = s.id AND cm.name = s.name " +
-            "GROUP BY m.title, m.year, m.director, r.rating";
-
-    private static final String getSingleMovieQuery = findMovieActorsQuery + "\n" + countActorMoviesQuery + "\n" +
-            singleMovieQuery;
-
-    // Create a database which is registered in web.xml
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
@@ -63,7 +35,7 @@ public class SingleMovieServlet extends HttpServlet{
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(getSingleMovieQuery);
+            PreparedStatement statement = conn.prepareStatement(getSingleMovieQuery());
             statement.setString(1, id);
             ResultSet rs = statement.executeQuery();
             JsonObject jsonObject = new JsonObject();
@@ -100,5 +72,36 @@ public class SingleMovieServlet extends HttpServlet{
         } finally {
             out.close();
         }
+    }
+
+    private String getSingleMovieQuery() {
+        final String findMovieActorsQuery = "WITH findActors AS ( " +
+                "SELECT s.id, s.name, m.id as movie_id " +
+                "FROM movies as m, stars as s, stars_in_movies as sm " +
+                "WHERE m.id = ? AND m.id = sm.movieId AND sm.starId = s.id " +
+                "ORDER BY s.id, s.name),";
+
+        final String countActorMoviesQuery = "countMovies AS ( " +
+                "SELECT fa.id, fa.name, COUNT(sm.movieId) AS actor_starred " +
+                "FROM findActors as fa, stars_in_movies as sm " +
+                "WHERE fa.id = sm.starId " +
+                "GROUP BY fa.id, fa.name " +
+                "ORDER BY actor_starred DESC, fa.name ASC)";
+
+        final String singleMovieQuery = "SELECT m.title, m.year, m.director, " +
+                "GROUP_CONCAT(DISTINCT g.name ORDER BY g.name ASC) as movie_genres, " +
+                "GROUP_CONCAT(DISTINCT s.name ORDER BY cm.actor_starred DESC, s.name ASC) as movie_starrings, " +
+                "GROUP_CONCAT(DISTINCT s.id ORDER BY cm.actor_starred DESC, s.name ASC) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm, countMovies as cm, findActors as fa " +
+                "WHERE m.id = fa.movie_id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
+                "AND m.id = sm.movieId AND sm.starId = s.id AND cm.id = s.id AND cm.name = s.name " +
+                "GROUP BY m.title, m.year, m.director, r.rating";
+
+        final String singleMovie = findMovieActorsQuery + "\n" + countActorMoviesQuery + "\n" +
+                singleMovieQuery;
+
+        return singleMovie;
     }
 }

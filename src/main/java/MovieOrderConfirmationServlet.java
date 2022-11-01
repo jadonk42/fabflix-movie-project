@@ -32,14 +32,9 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
         }
     }
 
-    // Need to get movie ID for each movie title
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Insert the movies into the database
-
-        // get the sale id from the database
-
-        // retrieve the rest of the information through sessions
+        // retrieve cart info from session and sale id from database
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         JsonArray jsonArray = new JsonArray();
@@ -52,22 +47,26 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
         HashMap<String, Integer> cart = (HashMap) session.getAttribute("shoppingCart");
 
         User getUserEmail = (User) session.getAttribute("user");
-        String customerIdQuery = getCustomerId(getUserEmail.username);
+        String customerIdQuery = getCustomerId();
 
         try(Connection conn = dataSource.getConnection()) {
+            // get the customer id
             PreparedStatement statement = conn.prepareStatement(customerIdQuery);
+            statement.setString(1, getUserEmail.username);
             ResultSet rs = statement.executeQuery();
             String customerId = "";
-            String movieId = "";
             while (rs.next()) {
                 customerId = rs.getString("id");
             }
             rs.close();
             statement.close();
 
+            String movieId = "";
             for (Map.Entry<String, Integer> movie : cart.entrySet()) {
                 if (!movie.getKey().equals("null")) {
-                    PreparedStatement movieStatement = conn.prepareStatement(getMovieId(movie.getKey()));
+                    // get the movie id
+                    PreparedStatement movieStatement = conn.prepareStatement(getMovieId());
+                    movieStatement.setString(1, movie.getKey());
                     ResultSet movieRs = movieStatement.executeQuery();
                     while (movieRs.next()) {
                         movieId = movieRs.getString("id");
@@ -75,7 +74,11 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
                     movieRs.close();
                     movieStatement.close();
 
-                    PreparedStatement insertMovieStatement = conn.prepareStatement(insertMovieSale(movieId, saleDate, customerId));
+                    // insert each movie
+                    PreparedStatement insertMovieStatement = conn.prepareStatement(insertMovieSale());
+                    insertMovieStatement.setString(1, customerId);
+                    insertMovieStatement.setString(2, movieId);
+                    insertMovieStatement.setString(3, saleDate);
                     insertMovieStatement.executeUpdate();
                     insertMovieStatement.close();
 
@@ -87,7 +90,9 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
             }
 
             // Retrieve the sale id by the customer
-            PreparedStatement transactionsStatement = conn.prepareStatement(getAllTransactions(saleDate, customerId));
+            PreparedStatement transactionsStatement = conn.prepareStatement(getAllTransactions());
+            transactionsStatement.setString(1, customerId);
+            transactionsStatement.setString(2, saleDate);
             ResultSet transactionsRs = transactionsStatement.executeQuery();
 
             while (transactionsRs.next()) {
@@ -115,31 +120,24 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    private String getMovieId(String movieName) {
-        String movieId = "SELECT id FROM movies WHERE title = '" + movieName + "'";
+    private String getMovieId() {
+        final String movieId = "SELECT id FROM movies WHERE title = ?";
         return movieId;
     }
 
-    // Need to get the current customer id
-
-    private String getCustomerId(String customerEmail) {
-        String customerId = "SELECT id FROM customers WHERE email = '" + customerEmail + "'";
+    private String getCustomerId() {
+        final String customerId = "SELECT id FROM customers WHERE email = ?";
         return customerId;
     }
-    private String insertMovieSale(String movieId, String saleDate, String customerId) {
+    private String insertMovieSale() {
         String insertIntoSalesTable = "INSERT INTO sales (customerId, movieId, saleDate) " +
-                "VALUES('" + customerId + "', '" + movieId + "', '" + saleDate + "')";
+                "VALUES(?, ?, ?)";
         return insertIntoSalesTable;
     }
 
-    private String getAllTransactions(String saleDate, String customerId) {
-        String transactions = "SELECT GROUP_CONCAT(id) as id FROM sales " +
-                "WHERE customerId = '" + customerId + "' AND saleDate = '" + saleDate + "'";
+    private String getAllTransactions() {
+        final String transactions = "SELECT GROUP_CONCAT(id) as id FROM sales " +
+                "WHERE customerId = ? AND saleDate = ?";
         return transactions;
     }
 }
