@@ -15,8 +15,8 @@ import javax.sql.DataSource;
 import java.sql.*;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
-@WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
-public class LoginServlet extends HttpServlet{
+@WebServlet(name = "DashboardLoginServlet", urlPatterns = "/api/dashboardlogin")
+public class DashboardLoginServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
 
     // Create a database which is registered in web.xml
@@ -42,6 +42,7 @@ public class LoginServlet extends HttpServlet{
         PrintWriter out = response.getWriter();
 
         // Verify reCAPTCHA
+
         try {
             RecaptchaVerifyUtils.verify(gRecaptchaResponse);
         } catch (Exception e) {
@@ -63,9 +64,9 @@ public class LoginServlet extends HttpServlet{
              *
              * Perform both - one for employees and one for customers.
              */
-            final String customerQuery = "SELECT EXISTS (SELECT c.email  FROM customers AS c " +
+            final String customerQuery = "SELECT EXISTS (SELECT c.email  FROM employees AS c " +
                     "WHERE c.email = ?) AS user_exists, " +
-                    "c.password AS encrypted_pass FROM customers AS c " +
+                    "c.password AS encrypted_pass FROM employees AS c " +
                     "WHERE c.email = ?";
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(customerQuery);

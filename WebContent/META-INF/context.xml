@@ -10,4 +10,6 @@
               username="CS122B"
               password="FabFlix"
               url="jdbc:mysql://localhost:3306/moviedb"/>
+
+    <Valve className="org.apache.catalina.valves.rewrite.RewriteValve" />
 </Context>

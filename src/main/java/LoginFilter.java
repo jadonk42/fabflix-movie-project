@@ -1,3 +1,5 @@
+import main.java.User;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -46,14 +48,17 @@ public class LoginFilter implements Filter {
         return allowedURIs.stream().anyMatch(requestURI.toLowerCase()::endsWith);
     }
 
+
     public void init(FilterConfig fConfig) {
         allowedURIs.add("login.html");
         allowedURIs.add("login.js");
         allowedURIs.add("login.css");
-        allowedURIs.add("index.html");
-        allowedURIs.add("index.js");
-        allowedURIs.add("index.css");
+        allowedURIs.add("_dashboard");
+        allowedURIs.add("_dashboard.html");
+        allowedURIs.add("_dashboard.js");
+        allowedURIs.add("_dashboard.css");
         allowedURIs.add("api/login");
+        allowedURIs.add("api/dashboardlogin");
     }
 
     public void destroy() {

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Fabflix Employee Login</title>
+    <link rel="stylesheet" href="css/_dashboard.css">
+    <script src='https://www.google.com/recaptcha/api.js' type="text/javascript"></script>
+</head>
+<body>
+
+<h1>FabFlix Dashboard Login</h1>
+<h2>Employees only. Customers head to <a href="index.html">main page</a>.</h2>
+
+<form id="login_form", method="post">
+    <label>Username:</label><br>
+    <input type="text" id = "username" name="username"><br>
+    <label>Password:</label><br>
+    <input type="password" id = "password" name="password"><br>
+
+    <input type="submit" value="Login">
+
+    <div class="g-recaptcha" data-sitekey="6LdJLsQiAAAAAOSKWigqmq2NbWKeh-vWKPy9LBHI"></div>
+</form>
+
+<div id="login_error_message"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="_dashboard.js"></script>
+
+</body>
+
+</html>

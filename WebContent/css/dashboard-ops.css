@@ -1,0 +1,9 @@
+/* All Metadata tables */
+table {
+    border: 1px solid;
+    width: 40%;
+}
+
+th, td {
+    border: 1px solid;
+}

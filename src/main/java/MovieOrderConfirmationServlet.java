@@ -52,7 +52,7 @@ public class MovieOrderConfirmationServlet extends HttpServlet {
         try(Connection conn = dataSource.getConnection()) {
             // get the customer id
             PreparedStatement statement = conn.prepareStatement(customerIdQuery);
-            statement.setString(1, getUserEmail.username);
+            statement.setString(1, getUserEmail.getUsername());
             ResultSet rs = statement.executeQuery();
             String customerId = "";
             while (rs.next()) {
