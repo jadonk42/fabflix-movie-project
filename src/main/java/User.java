@@ -3,9 +3,9 @@ public class User {
     private final String username;
     private final boolean is_employee;
 
-    public User(String username) {
+    public User(String username, boolean isemployee) {
         this.username = username;
-        this.is_employee =  false;
+        this.is_employee =  isemployee;
     }
 
     public String getUsername(){

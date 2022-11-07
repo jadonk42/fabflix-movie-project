@@ -129,16 +129,16 @@ public class SearchMovieServlet extends HttpServlet{
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                 "r.rating " +
-                "FROM TopMovies as T, movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm " +
-                "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "FROM (TopMovies as T, movies as m,  genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm) LEFT JOIN ratings as r ON (m.id = r.movieId) " +
+                "WHERE T.movieId = m.id AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY r.rating " + mode;
         String topMoviesResults = "WITH TopMovies AS ( " +
                 "SELECT DISTINCT(m.id) as movieId, r.rating " +
-                "FROM ratings as r, movies as m, stars_in_movies as sm, stars as s " +
-                "WHERE m.id = sm.movieId AND r.movieId = m.id AND s.id = sm.starId ";
+                "FROM ratings as r RIGHT JOIN (movies as m, stars_in_movies as sm, stars as s)  ON (m.id = r.movieId)" +
+                "WHERE m.id = sm.movieId AND s.id = sm.starId ";
         if (name != "" && name != null) {
             topMoviesResults += "AND (m.title = '" + name + "' OR m.title LIKE '" + name +  "%' OR m.title LIKE '" + "%" + name + "%') " ;
         }
@@ -174,9 +174,9 @@ public class SearchMovieServlet extends HttpServlet{
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                 "r.rating " +
-                "FROM TopMovies as T, movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm " +
-                "WHERE T.movieId = m.id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "FROM (TopMovies as T, movies as m,  genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm) LEFT JOIN ratings as r ON (m.id = r.movieId) " +
+                "WHERE T.movieId = m.id AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY m.title " + mode;

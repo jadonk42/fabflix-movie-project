@@ -88,7 +88,7 @@ public class LoginServlet extends HttpServlet{
             boolean password_success = new StrongPasswordEncryptor().checkPassword(password, encrypted_pass);
 
             if (Integer.parseInt(user_exists) == 1 && password_success) {
-                request.getSession().setAttribute("user",  new User(username));
+                request.getSession().setAttribute("user",  new User(username, false));
                 jsonObject.addProperty("status", "success");
             } else{
                 jsonObject.addProperty("status", "fail");

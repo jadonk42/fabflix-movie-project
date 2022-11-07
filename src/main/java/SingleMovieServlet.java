@@ -93,9 +93,9 @@ public class SingleMovieServlet extends HttpServlet{
                 "GROUP_CONCAT(DISTINCT s.name ORDER BY cm.actor_starred DESC, s.name ASC) as movie_starrings, " +
                 "GROUP_CONCAT(DISTINCT s.id ORDER BY cm.actor_starred DESC, s.name ASC) as movie_starring_ids, " +
                 "r.rating " +
-                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm, countMovies as cm, findActors as fa " +
-                "WHERE m.id = fa.movie_id AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id " +
+                "FROM (movies as m, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm, countMovies as cm, findActors as fa) LEFT JOIN ratings as r ON (m.id = r.movieId) " +
+                "WHERE m.id = fa.movie_id AND m.id = gm.movieId AND gm.genreId = g.id " +
                 "AND m.id = sm.movieId AND sm.starId = s.id AND cm.id = s.id AND cm.name = s.name " +
                 "GROUP BY m.title, m.year, m.director, r.rating";
 
