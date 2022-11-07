@@ -155,9 +155,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                 "r.rating " +
-                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm " +
-                "WHERE g.name = ? AND gm.genreId = g.id AND m.id = gm.movieId AND r.movieId = m.id " +
+                "FROM (ratings as r) RIGHT JOIN (movies as m, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm) ON (m.id = r.movieId) " +
+                "WHERE g.name = ? AND gm.genreId = g.id AND m.id = gm.movieId  " +
                 "AND " +
                 "sm.movieId = m.id AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
@@ -184,9 +184,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                     "r.rating " +
-                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                    "stars_in_movies as sm " +
-                    "WHERE LEFT(m.title, 1) = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                    "FROM (ratings as r) RIGHT JOIN (movies as m, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm) ON (m.id = r.movieId) " +
+                    "WHERE LEFT(m.title, 1) = ? AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                     "m.id = sm.movieId AND sm.starId = s.id " +
                     "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                     "ORDER BY r.rating " + mode +
@@ -200,9 +200,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                 "r.rating " +
-                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm " +
-                "WHERE g.name = ? AND gm.genreId = g.id AND m.id = gm.movieId AND r.movieId = m.id " +
+                "FROM (ratings as r) RIGHT JOIN (movies as m, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm) ON (m.id = r.movieId) " +
+                "WHERE g.name = ? AND gm.genreId = g.id AND m.id = gm.movieId " +
                 "AND " +
                 "sm.movieId = m.id AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
@@ -228,9 +228,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                     "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                     "r.rating " +
-                    "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                    "stars_in_movies as sm " +
-                    "WHERE LEFT(m.title, 1) = ? AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                    "FROM (ratings as r) RIGHT JOIN (movies as m, genres as g, genres_in_movies as gm, stars as s, " +
+                    "stars_in_movies as sm) ON (m.id = r.movieId) " +
+                    "WHERE LEFT(m.title, 1) = ? AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                     "m.id = sm.movieId AND sm.starId = s.id " +
                     "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                     "ORDER BY m.title " + mode +
@@ -245,9 +245,9 @@ public class BrowseMoviesServlet extends HttpServlet {
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
                 "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
                 "r.rating " +
-                "FROM movies as m, ratings as r, genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm " +
-                "WHERE m.title REGEXP '^[^0-9A-Za-z]' AND m.id = r.movieId AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "FROM (ratings as r) LEFT JOIN (movies as m, genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm) ON (m.id = r.movieId) " +
+                "WHERE m.title REGEXP '^[^0-9A-Za-z]' AND m.id = gm.movieId AND gm.genreId = g.id AND " +
                 "m.id = sm.movieId AND sm.starId = s.id " +
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating ";
 

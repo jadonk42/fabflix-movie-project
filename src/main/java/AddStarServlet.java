@@ -15,7 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@WebServlet(name = "MoviePaymentServlet", value = "/api/movie-payment")
+@WebServlet(name = "AddStarServlet", value = "/api/add-star")
 public class AddStarServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private DataSource dataSource;
@@ -30,19 +30,32 @@ public class AddStarServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String starName = request.getParameter("starName");
-        String lastName = request.getParameter("lastName");
+        // Set the response to be a JSON object
+        response.setContentType("application/json");
 
+        String starName = request.getParameter("starName");
+        int birthYear = Integer.parseInt(request.getParameter("birthYear"));
 
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(confirmCardQuery());
+            PreparedStatement statement = conn.prepareStatement("CALL add_star(?, ?);");
+            statement.setString(1, starName);
+            statement.setInt(2, birthYear);
 
+            ResultSet movieRs = statement.executeQuery();
+            statement.close();
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("status", "success");
+            jsonObject.addProperty("message", starName + " added successfully.");
+
+            out.write(jsonObject.toString());
+            response.setStatus(HttpURLConnection.HTTP_OK);
         }
         catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("errorMessage", e.getMessage());
+            jsonObject.addProperty("message", e.getMessage());
             jsonObject.addProperty("status", "failure");
             out.write(jsonObject.toString());
 
@@ -54,16 +67,4 @@ public class AddStarServlet extends HttpServlet {
         }
     }
 
-    private String confirmCardQuery() {
-        final String getCardQuery = "SELECT EXISTS (SELECT c.firstName FROM creditcards as c " +
-                "WHERE c.firstName = ?) AS first_name_exists, " +
-                "EXISTS (SELECT c.firstName, c.lastName FROM creditcards as c " +
-                "WHERE c.firstName = ? AND c.lastName = ?) AS last_name_exists, " +
-                "EXISTS (SELECT c.firstName, c.lastName, c.id FROM creditcards as c " +
-                "WHERE c.firstName = ? AND c.lastName = ? AND c.id = ?) AS credit_card_exists, " +
-                "EXISTS (SELECT c.firstName, c.lastName, c.id, c.expiration FROM creditcards as c " +
-                "WHERE c.firstName = ? AND c.lastName = ? AND c.id = ? AND c.expiration = ?) AS expiration_exists";
-
-        return getCardQuery;
-    }
 }

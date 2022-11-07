@@ -45,50 +45,46 @@ CREATE PROCEDURE add_movie(
     DECLARE genre_id VARCHAR(10);
     DECLARE newID VARCHAR(10);
 
-SELECT EXISTS(SELECT 1 FROM movies
-              WHERE director = inDirector AND year = inYear AND title = inTitle)
-INTO movie_exists;
-SELECT EXISTS(SELECT 1 FROM stars WHERE name = inStar) INTO star_exists;
-SELECT EXISTS(SELECT 1 FROM genres WHERE name = inGenre) INTO genre_exists;
+    SELECT EXISTS(SELECT 1 FROM movies
+                  WHERE director = inDirector AND year = inYear AND title = inTitle)
+    INTO movie_exists;
+    SELECT EXISTS(SELECT 1 FROM stars WHERE name = inStar) INTO star_exists;
+    SELECT EXISTS(SELECT 1 FROM genres WHERE name = inGenre) INTO genre_exists;
 
-IF movie_exists = 1 THEN
+    IF movie_exists = 1 THEN
         SET outResult = 4;
-SELECT outResult;
-LEAVE func;
+        SELECT outResult;
+        LEAVE func;
     ELSEIF star_exists & genre_exists THEN
-            SET outResult = 1;
+        SET outResult = 1;
+        SELECT id INTO star_id FROM stars WHERE name = inStar LIMIT 1;
+        SELECT id INTO genre_id FROM genres WHERE name = inGenre LIMIT 1;
+    ELSEIF star_exists THEN
+        SET outResult = 3;
+        INSERT INTO genres(name) VALUES(inGenre);
+        SELECT max(id) INTO genre_id FROM genres;
+        SELECT id INTO star_id FROM stars WHERE name = inStar LIMIT 1;
+    ELSEIF genre_exists THEN
+        SET outResult = 2;
+        CALL add_star(inStar, null);
+        SELECT max(id) INTO star_id FROM stars;
+        SELECT id INTO genre_id FROM genres WHERE name = inGenre LIMIT 1;
+    ELSE
+        SET outResult = 0;
+        CALL add_star(inStar, null);
+        INSERT INTO genres(name) VALUES(inGenre);
+        SELECT max(id) INTO star_id FROM stars;
+        SELECT max(id) INTO genre_id FROM genres;
+    END IF;
 
-SELECT id INTO star_id FROM stars WHERE name = inStar LIMIT 1;
-SELECT id INTO genre_id FROM genres WHERE name = inGenre LIMIT 1;
-ELSEIF star_exists THEN
-            SET outResult = 3;
-INSERT INTO genres(name) VALUES(inGenre);
+        SET newID = (select concat(left(max(id),3), cast((cast(right(max(id),6) AS UNSIGNED)+1) as char(6)))
+        FROM movies);
 
-SELECT max(id) INTO genre_id FROM genres;
-SELECT id INTO star_id FROM stars WHERE name = inStar LIMIT 1;
-ELSEIF genre_exists THEN
-            SET outResult = 2;
-CALL add_star(inStar, null);
+    INSERT INTO movies VALUES(newID, inTitle, inYear, inDirector);
+    INSERT INTO stars_in_movies VALUES(star_id, newID);
+    INSERT INTO genres_in_movies VALUES(genre_id, newID);
 
-SELECT max(id) INTO star_id FROM stars;
-SELECT id INTO genre_id FROM genres WHERE name = inGenre LIMIT 1;
-ELSE
-            SET outResult = 0;
-CALL add_star(inStar, null);
-INSERT INTO genres(name) VALUES(inGenre);
-
-SELECT max(id) INTO star_id FROM stars;
-SELECT max(id) INTO genre_id FROM genres;
-END IF;
-
-    SET newID = (select concat(left(max(id),3), cast((cast(right(max(id),6) AS UNSIGNED)+1) as char(6)))
-    FROM movies);
-
-INSERT INTO movies VALUES(newID, inTitle, inYear, inDirector);
-INSERT INTO stars_in_movies VALUES(star_id, newID);
-INSERT INTO genres_in_movies VALUES(genre_id, newID);
-
-SELECT outResult;
+    SELECT outResult;
 
 END$$
 DELIMITER ;

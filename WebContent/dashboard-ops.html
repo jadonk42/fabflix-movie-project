@@ -4,20 +4,46 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Fabflix Ops Dashboard</title>
     <link rel="stylesheet" href="css/dashboard-ops.css">
-    <script src='https://www.google.com/recaptcha/api.js' type="text/javascript"></script>
 </head>
 <body>
 
-<h1>FabFlix Ops Dashboard</h1>
+<h1>FabFlix Ops Dashboard</h1><br>
 
-<br>
+
+<h2>Insert Movie</h2>
+<form id="movie_form", method="post">
+    <label>Title:</label><br>
+    <input type="text" id = "title" name="title"><br>
+    <label>Year:</label><br>
+    <input type="text" id = "year" name="year"><br>
+    <label>Director:</label><br>
+    <input type="text" id = "director" name="director"><br>
+    <label>Genre (1):</label><br>
+    <input type="text" id = "genre" name="genre"><br>
+    <label>Star (1):</label><br>
+    <input type="text" id = "star" name="star"><br>
+
+    <input type="submit" value="Submit">
+</form>
+<div id ="movieResponseMessages"></div><br>
+
+
+
+<h2>Insert Star</h2>
+<form id="star_form", method="post">
+    <label>Name:</label><br>
+    <input type="text" id = "starName" name="starName"><br>
+    <label>Year:</label><br>
+    <input type="text" id = "birthYear" name="birthYear"><br>
+
+    <input type="submit" value="Submit">
+</form>
+<div id="starResponseMessages"></div><br>
+
+
 
 <h2>FabFlix DB MetaData (moviedb)</h2>
-<div id="metadataDiv">
-
-
-</div>
-
+<div id="metadataDiv"></div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

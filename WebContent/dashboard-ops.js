@@ -1,6 +1,11 @@
+let movie_form = jQuery("#movie_form");
+let star_form = jQuery("#star_form");
+
+
 let tables = ["movies", "stars", "genres", "ratings",
     "stars_in_movies", "genres_in_movies", "customers", "creditcards",
     "sales", "employees"];
+
 
 /**
  * Takes json data about movie and puts the data into the html element.
@@ -35,6 +40,73 @@ function populateHTMLWithMetaData(resultData, limit) {
     metadataElement.append(htmlString);
 }
 
+function handleMovieResult(resultData) {
+    console.log("handle movie response()");
+    console.log(resultData);
+    jQuery("#movieResponseMessages").text(resultData["message"]);
+}
+
+function handleStarResult(resultData) {
+    console.log("handle star response()");
+    console.log(resultData);
+    jQuery("#starResponseMessages").text(resultData["message"]);
+}
+
+
+/**
+ * Submit the form content with POST method
+ * @param formSubmitEvent
+ */
+function submitMovieForm(formSubmitEvent) {
+    console.log("submit star form");
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    formSubmitEvent.preventDefault();
+
+    jQuery.ajax(
+        "api/add-movie", {
+            method: "POST",
+            // Serialize the login form to the data sent by POST request
+            data: movie_form.serialize(),
+            success: handleMovieResult,
+            error: (resultData) => console.log(resultData)
+        }
+    );
+}
+
+// Bind the submit action of the form to a handler function
+movie_form.submit(submitMovieForm);
+
+
+/**
+ * Submit the form content with POST method
+ * @param formSubmitEvent
+ */
+function submitStarForm(formSubmitEvent) {
+    console.log("submit star form");
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    formSubmitEvent.preventDefault();
+
+    jQuery.ajax(
+        "api/add-star", {
+            method: "POST",
+            // Serialize the login form to the data sent by POST request
+            data: star_form.serialize(),
+            success: handleStarResult,
+            error: (resultData) => console.log(resultData)
+        }
+    );
+}
+
+// Bind the submit action of the form to a handler function
+star_form.submit(submitStarForm);
 
 
 jQuery.ajax({
