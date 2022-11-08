@@ -4,6 +4,7 @@
 - Jadon Kwan(jadonk@uci.edu)
 
 ## 1. Demo Video Link: 
+TO BE ADDED
 https://drive.google.com/file/d/1RPK_vJizaxvTwn9-aLwVdnJSFAUT09GQ/view?usp=sharing
 
 ## 2. How to deploy application:
@@ -58,22 +59,22 @@ mysql> quit;
 6. Open your localhost to the correct port.
 
 ## 3. Prepared Statements Locations:
-1. [AddMovieServlet.java] (src/main/java/AddMovieServlet.java)
-2. AddStarServlet.java
-3. BrowseMoviesServlet.java
-4. BrowseServlet.java
-5. DashboardLoginServlet.java
-6. DashboardMetadataServlet.java
-7. LoginServlet.java
-8. MovieOrderConfirmation.java
-9. MoviePaymentServlet.java
-10. MoviesServlet.java
-11. ParseMovies.java
-12. ParseStars.java
-13. ParseStarsInMovies.java
-14. SearchMovieServlet.java
-15. SingleMovieServlet.java
-16. SingleStarServlet.java
+1. [AddMovieServlet.java](src/main/java/AddMovieServlet.java)
+2. [AddStarServlet.java](src/main/java/AddStarServlet.java)
+3. [BrowseMoviesServlet.java](src/main/java/BrowseMoviesServlet.java)
+4. [BrowseServlet.java](src/main/java/BrowseServlet.java)
+5. [DashboardLoginServlet.java](src/main/java/DashboardLoginServlet.java)
+6. [DashboardMetadataServlet.java](src/main/java/DashboardMetadataServlet.java)
+7. [LoginServlet.java](src/main/java/LoginServlet.java)
+8. [MovieOrderConfirmationServlet.java](src/main/java/MovieOrderConfirmationServlet.java)
+9. [MoviePaymentServlet.java](src/main/java/MoviePaymentServlet.java)
+10. [MoviesServlet.java](src/main/java/MoviesServlet.java)
+11. [ParseMovies.java](src/main/java/ParseMovies.java)
+12. [ParseStars.java](src/main/java/ParseStars.java)
+13. [ParseStarsInMovies.java](src/main/java/ParseStarsInMovies.java)
+14. [SearchMovieServlet.java](src/main/java/SearchMovieServlet.java)
+15. [SingleMovieServlet.java](src/main/java/SingleMovieServlet.java)
+16. [SingleStarServlet.java](src/main/java/SingleStarServlet.java)
 
 ## 4. XML Parsing Optimizations
 1. Used Batch Insertion to insert new movies, stars, and genres into the database. Compared to the regular insert, batch insert allows us to insert many rows of data at a time saving network resources and time.
