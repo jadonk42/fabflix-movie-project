@@ -74,12 +74,6 @@ public class UpdateSecurePassword {
         }
         System.out.println("updating password completed, " + count + " rows affected");
 
-        statement.close();
-        connection.close();
-
-        System.out.println("finished");
-
-
 
 
 
@@ -120,7 +114,6 @@ public class UpdateSecurePassword {
         System.out.println("updating password");
         count = 0;
         for (String updateQuery : updateQueryList) {
-            System.out.println(updateQuery);
             int updateResult = statement.executeUpdate(updateQuery);
             count += updateResult;
         }
