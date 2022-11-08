@@ -340,9 +340,4 @@ public class ParseMovies extends DefaultHandler {
         }
 
     }
-
-    public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        ParseMovies pm = new ParseMovies();
-        pm.runParser("mains243.xml");
-    }
 }

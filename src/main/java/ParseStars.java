@@ -187,9 +187,4 @@ public class ParseStars extends DefaultHandler {
             throw new RuntimeException(e);
         }
     }
-
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException {
-        ParseStars ps = new ParseStars();
-        ps.runParser("actors63.xml");
-    }
 }

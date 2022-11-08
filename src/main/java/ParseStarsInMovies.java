@@ -170,9 +170,4 @@ public class ParseStarsInMovies extends DefaultHandler {
             throw new RuntimeException(e);
         }
     }
-
-    public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        ParseStarsInMovies psm = new ParseStarsInMovies();
-        psm.runParser("casts124.xml");
-    }
 }

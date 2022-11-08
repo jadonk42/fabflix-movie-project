@@ -1,4 +1,4 @@
-# Project 2 
+# Project 3 
 ## Team #37 Members
 - Yaseen Khan(yaseenk@uci.edu)
 - Jadon Kwan(jadonk@uci.edu)
@@ -47,29 +47,47 @@ mysql> quit;
 5. Set up tomcat to use your war file (IntelliJ has configuration with Tomcat).
 6. Open your localhost to the correct port.
 
-## 3. Substring Matching Design:
-For title, director, and stars: ```LIKE 'substring%' OR LIKE '% substring'```. 
-This would catch titles beginning with the substring, 
-or catching another word that began with the substring.
-It would also catch both first and last names for directors and stars.
+## 3. Prepared Statements Locations:
+1. AddMovieServlet.java
+2. AddStarServlet.java
+3. BrowseMoviesServlet.java
+4. BrowseServlet.java
+5. DashboardLoginServlet.java
+6. DashboardMetadataServlet.java
+7. LoginServlet.java
+8. MovieOrderConfirmation.java
+9. MoviePaymentServlet.java
+10. MoviesServlet.java
+11. ParseMovies.java
+12. ParseStars.java
+13. ParseStarsInMovies.java
+14. SearchMovieServlet.java
+15. SingleMovieServlet.java
+16. SingleStarServlet.java
+
+## 4. XML Parsing Optimizations
+1. Used Batch Insertion to insert new movies, stars, and genres into the database. Compared to the regular insert, batch insert allows us to insert many rows of data at a time saving network resources and time.
+2. Utilized Hashmaps and Sets to filter out inconsistent movies, stars, and genres(will be explained later). Hashmaps and Sets are efficient Data Structures that provides O(1) comparison and insertion. This is much faster compared to running a query for every single movie, star, and genre in the XML file in order to filter them out.
 
 
-## 4. Member Contributions:
+## 5. XML Inconsistent Data Reports
+To view the inconsistent movies, genres, and stars, refer to the following text files:
+1. inconsistent_genres.txt
+2. inconsistent_movies.txt
+3. inconsistent_stars.txt
+4. inconsistent_moviesInStars.txt
+
+- inconsistent_genres.txt contains Missing genres(null value) from movies 
+
+
+## 6. Member Contributions:
 ## Yaseen Khan
-- Implemented Browse functionality
-- Implemented Checkout and Payment functionality.
-- Implemented Order Confirmation Page
-- Helped with hyperlinks to Browse Page.
-- Query Optimizations and Code Refactoring
-- Styling with CSS.
+- Ensured all SQL queries used Prepared Statements instead of Statements
+- Implemented XML parsing to insert movies, stars, and genres into the database
 
 ## Jadon Kwan
-- Implemented Search functionality.
-- Implemented Login functionality.
-- Implemented Sorting functionality.
-- Implemented Shopping Cart
-- Added pagination support.
-- Added support to maintain sorting/pagination/search results when jumping back to 
-movies page
-- Styling with CSS.
+- Implemented reCAPTCHA
+- Encrypted all passwords
+- Implemented Employee Dashboard
+- Created Stored Procedure
 
