@@ -199,6 +199,7 @@ public class ParseMovies extends DefaultHandler {
                 tempGenre.setId(maxId);
                 verifyGenres.add(tempGenre.getName());
                 allGenres.add(tempGenre);
+                genreNameToGenreId.put(tempGenre.getName(), tempGenre.getId());
             }
 
         } else if (qName.equalsIgnoreCase("fid")) {
@@ -321,7 +322,6 @@ public class ParseMovies extends DefaultHandler {
                 String movieId = insertGenreToMovie.getMovieId();
                 String genreName = insertGenreToMovie.getGenreName();
                 int genreId = genreNameToGenreId.get(genreName);
-
                 getGenresToMovies.setInt(1, genreId);
                 getGenresToMovies.setString(2, movieId);
                 getGenresToMovies.addBatch();
