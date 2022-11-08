@@ -27,6 +27,16 @@ mysql> quit;
 5. Create the moviedb tables using the create_table.sql file: ```local> mysql -u CS122B -p < create_table.sql```
 6. Populate the database data using the movie-data.sql file: ```local> mysql -u CS122B -p --database=moviedb < PATH/movie-data.sql```
 
+### XML Parsing(Locally)
+1. To Run the parser, ensure the XML files are in the same directory as the **pom.xml** file
+2. Open Intellij and run src/main/java/MainParser.java 
+3. When the parser is finished, you can view the inconsistent reports in the same directory as **pom.xml** file.
+
+### XML Parsing(Command Line)
+1. To Run the parser, ensure the XML files are in the same directory as the **pom.xml** file
+2. Clean the package using ```mvn clean package```
+3. Compile the Parser using this command: ```java -cp target/YOURREPO-0.0.1-SNAPSHOT.jar MainParser``` 
+
 
 ### Option 1: Deploy from AWS instance
 1. SSH into your AWS instance. EX: ```ssh -i My.pem ubuntu@ec2-myipaddress.us-west-2.compute.amazonaws.com```
@@ -48,7 +58,7 @@ mysql> quit;
 6. Open your localhost to the correct port.
 
 ## 3. Prepared Statements Locations:
-1. AddMovieServlet.java
+1. [AddMovieServlet.java] (src/main/java/AddMovieServlet.java)
 2. AddStarServlet.java
 3. BrowseMoviesServlet.java
 4. BrowseServlet.java
@@ -77,7 +87,12 @@ To view the inconsistent movies, genres, and stars, refer to the following text 
 3. inconsistent_stars.txt
 4. inconsistent_moviesInStars.txt
 
-- inconsistent_genres.txt contains Missing genres(null value) from movies 
+These text files were obtained from running the XML Parser using the **XML Parsing** Instructions
+
+- inconsistent_genres.txt contains Missing genres(null value) from movies and duplicate genre values 
+- inconsistent_movies.txt contains Missing attributes from movies such as missing name, title, ID, and director. The text file also contains duplicate movies and movies with duplicate ID values
+- inconsistent_stars.txt contains missing star names and duplicate stars already found in the database
+- inconsistent_moviesInStars.txt contains movies that weren't inserted to the database, missing star name, and missing movie id  
 
 
 ## 6. Member Contributions:

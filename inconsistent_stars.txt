@@ -1,0 +1,1086 @@
+Star Details:
+Star Id: null
+Star Name: Brooke Adams
+Star Birth Year: 1949
+
+Star Details:
+Star Id: null
+Star Name: Mario Adorf
+Star Birth Year: 1930
+
+Star Details:
+Star Id: null
+Star Name: Rati Agnihotri
+Star Birth Year: 1960
+
+Star Details:
+Star Id: null
+Star Name: Edward Albert
+Star Birth Year: 1951
+
+Star Details:
+Star Id: null
+Star Name: Alan Alda
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: John Alderton
+Star Birth Year: 1940
+
+Star Details:
+Star Id: null
+Star Name: Woody Allen
+Star Birth Year: 1935
+
+Star Details:
+Star Id: null
+Star Name: Richard Anderson
+Star Birth Year: 1926
+
+Star Details:
+Star Id: null
+Star Name: Ursula Andress
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Fanny Ardant
+Star Birth Year: 1949
+
+Star Details:
+Star Id: null
+Star Name: Alan Arkin
+Star Birth Year: 1934
+
+Star Details:
+Star Id: null
+Star Name: Lucie Arnaz
+Star Birth Year: 1951
+
+Star Details:
+Star Id: null
+Star Name: Elizabeth Ashley
+Star Birth Year: 1939
+
+Star Details:
+Star Id: null
+Star Name: Fred Astaire
+Star Birth Year: 1899
+
+Star Details:
+Star Id: null
+Star Name: William Atherton
+Star Birth Year: 1947
+
+Star Details:
+Star Id: null
+Star Name: Christopher Atkins
+Star Birth Year: 1961
+
+Star Details:
+Star Id: null
+Star Name: Richard Attenborough
+Star Birth Year: 1923
+
+Star Details:
+Star Id: null
+Star Name: Charles Aznavour
+Star Birth Year: 1924
+
+Star Details:
+Star Id: null
+Star Name: Hank Azaria
+Star Birth Year: 1964
+
+Star Details:
+Star Id: null
+Star Name: Amitabh Bachchan
+Star Birth Year: 1942
+
+Star Details:
+Star Id: null
+Star Name: Josephine Baker
+Star Birth Year: 1906
+
+Star Details:
+Star Id: null
+Star Name: Jill Balcon
+Star Birth Year: 1925
+
+Star Details:
+Star Id: null
+Star Name: William Baldwin
+Star Birth Year: 1963
+
+Star Details:
+Star Id: null
+Star Name: Anne Bancroft
+Star Birth Year: 1931
+
+Star Details:
+Star Id: null
+Star Name: Antonio Banderas
+Star Birth Year: 1960
+
+Star Details:
+Star Id: null
+Star Name: Ellen Barkin
+Star Birth Year: 1954
+
+Star Details:
+Star Id: null
+Star Name: Kim Basinger
+Star Birth Year: 1953
+
+Star Details:
+Star Id: null
+Star Name: Angela Bassett
+Star Birth Year: 1958
+
+Star Details:
+Star Id: null
+Star Name: Ned Beatty
+Star Birth Year: 1937
+
+Star Details:
+Star Id: null
+Star Name: Warren Beatty
+Star Birth Year: 1937
+
+Star Details:
+Star Id: null
+Star Name: John Beck
+Star Birth Year: 1943
+
+Star Details:
+Star Id: null
+Star Name: Harry Belafonte
+Star Birth Year: 1927
+
+Star Details:
+Star Id: null
+Star Name: Tom Bell
+Star Birth Year: 1933
+
+Star Details:
+Star Id: null
+Star Name: Dirk Benedict
+Star Birth Year: 1945
+
+Star Details:
+Star Id: null
+Star Name: Hywel Bennett
+Star Birth Year: 1944
+
+Star Details:
+Star Id: null
+Star Name: Candice Bergen
+Star Birth Year: 1946
+
+Star Details:
+Star Id: null
+Star Name: Pat Boone
+Star Birth Year: 1934
+
+Star Details:
+Star Id: null
+Star Name: John Boorman
+Star Birth Year: 1933
+
+Star Details:
+Star Id: null
+Star Name: Tom Bosley
+Star Birth Year: 1927
+
+Star Details:
+Star Id: null
+Star Name: David Bowie
+Star Birth Year: 1947
+
+Star Details:
+Star Id: null
+Star Name: Bruce Boxleitner
+Star Birth Year: 1950
+
+Star Details:
+Star Id: null
+Star Name: Kenneth Branagh
+Star Birth Year: 1960
+
+Star Details:
+Star Id: null
+Star Name: Marlon Brando
+Star Birth Year: 1924
+
+Star Details:
+Star Id: null
+Star Name: Claude Brasseur
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Beau Bridges
+Star Birth Year: 1941
+
+Star Details:
+Star Id: null
+Star Name: Jeff Bridges
+Star Birth Year: 1949
+
+Star Details:
+Star Id: null
+Star Name: James Brolin
+Star Birth Year: 1940
+
+Star Details:
+Star Id: null
+Star Name: Albert Brooks
+Star Birth Year: 1947
+
+Star Details:
+Star Id: null
+Star Name: Mel Brooks
+Star Birth Year: 1926
+
+Star Details:
+Star Id: null
+Star Name: Gary Brown
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Jim Brown
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Peter Brown
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Carol Burnett
+Star Birth Year: 1933
+
+Star Details:
+Star Id: null
+Star Name: Ellen Burstyn
+Star Birth Year: 1932
+
+Star Details:
+Star Id: null
+Star Name: Gary Busey
+Star Birth Year: 1944
+
+Star Details:
+Star Id: null
+Star Name: Robert Butler
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: William Butler
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Nicolas Cage
+Star Birth Year: 1964
+
+Star Details:
+Star Id: null
+Star Name: Michael Caine
+Star Birth Year: 1933
+
+Star Details:
+Star Id: null
+Star Name: Helena Bonham Carter
+Star Birth Year: 1966
+
+Star Details:
+Star Id: null
+Star Name: Veronica Cartwright
+Star Birth Year: 1949
+
+Star Details:
+Star Id: null
+Star Name: Johnny Cash
+Star Birth Year: 1932
+
+Star Details:
+Star Id: nm9423928
+Star Name: John Cassavetes
+Star Birth Year: 1929
+
+Star Details:
+Star Id: null
+Star Name: Seymour Cassel
+Star Birth Year: 1935
+
+Star Details:
+Star Id: null
+Star Name: Phoebe Cates
+Star Birth Year: 1963
+
+Star Details:
+Star Id: null
+Star Name: Adolfo Celi
+Star Birth Year: 1922
+
+Star Details:
+Star Id: null
+Star Name: Stockard Channing
+Star Birth Year: 1944
+
+Star Details:
+Star Id: null
+Star Name: Geraldine Chaplin
+Star Birth Year: 1944
+
+Star Details:
+Star Id: null
+Star Name: Sydney Chaplin
+Star Birth Year: 1926
+
+Star Details:
+Star Id: null
+Star Name: Cher
+Star Birth Year: 1946
+
+Star Details:
+Star Id: null
+Star Name: Thomas Chong
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Julie Christie
+Star Birth Year: 1940
+
+Star Details:
+Star Id: null
+Star Name: John Cleese
+Star Birth Year: 1939
+
+Star Details:
+Star Id: null
+Star Name: Glenn Close
+Star Birth Year: 1947
+
+Star Details:
+Star Id: null
+Star Name: Jennifer Cluff
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: James Coburn
+Star Birth Year: 1928
+
+Star Details:
+Star Id: null
+Star Name: Jeff Conaway
+Star Birth Year: 1950
+
+Star Details:
+Star Id: null
+Star Name: Robert Conrad
+Star Birth Year: 1935
+
+Star Details:
+Star Id: null
+Star Name: Ron Cook
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Francis Ford Coppola
+Star Birth Year: 1939
+
+Star Details:
+Star Id: null
+Star Name: Roger Corman
+Star Birth Year: 1926
+
+Star Details:
+Star Id: null
+Star Name: Kevin Costner
+Star Birth Year: 1955
+
+Star Details:
+Star Id: null
+Star Name: Clotilde Courau
+Star Birth Year: 1969
+
+Star Details:
+Star Id: null
+Star Name: Tom Courtenay
+Star Birth Year: 1937
+
+Star Details:
+Star Id: null
+Star Name: Ronny Cox
+Star Birth Year: 1938
+
+Star Details:
+Star Id: null
+Star Name: John Crawford
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Billy Crystal
+Star Birth Year: 1948
+
+Star Details:
+Star Id: null
+Star Name: Kieran Culkin
+Star Birth Year: 1982
+
+Star Details:
+Star Id: null
+Star Name: Robert Culp
+Star Birth Year: 1930
+
+Star Details:
+Star Id: null
+Star Name: Tim Curry
+Star Birth Year: 1946
+
+Star Details:
+Star Id: null
+Star Name: Jamie Lee Curtis
+Star Birth Year: 1958
+
+Star Details:
+Star Id: null
+Star Name: Roger Daltrey
+Star Birth Year: 1944
+
+Star Details:
+Star Id: null
+Star Name: Kim Darby
+Star Birth Year: 1947
+
+Star Details:
+Star Id: null
+Star Name: James Darren
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Danielle Darrieux
+Star Birth Year: 1917
+
+Star Details:
+Star Id: null
+Star Name: Ossie Davis
+Star Birth Year: 1917
+
+Star Details:
+Star Id: null
+Star Name: Julie Delpy
+Star Birth Year: 1969
+
+Star Details:
+Star Id: null
+Star Name: Dom DeLuise
+Star Birth Year: 1933
+
+Star Details:
+Star Id: null
+Star Name: Judi Dench
+Star Birth Year: 1934
+
+Star Details:
+Star Id: null
+Star Name: Catherine Deneuve
+Star Birth Year: 1943
+
+Star Details:
+Star Id: null
+Star Name: Bruce Dern
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Laura Dern
+Star Birth Year: 1967
+
+Star Details:
+Star Id: null
+Star Name: Marlene Dietrich
+Star Birth Year: 1901
+
+Star Details:
+Star Id: null
+Star Name: Phyllis Diller
+Star Birth Year: 1917
+
+Star Details:
+Star Id: null
+Star Name: Matt Dillon
+Star Birth Year: 1964
+
+Star Details:
+Star Id: null
+Star Name: Brad Dourif
+Star Birth Year: 1950
+
+Star Details:
+Star Id: null
+Star Name: James Drury
+Star Birth Year: 1934
+
+Star Details:
+Star Id: null
+Star Name: Faye Dunaway
+Star Birth Year: 1941
+
+Star Details:
+Star Id: null
+Star Name: Griffin Dunne
+Star Birth Year: 1955
+
+Star Details:
+Star Id: null
+Star Name: Robert Duvall
+Star Birth Year: 1931
+
+Star Details:
+Star Id: null
+Star Name: Clint Eastwood
+Star Birth Year: 1930
+
+Star Details:
+Star Id: null
+Star Name: Blake Edwards
+Star Birth Year: 1922
+
+Star Details:
+Star Id: null
+Star Name: Hector Elizondo
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Sam Elliott
+Star Birth Year: 1944
+
+Star Details:
+Star Id: null
+Star Name: Michael Elphick
+Star Birth Year: 1946
+
+Star Details:
+Star Id: null
+Star Name: Charles Farrell
+Star Birth Year: 1901
+
+Star Details:
+Star Id: null
+Star Name: Mia Farrow
+Star Birth Year: 1945
+
+Star Details:
+Star Id: null
+Star Name: Sherilyn Fenn
+Star Birth Year: 1965
+
+Star Details:
+Star Id: null
+Star Name: Sally Field
+Star Birth Year: 1946
+
+Star Details:
+Star Id: null
+Star Name: Frank Finlay
+Star Birth Year: 1926
+
+Star Details:
+Star Id: null
+Star Name: Albert Finney
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Frances Fisher
+Star Birth Year: 1952
+
+Star Details:
+Star Id: null
+Star Name: Bridget Fonda
+Star Birth Year: 1964
+
+Star Details:
+Star Id: null
+Star Name: Jodie Foster
+Star Birth Year: 1962
+
+Star Details:
+Star Id: null
+Star Name: John Foster
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: James Fox
+Star Birth Year: 1939
+
+Star Details:
+Star Id: null
+Star Name: Michael J. Fox
+Star Birth Year: 1961
+
+Star Details:
+Star Id: null
+Star Name: Dominic Frontiere
+Star Birth Year: 1931
+
+Star Details:
+Star Id: null
+Star Name: Greta Garbo
+Star Birth Year: 1905
+
+Star Details:
+Star Id: null
+Star Name: Allen Garfield
+Star Birth Year: 1939
+
+Star Details:
+Star Id: null
+Star Name: Beverly Garland
+Star Birth Year: 1926
+
+Star Details:
+Star Id: null
+Star Name: James Garner
+Star Birth Year: 1928
+
+Star Details:
+Star Id: null
+Star Name: Ben Gazzara
+Star Birth Year: 1930
+
+Star Details:
+Star Id: null
+Star Name: Judy Geeson
+Star Birth Year: 1948
+
+Star Details:
+Star Id: null
+Star Name: Bill Gerber
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Richard Gere
+Star Birth Year: 1949
+
+Star Details:
+Star Id: null
+Star Name: Balthazar Getty
+Star Birth Year: 1975
+
+Star Details:
+Star Id: null
+Star Name: Giancarlo Giannini
+Star Birth Year: 1942
+
+Star Details:
+Star Id: null
+Star Name: Henry Gibson
+Star Birth Year: 1935
+
+Star Details:
+Star Id: null
+Star Name: Annie Girardot
+Star Birth Year: 1931
+
+Star Details:
+Star Id: null
+Star Name: Paul Michael Glaser
+Star Birth Year: 1943
+
+Star Details:
+Star Id: null
+Star Name: Jeff Goldblum
+Star Birth Year: 1952
+
+Star Details:
+Star Id: null
+Star Name: Colin Gordon
+Star Birth Year: 1911
+
+Star Details:
+Star Id: null
+Star Name: Robert Gordon
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Elliott Gould
+Star Birth Year: 1938
+
+Star Details:
+Star Id: null
+Star Name: Harold Gould
+Star Birth Year: 1923
+
+Star Details:
+Star Id: null
+Star Name: Pam Grier
+Star Birth Year: 1949
+
+Star Details:
+Star Id: null
+Star Name: Melanie Griffith
+Star Birth Year: 1957
+
+Star Details:
+Star Id: null
+Star Name: Charles Grodin
+Star Birth Year: 1935
+
+Star Details:
+Star Id: null
+Star Name: Gene Hackman
+Star Birth Year: 1930
+
+Star Details:
+Star Id: null
+Star Name: Harry Hamlin
+Star Birth Year: 1951
+
+Star Details:
+Star Id: null
+Star Name: Tom Hanks
+Star Birth Year: 1956
+
+Star Details:
+Star Id: null
+Star Name: Mark Harmon
+Star Birth Year: 1951
+
+Star Details:
+Star Id: null
+Star Name: John Hart
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Mariette Hartley
+Star Birth Year: 1940
+
+Star Details:
+Star Id: null
+Star Name: Rutger Hauer
+Star Birth Year: 1944
+
+Star Details:
+Star Id: null
+Star Name: Goldie Hawn
+Star Birth Year: 1945
+
+Star Details:
+Star Id: null
+Star Name: John Heard
+Star Birth Year: 1946
+
+Star Details:
+Star Id: null
+Star Name: Mariel Hemingway
+Star Birth Year: 1961
+
+Star Details:
+Star Id: null
+Star Name: David Hemmings
+Star Birth Year: 1941
+
+Star Details:
+Star Id: null
+Star Name: Justin Henry
+Star Birth Year: 1971
+
+Star Details:
+Star Id: null
+Star Name: Bernard Hepton
+Star Birth Year: 1925
+
+Star Details:
+Star Id: null
+Star Name: Dustin Hoffman
+Star Birth Year: 1937
+
+Star Details:
+Star Id: null
+Star Name: Bo Hopkins
+Star Birth Year: 1942
+
+Star Details:
+Star Id: null
+Star Name: Bob Hoskins
+Star Birth Year: 1942
+
+Star Details:
+Star Id: null
+Star Name: Dan Howard
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Helen Hunt
+Star Birth Year: 1963
+
+Star Details:
+Star Id: null
+Star Name: Holly Hunter
+Star Birth Year: 1958
+
+Star Details:
+Star Id: null
+Star Name: Elizabeth Hurley
+Star Birth Year: 1965
+
+Star Details:
+Star Id: null
+Star Name: John Hurt
+Star Birth Year: 1940
+
+Star Details:
+Star Id: null
+Star Name: William Hurt
+Star Birth Year: 1950
+
+Star Details:
+Star Id: null
+Star Name: Olivia Hussey
+Star Birth Year: 1951
+
+Star Details:
+Star Id: null
+Star Name: Anjelica Huston
+Star Birth Year: 1951
+
+Star Details:
+Star Id: null
+Star Name: Timothy Hutton
+Star Birth Year: 1960
+
+Star Details:
+Star Id: null
+Star Name: Jeremy Irons
+Star Birth Year: 1948
+
+Star Details:
+Star Id: null
+Star Name: Samuel L. Jackson
+Star Birth Year: 1948
+
+Star Details:
+Star Id: null
+Star Name: Derek Jacobi
+Star Birth Year: 1938
+
+Star Details:
+Star Id: null
+Star Name: Elton John
+Star Birth Year: 1947
+
+Star Details:
+Star Id: null
+Star Name: Stephen Johnson
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Freddie Jones
+Star Birth Year: 1927
+
+Star Details:
+Star Id: null
+Star Name: Shirley Jones
+Star Birth Year: 1934
+
+Star Details:
+Star Id: null
+Star Name: Tommy Lee Jones
+Star Birth Year: 1946
+
+Star Details:
+Star Id: null
+Star Name: Stacy Keach
+Star Birth Year: 1941
+
+Star Details:
+Star Id: null
+Star Name: Marthe Keller
+Star Birth Year: 1945
+
+Star Details:
+Star Id: null
+Star Name: Gary Kemp
+Star Birth Year: 1959
+
+Star Details:
+Star Id: null
+Star Name: George Kennedy
+Star Birth Year: 1925
+
+Star Details:
+Star Id: null
+Star Name: Margot Kidder
+Star Birth Year: 1948
+
+Star Details:
+Star Id: null
+Star Name: Nicole Kidman
+Star Birth Year: 1967
+
+Star Details:
+Star Id: null
+Star Name: Val Kilmer
+Star Birth Year: 1959
+
+Star Details:
+Star Id: null
+Star Name: Greg Kinnear
+Star Birth Year: 1963
+
+Star Details:
+Star Id: null
+Star Name: Kris Kristofferson
+Star Birth Year: 1936
+
+Star Details:
+Star Id: null
+Star Name: Burt Kwouk
+Star Birth Year: 1930
+
+Star Details:
+Star Id: null
+Star Name: Diane Lane
+Star Birth Year: 1965
+
+Star Details:
+Star Id: null
+Star Name: Mike Lane
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Jessica Lange
+Star Birth Year: 1949
+
+Star Details:
+Star Id: null
+Star Name: Louise Lasser
+Star Birth Year: 1939
+
+Star Details:
+Star Id: null
+Star Name: John Phillip Law
+Star Birth Year: 1937
+
+Star Details:
+Star Id: null
+Star Name: Cloris Leachman
+Star Birth Year: 1926
+
+Star Details:
+Star Id: null
+Star Name: Mark Lee
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Joe Lewis
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Robert Loggia
+Star Birth Year: 1930
+
+Star Details:
+Star Id: null
+Star Name: Karina Lombard
+Star Birth Year: 1969
+
+Star Details:
+Star Id: null
+Star Name: Shirley MacLaine
+Star Birth Year: 1934
+
+Star Details:
+Star Id: null
+Star Name: Jena Malone
+Star Birth Year: 1984
+
+Star Details:
+Star Id: null
+Star Name: Jane March
+Star Birth Year: 1973
+
+Star Details:
+Star Id: null
+Star Name: Jane March
+Star Birth Year: 1973
+
+Star Details:
+Star Id: null
+Star Name: Bryan Marshall
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Steve Martin
+Star Birth Year: 1945
+
+Star Details:
+Star Id: null
+Star Name: Anna Massey
+Star Birth Year: 1937
+
+Star Details:
+Star Id: null
+Star Name: Peter Masterson
+Star Birth Year: 0
+
+Star Details:
+Star Id: null
+Star Name: Chiara Mastroianni
+Star Birth Year: 1972
+
+Star Details:
+Star Id: null
+Star Name: Elaine May
+Star Birth Year: 1932
+
+Star Details:
+Star Id: null
+Star Name: Malcolm McDowell
+Star Birth Year: 1943
+
+Star Details:
+Star Id: null
+Star Name: Ian McShane
+Star Birth Year: 1942
+
+Star Details:
+Star Id: null
+Star Name: Spike Milligan
+Star Birth Year: 1918
+
+Star Details:
+Star Id: null
+Star Name: Ron Moody
+Star Birth Year: 1924
+
+Star Details:
+Star Id: null
+Star Name: Terry Moore
+Star Birth Year: 1929
+
+Star Details
