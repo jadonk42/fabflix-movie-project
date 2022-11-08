@@ -36,7 +36,7 @@ mysql> quit;
 ### XML Parsing(Command Line)
 1. To Run the parser, ensure the XML files are in the same directory as the **pom.xml** file
 2. Clean the package using ```mvn clean package```
-3. Compile the Parser using this command: ```java -cp target/YOURREPO-0.0.1-SNAPSHOT.jar MainParser``` 
+3. Compile the Parser using this command: ```java -cp mvn exec:java -q -e -Dexec.cleanupDaemonThreads=false -Dexec.mainClass="main.java.MainParser"``` 
 
 
 ### Option 1: Deploy from AWS instance
