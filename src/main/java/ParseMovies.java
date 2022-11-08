@@ -179,9 +179,11 @@ public class ParseMovies extends DefaultHandler {
             }
             else if (!inconsistentMovies.contains(tempMovie)) {
                 verifyMovies.put(tempMovie.getTitle(), tempMovie.getYear());
-                tempGenreInMovie.setMovieId(tempMovie.getId());
-                tempGenreInMovie.setGenreName(tempGenre.getName());
-                allGenreInMovies.add(tempGenreInMovie);
+                if (tempGenre.getName() != null && !tempGenre.getName().equalsIgnoreCase("")) {
+                    tempGenreInMovie.setMovieId(tempMovie.getId());
+                    tempGenreInMovie.setGenreName(tempGenre.getName());
+                    allGenreInMovies.add(tempGenreInMovie);
+                }
                 verifyMovieId.add(tempMovie.getId());
                 allMovies.add(tempMovie);
             }
