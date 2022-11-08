@@ -79,7 +79,7 @@ CREATE TABLE ratings(
                         movieId varchar(10) NOT NULL,
                         rating float NOT NULL,
                         numVotes int NOT NULL,
-                        FOREIGN KEY (movieId) REFERENCES movies
+                        FOREIGN KEY (movieId) REFERENCES movies.id
 );
 
 
