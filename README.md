@@ -4,8 +4,7 @@
 - Jadon Kwan(jadonk@uci.edu)
 
 ## 1. Demo Video Link: 
-TO BE ADDED
-https://drive.google.com/file/d/1RPK_vJizaxvTwn9-aLwVdnJSFAUT09GQ/view?usp=sharing
+https://drive.google.com/file/d/10PsVvP2xNPZlFrkQzgPXGiJz-EXc18gv/view?usp=sharing
 
 ## 2. How to deploy application:
 
@@ -98,12 +97,12 @@ These text files were obtained from running the XML Parser using the **XML Parsi
 
 ## 6. Member Contributions:
 ## Yaseen Khan
-- Ensured all SQL queries used Prepared Statements instead of Statements
-- Implemented XML parsing to insert movies, stars, and genres into the database
+- Ensured all SQL queries used Prepared Statements instead of Statements.
+- Implemented XML parsing to insert movies, stars, and genres into the database.
 
 ## Jadon Kwan
 - Implemented reCAPTCHA
-- Encrypted all passwords
-- Implemented Employee Dashboard
-- Created Stored Procedure
+- Encrypted all passwords and added encryption support.
+- Implemented Employee Dashboard and Dashboard operations.
+- Created Stored Procedure for inserting movie.
 
