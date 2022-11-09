@@ -1,24 +1,24 @@
 package main.java;
 
 public class StarsInMovies {
-    private String movieId;
+    private String movieName;
     private String starName;
 
     public StarsInMovies() {
 
     }
 
-    public StarsInMovies(String movieId, String starName) {
-        this.movieId = movieId;
+    public StarsInMovies(String movieName, String starName) {
+        this.movieName = movieName;
         this.starName = starName;
     }
 
-    public String getMovieId() {
-        return movieId;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
     public String getStarName() {
@@ -32,7 +32,7 @@ public class StarsInMovies {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("Star in Movies Details:\n");
-        sb.append("Movie Id: ").append(getMovieId());
+        sb.append("Movie Name: ").append(getMovieName());
         sb.append("\n");
         sb.append("Star Name: ").append(getStarName());
         sb.append("\n");

@@ -18,15 +18,18 @@ public class ParseStarsInMovies extends DefaultHandler {
 
     HashMap<String, String> mapStarNameToStarId;
 
-    Set<String> verifyMovieId;
+    Set<String> verifyMovieName;
     private String tempVal;
     List<StarsInMovies> allStarsInMovies;
     List<StarsInMovies> inconsistentStarsInMovies;
     private StarsInMovies tempStarsInMovie;
 
+    HashMap<String, String> mapMovieNameToMovieId;
+
     public ParseStarsInMovies() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
         mapStarNameToStarId = new HashMap<String, String>();
-        verifyMovieId = new HashSet<String>();
+        verifyMovieName = new HashSet<String>();
+        mapMovieNameToMovieId = new HashMap<String, String>();
         String loginUser = "CS122B";
         String loginPasswd = "FabFlix";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
@@ -43,12 +46,14 @@ public class ParseStarsInMovies extends DefaultHandler {
           mapStarNameToStarId.put(starName, starId);
         }
 
-        String getAllMovieIds = "SELECT id FROM movies";
+        String getAllMovieIds = "SELECT id, title FROM movies";
         PreparedStatement allMovieIds = connection.prepareStatement(getAllMovieIds);
         ResultSet allMovies = allMovieIds.executeQuery();
         while (allMovies.next()) {
             String movieId = allMovies.getString("id");
-            verifyMovieId.add(movieId);
+            String movieName = allMovies.getString("title");
+            verifyMovieName.add(movieName);
+            mapMovieNameToMovieId.put(movieName, movieId);
         }
 
         allStarsInMovies = new ArrayList<StarsInMovies>();
@@ -104,13 +109,13 @@ public class ParseStarsInMovies extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
         if (qName.equalsIgnoreCase("m")) {
-            if (tempStarsInMovie.getStarName() == null || tempStarsInMovie.getMovieId() == null) {
+            if (tempStarsInMovie.getStarName() == null || tempStarsInMovie.getMovieName() == null) {
                 inconsistentStarsInMovies.add(tempStarsInMovie);
             }
-            else if (tempStarsInMovie.getStarName().equalsIgnoreCase("") || tempStarsInMovie.getMovieId().equalsIgnoreCase("")) {
+            else if (tempStarsInMovie.getStarName().equalsIgnoreCase("") || tempStarsInMovie.getMovieName().equalsIgnoreCase("")) {
                 inconsistentStarsInMovies.add(tempStarsInMovie);
             }
-            else if (!verifyMovieId.contains(tempStarsInMovie.getMovieId())) {
+            else if (!verifyMovieName.contains(tempStarsInMovie.getMovieName())) {
                 inconsistentStarsInMovies.add(tempStarsInMovie);
             }
             else if (!mapStarNameToStarId.containsKey(tempStarsInMovie.getStarName())) {
@@ -120,8 +125,8 @@ public class ParseStarsInMovies extends DefaultHandler {
                 allStarsInMovies.add(tempStarsInMovie);
             }
 
-        } else if (qName.equalsIgnoreCase("f")) {
-            tempStarsInMovie.setMovieId(tempVal);
+        } else if (qName.equalsIgnoreCase("t")) {
+            tempStarsInMovie.setMovieName(tempVal);
         } else if (qName.equalsIgnoreCase("a")) {
             tempStarsInMovie.setStarName(tempVal);
         }
@@ -147,7 +152,8 @@ public class ParseStarsInMovies extends DefaultHandler {
             connection.setAutoCommit(false);
 
             for (StarsInMovies starInMovie: allStarsInMovies) {
-                String movieId = starInMovie.getMovieId();
+                String movieName = starInMovie.getMovieName();
+                String movieId = mapMovieNameToMovieId.get(movieName);
                 String starName = starInMovie.getStarName();
                 String starId = mapStarNameToStarId.get(starName);
 
