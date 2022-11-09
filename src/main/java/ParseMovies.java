@@ -38,6 +38,7 @@ public class ParseMovies extends DefaultHandler {
     private GenresInMovies tempGenreInMovie;
 
     int maxId;
+    private String maxMovieID;
 
     public ParseMovies() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
         verifyMovies = new HashMap<String, Integer>();
@@ -77,12 +78,23 @@ public class ParseMovies extends DefaultHandler {
             genreNameToGenreId.put(genre, id);
         }
 
+
+        String getMovieID = "SElECT max(id) as id FROM movies";
+        PreparedStatement getMovieStatement = connection.prepareStatement(getMovieID);
+        rs = getMovieStatement.executeQuery();
+        String newID = "";
+
+        while (rs.next()) {
+            newID = rs.getString("id");
+        }
+
         String genreMaxId = "SELECT MAX(id) as id FROM genres";
 
         PreparedStatement getMaxId = connection.prepareStatement(genreMaxId);
         ResultSet maxGenreId = getMaxId.executeQuery();
         maxGenreId.next();
 
+        maxMovieID = newID;
         maxId = Integer.parseInt(maxGenreId.getString("id"));
         allMovies = new ArrayList<Movie>();
         allGenres = new ArrayList<Genre>();
@@ -240,7 +252,7 @@ public class ParseMovies extends DefaultHandler {
             connection.setAutoCommit(false);
 
             for (Movie currMovie: allMovies) {
-                String id = currMovie.getId();
+                String id = maxMovieID.substring(0, 3) + (Integer.parseInt(maxMovieID.substring(3, maxMovieID.length())) +1);
                 String title = currMovie.getTitle();
                 int year = currMovie.getYear();
                 String director = currMovie.getDirector();
