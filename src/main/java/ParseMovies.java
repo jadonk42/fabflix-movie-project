@@ -107,6 +107,7 @@ public class ParseMovies extends DefaultHandler {
         parseXMLDocuments(XMLDoc);
         writeInconsistentMoviesToFile();
         writeInconsistentGenresToFile();
+
         insertMoviesIntoDatabase();
         insertGenresIntoDatabase();
         insertGenresInMoviesToDatabase();
@@ -157,6 +158,7 @@ public class ParseMovies extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         tempVal = "";
         if (qName.equalsIgnoreCase("film")) {
+            maxMovieID = maxMovieID.substring(0, 3) + (Integer.parseInt(maxMovieID.substring(3, maxMovieID.length())) + 1);
             tempMovie = new Movie();
             tempGenre = new Genre();
             tempGenreInMovie = new GenresInMovies();
@@ -192,7 +194,7 @@ public class ParseMovies extends DefaultHandler {
             else if (!inconsistentMovies.contains(tempMovie)) {
                 verifyMovies.put(tempMovie.getTitle(), tempMovie.getYear());
                 if (tempGenre.getName() != null && !tempGenre.getName().equalsIgnoreCase("")) {
-                    tempGenreInMovie.setMovieId(tempMovie.getId());
+                    tempGenreInMovie.setMovieId(maxMovieID);
                     tempGenreInMovie.setGenreName(tempGenre.getName());
                     allGenreInMovies.add(tempGenreInMovie);
                 }
@@ -215,7 +217,7 @@ public class ParseMovies extends DefaultHandler {
             }
 
         } else if (qName.equalsIgnoreCase("fid")) {
-            tempMovie.setId(tempVal);
+            tempMovie.setId(maxMovieID);
         } else if (qName.equalsIgnoreCase("t")) {
             tempMovie.setTitle(tempVal);
         } else if (qName.equalsIgnoreCase("year")) {
@@ -252,8 +254,7 @@ public class ParseMovies extends DefaultHandler {
             connection.setAutoCommit(false);
 
             for (Movie currMovie: allMovies) {
-                maxMovieID = maxMovieID.substring(0, 3) + (Integer.parseInt(maxMovieID.substring(3, maxMovieID.length())) +1);
-                String id = maxMovieID;
+                String id = currMovie.getId();
                 String title = currMovie.getTitle();
                 int year = currMovie.getYear();
                 String director = currMovie.getDirector();
