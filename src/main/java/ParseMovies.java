@@ -333,7 +333,7 @@ public class ParseMovies extends DefaultHandler {
             connection.setAutoCommit(false);
 
             for (GenresInMovies insertGenreToMovie: allGenreInMovies) {
-                String movieId = maxMovieID;
+                String movieId = insertGenreToMovie.getMovieId();
                 String genreName = insertGenreToMovie.getGenreName();
                 int genreId = genreNameToGenreId.get(genreName);
                 getGenresToMovies.setInt(1, genreId);
