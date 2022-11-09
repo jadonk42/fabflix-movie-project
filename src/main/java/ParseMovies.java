@@ -252,7 +252,8 @@ public class ParseMovies extends DefaultHandler {
             connection.setAutoCommit(false);
 
             for (Movie currMovie: allMovies) {
-                String id = maxMovieID.substring(0, 3) + (Integer.parseInt(maxMovieID.substring(3, maxMovieID.length())) +1);
+                maxMovieID = maxMovieID.substring(0, 3) + (Integer.parseInt(maxMovieID.substring(3, maxMovieID.length())) +1);
+                String id = maxMovieID;
                 String title = currMovie.getTitle();
                 int year = currMovie.getYear();
                 String director = currMovie.getDirector();
@@ -331,7 +332,7 @@ public class ParseMovies extends DefaultHandler {
             connection.setAutoCommit(false);
 
             for (GenresInMovies insertGenreToMovie: allGenreInMovies) {
-                String movieId = insertGenreToMovie.getMovieId();
+                String movieId = maxMovieID;
                 String genreName = insertGenreToMovie.getGenreName();
                 int genreId = genreNameToGenreId.get(genreName);
                 getGenresToMovies.setInt(1, genreId);
