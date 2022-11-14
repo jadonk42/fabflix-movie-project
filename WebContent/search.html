@@ -18,6 +18,22 @@
 </div>
 <br><br>
 
+<h3>Search: </h3>
+<form action="movies.html">
+    <input type="hidden" name="method" value="fsSearch" />
+    <input type="hidden" name="sortBy" value="ratingDesc" />
+    <input type="hidden" name="limit" value="10" />
+    <input type="hidden" name="page" value="1" />
+
+    <label>Movie name:</label>
+    <input type="text" name = "full_text"  id="autocomplete" class="autocomplete-searchbox form-control"  placeholder="Search.."><br><br>
+</form>
+
+
+
+<br><br>
+<h3>Or Advanced Search Below: </h3>
+
 <form action="movies.html">
     <input type="hidden" name="method" value="search" />
     <input type="hidden" name="sortBy" value="ratingDesc" />
@@ -36,9 +52,12 @@
     <input type="submit" value="Search" class="sortButton">
 </form>
 
+
+
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.11/jquery.autocomplete.min.js"></script>
 <script src="search.js"></script>
 
 </html>

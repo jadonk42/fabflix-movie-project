@@ -173,13 +173,27 @@ else if (method =="search") {
         error: (resultData) => console.log(resultData)
     });
 }
-else if (method === "browse") {
+else if (method == "browse") {
     let genre = getParameterByName('genre');
     let character = getParameterByName('character');
 
     let url = `api/movies/browse?method=${method}&genre=${genre}&character=${character}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
 
     console.log('About to send GET request to BrowseMoviesServlet!');
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: url,
+        success: (resultData) => populateHTMLWithMovieData(resultData, limit),
+        error: (resultData) => console.log(resultData)
+    });
+}
+else if (method == 'fsSearch') {
+    let full_text = getParameterByName('full_text');
+
+    let url = `api/movies/fullTextSearch?method=${method}&full_text=${full_text}&sortBy=${sortBy}&limit=${limit}&page=${page}`;
+
+    console.log('About to send GET request to FullTextSearchServlet!');
     jQuery.ajax({
         dataType: "json",
         method: "GET",

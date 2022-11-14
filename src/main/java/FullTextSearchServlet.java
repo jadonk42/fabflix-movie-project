@@ -15,8 +15,8 @@ import javax.sql.DataSource;
 import java.net.HttpURLConnection;
 import java.sql.*;
 
-@WebServlet(name = "SearchMovieServlet", urlPatterns = "/api/movies/search")
-public class SearchMovieServlet extends HttpServlet{
+@WebServlet(name = "FullTextSearchServlet", urlPatterns = "/api/movies/fullTextSearch")
+public class FullTextSearchServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
 
     private DataSource dataSource;
@@ -31,29 +31,25 @@ public class SearchMovieServlet extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        //SAVE THE LAST SEEN MOVIE SEARCH IN THE SESSION
         HttpSession session = request.getSession(true);
         session.setAttribute("lastQueryString", request.getQueryString());
         System.out.println("JUST SAVED: " + (String)session.getAttribute("lastQueryString"));
         response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
 
+        String full_text = request.getParameter("full_text");
         String sortBy = request.getParameter("sortBy");
-        String name = request.getParameter("name");
-        String year = request.getParameter("year");
-        String director = request.getParameter("director");
-        String star = request.getParameter("star");
         int limit = Integer.parseInt(request.getParameter("limit"));
         int page = Integer.parseInt(request.getParameter("page"));
-
-        PrintWriter out = response.getWriter();
+        full_text = transformFullText(full_text);
 
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForMoviesByRating(sortBy, name, year, director, star, limit, page));
+                statement = conn.prepareStatement(getQueryStatementForMoviesByRating(full_text, sortBy, limit, page));
             }
             else if (sortBy.equals("alphaDesc") || sortBy.equals("alphaAsc")) {
-                statement = conn.prepareStatement(getQueryStatementForMoviesByName(sortBy, name, year, director, star, limit, page));
+                statement = conn.prepareStatement(getQueryStatementForMoviesByName(full_text, sortBy, limit, page));
             }
             else {
                 return;
@@ -88,6 +84,87 @@ public class SearchMovieServlet extends HttpServlet{
         }
     }
 
+
+    private String getQueryStatementForMoviesByRating(String full_text, String sortBy, int limit, int page) {
+        String mode;
+        if (sortBy.equals("ratingDesc")) {
+            mode = "desc";
+        }
+        else {
+            mode = "asc";
+        }
+        int offset = (page-1)*limit;
+
+        String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM (TopMovies as T, movies as m,  genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm) LEFT JOIN ratings as r ON (m.id = r.movieId) " +
+                "WHERE T.movieId = m.id AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "m.id = sm.movieId AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY r.rating " + mode;
+        String topMoviesResults = "WITH TopMovies AS ( " +
+                "SELECT DISTINCT(m.id) as movieId, r.rating " +
+                "FROM ratings as r RIGHT JOIN (movies as m, stars_in_movies as sm, stars as s)  ON (m.id = r.movieId)" +
+                "WHERE m.id = sm.movieId AND s.id = sm.starId AND " +
+                "MATCH title AGAINST ('" + full_text + "' IN BOOLEAN MODE) " +
+                "ORDER BY m.title " + mode + " " +
+                "LIMIT " + limit + " " +
+                "OFFSET " + offset + ") ";;;
+
+        return topMoviesResults + "\n" + getAllMoviesQuery;
+    }
+
+    private String getQueryStatementForMoviesByName(String full_text, String sortBy, int limit, int page) {
+        String mode;
+        if (sortBy.equals("alphaDesc")) {
+            mode = "desc";
+        }
+        else {
+            mode = "asc";
+        }
+        int offset = (page-1)*limit;
+
+        String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
+                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
+                "r.rating " +
+                "FROM (TopMovies as T, movies as m,  genres as g, genres_in_movies as gm, stars as s, " +
+                "stars_in_movies as sm) LEFT JOIN ratings as r ON (m.id = r.movieId) " +
+                "WHERE T.movieId = m.id AND m.id = gm.movieId AND gm.genreId = g.id AND " +
+                "m.id = sm.movieId AND sm.starId = s.id " +
+                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
+                "ORDER BY m.title " + mode;
+        String topMoviesResults = "WITH TopMovies AS ( " +
+                "SELECT DISTINCT(m.id) as movieId, m.title " +
+                "FROM movies as m, stars_in_movies as sm, stars as s " +
+                "WHERE m.id = sm.movieId AND s.id = sm.starId AND " +
+                "MATCH title AGAINST ('" + full_text + "' IN BOOLEAN MODE) " +
+                "ORDER BY m.title " + mode + " " +
+                "LIMIT " + limit + " " +
+                "OFFSET " + offset + ") ";;
+
+
+        return topMoviesResults + "\n" + getAllMoviesQuery;
+    }
+
+
+    private String transformFullText(String full_text) {
+        String[] arrayString = full_text.split("[, ]");
+        String result = "";
+
+        for (String token: arrayString) {
+            if (token != "") {
+                result += "+" + token + "*";
+            }
+        }
+        return result;
+    }
+
     private JsonObject getMoviesAsJson(ResultSet rs) throws SQLException {
         String movieId = rs.getString("m.id");
         String movieTitle = rs.getString("m.title");
@@ -112,105 +189,5 @@ public class SearchMovieServlet extends HttpServlet{
         jsonObject.addProperty("movie_star_ids", movieStarIds);
 
         return jsonObject;
-    }
-
-    private String getQueryStatementForMoviesByRating(String sortBy, String name, String year, String director, String star, int limit, int page) {
-        String mode;
-        if (sortBy.equals("ratingDesc")) {
-            mode = "desc";
-        }
-        else {
-            mode = "asc";
-        }
-        int offset = (page-1)*limit;
-
-        String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
-                "r.rating " +
-                "FROM (TopMovies as T, movies as m,  genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm) LEFT JOIN ratings as r ON (m.id = r.movieId) " +
-                "WHERE T.movieId = m.id AND m.id = gm.movieId AND gm.genreId = g.id AND " +
-                "m.id = sm.movieId AND sm.starId = s.id " +
-                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY r.rating " + mode;
-        String topMoviesResults = "WITH TopMovies AS ( " +
-                "SELECT DISTINCT(m.id) as movieId, r.rating " +
-                "FROM ratings as r RIGHT JOIN (movies as m, stars_in_movies as sm, stars as s)  ON (m.id = r.movieId)" +
-                "WHERE m.id = sm.movieId AND s.id = sm.starId ";
-        if (name != "" && name != null) {
-            topMoviesResults += "AND (m.title = '" + name + "' OR m.title LIKE '" + name +  "%' OR m.title LIKE '" + "%" + name + "%') " ;
-        }
-        if (isNumeric(year)) {
-            topMoviesResults += "AND m.year = " + year + " ";
-        }
-        if (director != "" && director != null) {
-            topMoviesResults += "AND (m.director = '" + director + "' OR m.director LIKE '" + director +  "%' OR m.director LIKE '" + "%" + director + "%') " ;
-        }
-        if (star != "" && star != null) {
-            topMoviesResults += "AND (s.name = '" + star + "' OR s.name LIKE '" + star +  "%' OR s.name LIKE '" + "%" + star + "%') " ;
-        }
-
-        topMoviesResults += "ORDER BY r.rating " + mode + " " +
-                "LIMIT " + limit + " " +
-                "OFFSET " + offset + ") ";
-
-        return topMoviesResults + "\n" + getAllMoviesQuery;
-    }
-
-    private String getQueryStatementForMoviesByName(String sortBy, String name, String year, String director, String star, int limit, int page) {
-        String mode;
-        if (sortBy.equals("alphaDesc")) {
-            mode = "desc";
-        }
-        else {
-            mode = "asc";
-        }
-        int offset = (page-1)*limit;
-
-        String getAllMoviesQuery =  "SELECT m.id, m.title, m.year, m.director, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ','), ',', 3) as movie_genres, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starrings, " +
-                "SUBSTRING_INDEX(GROUP_CONCAT(DISTINCT s.id ORDER BY s.id SEPARATOR ','), ',', 3) as movie_starring_ids, " +
-                "r.rating " +
-                "FROM (TopMovies as T, movies as m,  genres as g, genres_in_movies as gm, stars as s, " +
-                "stars_in_movies as sm) LEFT JOIN ratings as r ON (m.id = r.movieId) " +
-                "WHERE T.movieId = m.id AND m.id = gm.movieId AND gm.genreId = g.id AND " +
-                "m.id = sm.movieId AND sm.starId = s.id " +
-                "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
-                "ORDER BY m.title " + mode;
-        String topMoviesResults = "WITH TopMovies AS ( " +
-                "SELECT DISTINCT(m.id) as movieId, m.title " +
-                "FROM movies as m, stars_in_movies as sm, stars as s " +
-                "WHERE m.id = sm.movieId AND s.id = sm.starId ";
-        if (name != "" && name != null) {
-            topMoviesResults += "AND (m.title = '" + name + "' OR m.title LIKE '" + name +  "%' OR m.title LIKE '"+ "% " + name + "%') " ;
-        }
-        if (isNumeric(year)) {
-            topMoviesResults += "AND m.year = " + year + " ";
-        }
-        if (director != "" && director != null) {
-            topMoviesResults += "AND (m.director LIKE '" + director +  "%' OR m.director LIKE '" + "%" + director + "%') " ;
-        }
-        if (star != "" && star != null) {
-            topMoviesResults += "AND (s.name LIKE '" + star +  "%' OR s.name LIKE '" + "%" + star + "%') " ;
-        }
-
-        topMoviesResults += "ORDER BY m.title " + mode + " " +
-                "LIMIT " + limit + " " +
-                "OFFSET " + offset + ") ";
-
-        return topMoviesResults + "\n" + getAllMoviesQuery;
-    }
-
-    private boolean isNumeric(String year) {
-        try {
-            Integer.parseInt(year);
-            return true;
-        }
-        catch(NumberFormatException e) {
-            return false;
-        }
     }
 }
