@@ -31,3 +31,16 @@ body {
     width: 50%;
     padding: 10px;
 }
+
+
+.autocomplete-searchbox {
+    height: 50px;
+    width: 600px;
+}
+
+.autocomplete-suggestions { border: 1px solid #222; background: #FFF; overflow: auto; color: #000000}
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
