@@ -33,9 +33,11 @@ public class LoginActivity extends AppCompatActivity {
       In Android, localhost is the address of the device or the emulator.
       To connect to your machine, you need to use the below IP address
      */
-    private final String host = "10.0.2.2";
+
+    // change host to AWS instance IP address and domain to our link
+    private final String host = "52.12.152.71";
     private final String port = "8080";
-    private final String domain = "cs122b-fall22-project2-login-cart-example";
+    private final String domain = "cs-122b-group-37";
     private final String baseURL = "http://" + host + ":" + port + "/" + domain;
 
     @Override
@@ -68,16 +70,26 @@ public class LoginActivity extends AppCompatActivity {
                     // TODO: should parse the json response to redirect to appropriate functions
                     //  upon different response value.
                     Log.d("login.success", response);
-                    //Complete and destroy login activity once successful
-                    finish();
-                    // initialize the activity(page)/destination
-                    Intent MovieListPage = new Intent(LoginActivity.this, MovieListActivity.class);
-                    // activate the list page.
-                    startActivity(MovieListPage);
+                    System.out.println(response);
+
+                    // User has correct Login information
+                    if (response.equalsIgnoreCase("{\"status\":\"success\"}")) {
+                        //Complete and destroy login activity once successful
+                        finish();
+                        // initialize the activity(page)/destination
+                        Intent MovieListPage = new Intent(LoginActivity.this, MovieListActivity.class);
+                        // activate the list page.
+                        startActivity(MovieListPage);
+                    }
+                    // User has incorrect Login information
+                    else {
+                        message.setText(response);
+                    }
                 },
                 error -> {
                     // error
                     Log.d("login.error", error.toString());
+                    message.setText("Unable to Login. Please Try again");
                 }) {
             @Override
             protected Map<String, String> getParams() {
