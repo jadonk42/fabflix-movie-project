@@ -23,6 +23,9 @@ import edu.uci.ics.fabflixmobile.ui.movielist.MovieListActivity;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText username;
@@ -70,26 +73,35 @@ public class LoginActivity extends AppCompatActivity {
                     // TODO: should parse the json response to redirect to appropriate functions
                     //  upon different response value.
                     Log.d("login.success", response);
-                    System.out.println(response);
+                    JSONObject responseObject;
+                    String status = "";
+                    String responseMessage = "";
+                    try {
+                        responseObject = new JSONObject(response);
+                        status = responseObject.getString("status");
+                        responseMessage = responseObject.getString("message");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     // User has correct Login information
-                    if (response.equalsIgnoreCase("{\"status\":\"success\"}")) {
+                    if (status.equalsIgnoreCase("success")) {
                         //Complete and destroy login activity once successful
                         finish();
                         // initialize the activity(page)/destination
-                        Intent MovieListPage = new Intent(LoginActivity.this, MovieListActivity.class);
+                        Intent SearchPage = new Intent(LoginActivity.this, MovieListActivity.class);
                         // activate the list page.
-                        startActivity(MovieListPage);
+                        startActivity(SearchPage);
                     }
                     // User has incorrect Login information
                     else {
-                        message.setText(response);
+                        message.setText(responseMessage);
                     }
                 },
                 error -> {
                     // error
                     Log.d("login.error", error.toString());
-                    message.setText("Unable to Login. Please Try again");
+                    message.setText(error.toString());
                 }) {
             @Override
             protected Map<String, String> getParams() {
