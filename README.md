@@ -32,7 +32,7 @@ mysql> quit;
 1. To run the backend to the Tomcat server, follow the ```Option 1: Deploy from AWS instance``` instructions below.
 2. Clone the github repo locally using ```git clone https://github.com/uci-jherold2-teaching/cs122b-fall-team-37.git```
 3. Open the android directory of the repo using Android Studio or Intellij.
-4. Change the host to your AWS public IP address(this is crucial for the Android app to use the existing backend code).
+4. Change the host to your AWS public IP address in the BackendServer class constructor(```android/app/src/main/java/edu/uci/ics/fabflixmobile/BackendServer.java```).
 5. Setup an Android Emulator if you do not have one. You can also connect your Android phone to run the app.
 6. Turn on the Emulator.
 7. Run the Application.

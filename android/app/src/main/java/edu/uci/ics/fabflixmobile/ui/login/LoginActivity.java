@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 
+import edu.uci.ics.fabflixmobile.data.BackendServer;
 import edu.uci.ics.fabflixmobile.data.NetworkManager;
 import edu.uci.ics.fabflixmobile.databinding.ActivityLoginBinding;
 import edu.uci.ics.fabflixmobile.ui.search.SearchActivity;
@@ -36,11 +37,8 @@ public class LoginActivity extends AppCompatActivity {
       To connect to your machine, you need to use the below IP address
      */
 
-    // change host to AWS instance IP address and domain to our link
-    private final String host = "52.12.152.71";
-    private final String port = "8080";
-    private final String domain = "cs-122b-group-37";
-    private final String baseURL = "http://" + host + ":" + port + "/" + domain;
+    BackendServer server = new BackendServer();
+    private final String baseURL = server.getBaseURL();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

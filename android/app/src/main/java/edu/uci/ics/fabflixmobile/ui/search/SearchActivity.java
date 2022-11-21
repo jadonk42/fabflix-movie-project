@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.uci.ics.fabflixmobile.R;
+import edu.uci.ics.fabflixmobile.data.BackendServer;
 import edu.uci.ics.fabflixmobile.data.NetworkManager;
 import edu.uci.ics.fabflixmobile.data.model.Movie;
 import edu.uci.ics.fabflixmobile.ui.movielist.MovieListActivity;
@@ -33,10 +33,8 @@ public class SearchActivity extends AppCompatActivity {
     private EditText searchQuery;
     Button searchResults;
 
-    private final String host = "52.12.152.71";
-    private final String port = "8080";
-    private final String domain = "cs-122b-group-37";
-    private final String baseURL = "http://" + host + ":" + port + "/" + domain;
+    BackendServer server = new BackendServer();
+    private final String baseURL = server.getBaseURL();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
