@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.movielist.SingleMovieActivity" />
         <activity android:name=".ui.search.SearchActivity" />
         <activity android:name=".ui.movielist.MovieListActivity" />
         <activity

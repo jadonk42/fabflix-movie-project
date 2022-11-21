@@ -58,19 +58,17 @@ public class MovieListViewAdapter extends ArrayAdapter<Movie> {
         ArrayList<String> allGenres = movie.getGenres();
         ArrayList<String> allStars = movie.getStars();
         StringBuilder getTopStars = new StringBuilder();
-        int minStars = Math.min(3, allStars.size());
-        for (int i = 0; i < minStars; i++) {
+        for (int i = 0; i < allStars.size(); i++) {
             getTopStars.append(allStars.get(i));
-            if (i < minStars - 1) {
+            if (i < allStars.size() - 1) {
                 getTopStars.append(", ");
             }
         }
 
         StringBuilder getTopGenres = new StringBuilder();
-        int minGenres = Math.min(3, allGenres.size());
-        for (int i = 0; i < minGenres; i++) {
+        for (int i = 0; i < allGenres.size(); i++) {
             getTopGenres.append(allGenres.get(i));
-            if (i < minGenres - 1) {
+            if (i < allGenres.size() - 1) {
                 getTopGenres.append(", ");
             }
         }
