@@ -10,4 +10,7 @@
     <string name="invalid_password">Password must be >2 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="fabflix">Fabflix</string>
+    <string name="search">Search</string>
+    <string name="prompt_search">Movie Title</string>
+    <string name="action_search">SEARCH</string>
 </resources>

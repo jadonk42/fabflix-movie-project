@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import edu.uci.ics.fabflixmobile.data.NetworkManager;
 import edu.uci.ics.fabflixmobile.databinding.ActivityLoginBinding;
-import edu.uci.ics.fabflixmobile.ui.movielist.MovieListActivity;
+import edu.uci.ics.fabflixmobile.ui.search.SearchActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,8 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 Request.Method.POST,
                 baseURL + "/api/login",
                 response -> {
-                    // TODO: should parse the json response to redirect to appropriate functions
-                    //  upon different response value.
                     Log.d("login.success", response);
                     JSONObject responseObject;
                     String status = "";
@@ -89,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                         //Complete and destroy login activity once successful
                         finish();
                         // initialize the activity(page)/destination
-                        Intent SearchPage = new Intent(LoginActivity.this, MovieListActivity.class);
+                        Intent SearchPage = new Intent(LoginActivity.this, SearchActivity.class);
                         // activate the list page.
                         startActivity(SearchPage);
                     }
