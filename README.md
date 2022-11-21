@@ -61,12 +61,9 @@ mysql> quit;
 
 ## 3. Member Contributions:
 ## Yaseen Khan
-- Ensured all SQL queries used Prepared Statements instead of Statements.
-- Implemented XML parsing to insert movies, stars, and genres into the database.
+- Implemented Android Login, Search, Movie List Page, and Single Movie Page 
 
 ## Jadon Kwan
-- Implemented reCAPTCHA
-- Encrypted all passwords and added encryption support.
-- Implemented Employee Dashboard and Dashboard operations.
-- Created Stored Procedure for inserting movie.
+- Implemented Full-text Search for Movie Title field
+- Implemented Autocomplete features and search
 

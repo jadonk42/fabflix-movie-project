@@ -90,6 +90,8 @@ public class SearchActivity extends AppCompatActivity {
                     finish();
                     Intent movieList = new Intent(SearchActivity.this, MovieListActivity.class);
                     movieList.putParcelableArrayListExtra("movie_search_results", movies);
+                    movieList.putExtra("movie_query", query);
+                    movieList.putExtra("movie_page", 1);
                     startActivity(movieList);
                 },
                 error -> {

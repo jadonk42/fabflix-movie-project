@@ -3,6 +3,7 @@ package edu.uci.ics.fabflixmobile.ui.movielist;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,13 +33,20 @@ public class MovieListActivity extends AppCompatActivity {
     BackendServer server = new BackendServer();
     private final String baseURL = server.getBaseURL();
 
+    Button prevButton;
+    Button nextButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movielist);
+        prevButton = findViewById(R.id.prevPage);
+        nextButton = findViewById(R.id.nextPage);
         ArrayList<Movie> movies;
         Bundle b = getIntent().getExtras();
         movies = b.getParcelableArrayList("movie_search_results");
+        String movieQuery = b.getString("movie_query");
+        int moviePage = b.getInt("movie_page");
         MovieListViewAdapter adapter = new MovieListViewAdapter(this, movies);
         ListView listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
@@ -83,10 +91,129 @@ public class MovieListActivity extends AppCompatActivity {
                     });
 
             queue.add(singleMovieRequest);
-
-            // This is where we transition to the Single Movie Page
-//            @SuppressLint("DefaultLocale") String message = String.format("Clicked on position: %d, name: %s, %d", position, movie.getName(), movie.getYear());
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
         });
+        prevButton.setOnClickListener(view -> getPrevResults(moviePage, movieQuery, finalMovies));
+        nextButton.setOnClickListener(view -> getNextResults(moviePage, movieQuery));
+
+    }
+
+    public void getNextResults(int pageNum, String query) {
+        pageNum += 1;
+        // use the same network queue across our application
+        final RequestQueue queue = NetworkManager.sharedManager(this).queue;
+
+        final ArrayList<Movie> movies = new ArrayList<>();
+
+        // request type is GET
+        int finalPageNum = pageNum;
+        final StringRequest nextResults = new StringRequest(
+                Request.Method.GET,
+                baseURL + "/api/movies" + "?method=fsSearch&full_text=" + query + "&sortBy=ratingDesc&limit=20&page=" + finalPageNum,
+                response -> {
+                    Log.d("search.success", response);
+
+                    try {
+                        JSONArray allMovies = new JSONArray(response);
+                        for (int i = 0; i < allMovies.length(); i++) {
+                            JSONObject singleMovie = new JSONObject(allMovies.get(i).toString());
+                            String movieId = singleMovie.getString("movie_id");
+                            String movieName = singleMovie.getString("movie_title");
+                            String movieDirector = singleMovie.getString("movie_director");
+                            String movieYear = singleMovie.getString("movie_year");
+                            int getYear = Integer.parseInt(movieYear);
+                            String movieGenres = singleMovie.getString("movie_genres");
+                            String[] allGenres = movieGenres.split(",", 0);
+                            String movieStars = singleMovie.getString("movie_stars");
+                            String[] allStars = movieStars.split(",", 0) ;
+                            ArrayList<String> stars = new ArrayList<>(Arrays.asList(allStars));
+                            ArrayList<String> genres = new ArrayList<>(Arrays.asList(allGenres));
+
+                            Movie currMovie = new Movie(movieId, movieName, getYear, movieDirector, genres, stars);
+
+                            movies.add(currMovie);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    finish();
+                    Intent movieList = new Intent(MovieListActivity.this, MovieListActivity.class);
+                    movieList.putParcelableArrayListExtra("movie_search_results", movies);
+                    movieList.putExtra("movie_query", query);
+                    movieList.putExtra("movie_page", finalPageNum);
+                    startActivity(movieList);
+                },
+                error -> {
+                    // error
+                    Log.d("search.error", error.toString());
+                });
+        // important: queue.add is where the login request is actually sent
+        queue.add(nextResults);
+
+
+    }
+
+    public void getPrevResults(int pageNum, String query, ArrayList<Movie> oriMovies) {
+        if (pageNum < 2) {
+            finish();
+            Intent movieList = new Intent(MovieListActivity.this, MovieListActivity.class);
+            movieList.putParcelableArrayListExtra("movie_search_results", oriMovies);
+            movieList.putExtra("movie_query", query);
+            movieList.putExtra("movie_page", 1);
+            startActivity(movieList);
+            return;
+        }
+        pageNum -= 1;
+
+        // use the same network queue across our application
+        final RequestQueue queue = NetworkManager.sharedManager(this).queue;
+
+        final ArrayList<Movie> movies = new ArrayList<>();
+
+        // request type is GET
+        int finalPageNum = pageNum;
+        final StringRequest prevResults = new StringRequest(
+                Request.Method.GET,
+                baseURL + "/api/movies" + "?method=fsSearch&full_text=" + query + "&sortBy=ratingDesc&limit=20&page=" + finalPageNum,
+                response -> {
+                    Log.d("search.success", response);
+
+                    try {
+                        JSONArray allMovies = new JSONArray(response);
+                        for (int i = 0; i < allMovies.length(); i++) {
+                            JSONObject singleMovie = new JSONObject(allMovies.get(i).toString());
+                            String movieId = singleMovie.getString("movie_id");
+                            String movieName = singleMovie.getString("movie_title");
+                            String movieDirector = singleMovie.getString("movie_director");
+                            String movieYear = singleMovie.getString("movie_year");
+                            int getYear = Integer.parseInt(movieYear);
+                            String movieGenres = singleMovie.getString("movie_genres");
+                            String[] allGenres = movieGenres.split(",", 0);
+                            String movieStars = singleMovie.getString("movie_stars");
+                            String[] allStars = movieStars.split(",", 0) ;
+                            ArrayList<String> stars = new ArrayList<>(Arrays.asList(allStars));
+                            ArrayList<String> genres = new ArrayList<>(Arrays.asList(allGenres));
+
+                            Movie currMovie = new Movie(movieId, movieName, getYear, movieDirector, genres, stars);
+
+                            movies.add(currMovie);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    finish();
+                    Intent movieList = new Intent(MovieListActivity.this, MovieListActivity.class);
+                    movieList.putParcelableArrayListExtra("movie_search_results", movies);
+                    movieList.putExtra("movie_query", query);
+                    movieList.putExtra("movie_page", finalPageNum);
+                    startActivity(movieList);
+                },
+                error -> {
+                    // error
+                    Log.d("search.error", error.toString());
+                });
+        // important: queue.add is where the login request is actually sent
+        queue.add(prevResults);
     }
 }

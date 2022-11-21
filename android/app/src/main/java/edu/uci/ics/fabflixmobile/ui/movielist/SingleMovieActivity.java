@@ -15,14 +15,14 @@ public class SingleMovieActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movielist);
+        setContentView(R.layout.activity_singlemovie);
         Movie singleMovie;
         Bundle b = getIntent().getExtras();
         singleMovie = b.getParcelable("single_movie_results");
         ArrayList<Movie> movies = new ArrayList<>();
         movies.add(singleMovie);
         MovieListViewAdapter adapter = new MovieListViewAdapter(this, movies);
-        ListView listView = findViewById(R.id.list);
+        ListView listView = findViewById(R.id.singleMovieList);
         listView.setAdapter(adapter);
     }
 }

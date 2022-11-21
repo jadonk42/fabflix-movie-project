@@ -13,4 +13,6 @@
     <string name="search">Search</string>
     <string name="prompt_search">Movie Title</string>
     <string name="action_search">SEARCH</string>
+    <string name="action_prevPage">PREV</string>
+    <string name="action_nextPage">NEXT</string>
 </resources>
