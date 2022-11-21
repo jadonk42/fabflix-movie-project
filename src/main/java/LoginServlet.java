@@ -41,18 +41,21 @@ public class LoginServlet extends HttpServlet{
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
-        // Verify reCAPTCHA
-        try {
-            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-        } catch (Exception e) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("message", "Recaptcha incorrect, please try again.");
-            jsonObject.addProperty("status", "fail");
+        // If request is coming from Android, ignore ReCAPTCHA check
+        if (!gRecaptchaResponse.equalsIgnoreCase("android")) {
+            try {
+                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+            } catch (Exception e) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("message", "Recaptcha incorrect, please try again.");
+                jsonObject.addProperty("status", "fail");
 
-            out.write(jsonObject.toString());
-            out.close();
-            return;
+                out.write(jsonObject.toString());
+                out.close();
+                return;
+            }
         }
+
         // Establish connection with database and closes connection after being used
         try (Connection conn = dataSource.getConnection()) {
 
