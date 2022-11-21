@@ -19,15 +19,15 @@ public class MovieListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movielist);
-        // TODO: this should be retrieved from the backend server
-        final ArrayList<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("The Terminal", (short) 2004));
-        movies.add(new Movie("The Final Season", (short) 2007));
+        ArrayList<Movie> movies = new ArrayList<>();
+        Bundle b = getIntent().getExtras();
+        movies = b.getParcelableArrayList("movie_search_results");
         MovieListViewAdapter adapter = new MovieListViewAdapter(this, movies);
         ListView listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
+        ArrayList<Movie> finalMovies = movies;
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            Movie movie = movies.get(position);
+            Movie movie = finalMovies.get(position);
             @SuppressLint("DefaultLocale") String message = String.format("Clicked on position: %d, name: %s, %d", position, movie.getName(), movie.getYear());
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
         });

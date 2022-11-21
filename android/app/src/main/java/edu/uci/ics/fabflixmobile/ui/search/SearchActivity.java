@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -90,6 +91,7 @@ public class SearchActivity extends AppCompatActivity {
 
                     finish();
                     Intent movieList = new Intent(SearchActivity.this, MovieListActivity.class);
+                    movieList.putParcelableArrayListExtra("movie_search_results", movies);
                     startActivity(movieList);
                 },
                 error -> {
