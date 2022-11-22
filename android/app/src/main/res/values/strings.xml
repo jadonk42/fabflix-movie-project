@@ -15,4 +15,6 @@
     <string name="action_search">SEARCH</string>
     <string name="action_prevPage">PREV</string>
     <string name="action_nextPage">NEXT</string>
+    <string name="action_searchPage">BACK SEARCH</string>
+    <string name="action_backToMovies">BACK TO MOVIES</string>
 </resources>

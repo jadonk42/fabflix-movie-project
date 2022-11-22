@@ -12,11 +12,21 @@
 
     <ListView
         android:id="@+id/singleMovieList"
-        android:layout_width="399dp"
-        android:layout_height="718dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="345dp"
+        android:layout_height="563dp"
+        app:layout_constraintBottom_toTopOf="@+id/moviesListPage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/moviesListPage"
+        android:layout_width="121dp"
+        android:layout_height="60dp"
+        android:text="@string/action_backToMovies"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,9 +12,9 @@
 
     <ListView
         android:id="@+id/list"
-        android:layout_width="379dp"
-        android:layout_height="622dp"
-        app:layout_constraintBottom_toTopOf="@+id/prevPage"
+        android:layout_width="395dp"
+        android:layout_height="611dp"
+        app:layout_constraintBottom_toTopOf="@+id/search_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,5 +34,14 @@
         android:text="@string/action_nextPage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/search_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_searchPage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/nextPage"
+        app:layout_constraintStart_toEndOf="@+id/prevPage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

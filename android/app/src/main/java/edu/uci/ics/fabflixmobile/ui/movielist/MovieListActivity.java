@@ -35,6 +35,7 @@ public class MovieListActivity extends AppCompatActivity {
 
     Button prevButton;
     Button nextButton;
+    Button searchButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MovieListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movielist);
         prevButton = findViewById(R.id.prevPage);
         nextButton = findViewById(R.id.nextPage);
+        searchButton = findViewById(R.id.search_back);
         ArrayList<Movie> movies;
         Bundle b = getIntent().getExtras();
         movies = b.getParcelableArrayList("movie_search_results");
@@ -78,6 +80,9 @@ public class MovieListActivity extends AppCompatActivity {
 
                             finish();
                             Intent movieList = new Intent(MovieListActivity.this, SingleMovieActivity.class);
+                            movieList.putParcelableArrayListExtra("all_movies_list", finalMovies);
+                            movieList.putExtra("query_search", movieQuery);
+                            movieList.putExtra("query_page_number", moviePage);
                             movieList.putExtra("single_movie_results", singleMovie);
                             startActivity(movieList);
 
@@ -94,7 +99,15 @@ public class MovieListActivity extends AppCompatActivity {
         });
         prevButton.setOnClickListener(view -> getPrevResults(moviePage, movieQuery, finalMovies));
         nextButton.setOnClickListener(view -> getNextResults(moviePage, movieQuery));
+        searchButton.setOnClickListener(view -> backToSearchPage());
 
+
+    }
+
+    public void backToSearchPage() {
+        finish();
+        Intent searchPage = new Intent(MovieListActivity.this, SearchActivity.class);
+        startActivity(searchPage);
     }
 
     public void getNextResults(int pageNum, String query) {
