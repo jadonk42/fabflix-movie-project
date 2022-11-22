@@ -107,7 +107,7 @@ public class FullTextSearchServlet extends HttpServlet{
                 "GROUP BY m.id, m.title, m.year, m.director, r.rating " +
                 "ORDER BY r.rating " + mode;
         String topMoviesResults = "WITH TopMovies AS ( " +
-                "SELECT DISTINCT(m.id) as movieId, r.rating " +
+                "SELECT DISTINCT(m.id) as movieId, m.title, r.rating " +
                 "FROM ratings as r RIGHT JOIN (movies as m, stars_in_movies as sm, stars as s)  ON (m.id = r.movieId)" +
                 "WHERE m.id = sm.movieId AND s.id = sm.starId AND " +
                 "MATCH title AGAINST ('" + full_text + "' IN BOOLEAN MODE) " +
