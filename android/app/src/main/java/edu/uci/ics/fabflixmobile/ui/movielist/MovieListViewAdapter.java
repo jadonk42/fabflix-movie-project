@@ -74,10 +74,10 @@ public class MovieListViewAdapter extends ArrayAdapter<Movie> {
         }
 
         viewHolder.title.setText(movie.getName());
-        viewHolder.year.setText(movie.getYear() + "");
-        viewHolder.director.setText(movie.getDirector());
-        viewHolder.genres.setText(getTopGenres);
-        viewHolder.stars.setText(getTopStars);
+        viewHolder.year.setText("Year: " + movie.getYear() + "");
+        viewHolder.director.setText("Director: " + movie.getDirector());
+        viewHolder.genres.setText("Stars: " + getTopGenres);
+        viewHolder.stars.setText("Genres: " + getTopStars);
         // Return the completed view to render on screen
         return convertView;
     }
