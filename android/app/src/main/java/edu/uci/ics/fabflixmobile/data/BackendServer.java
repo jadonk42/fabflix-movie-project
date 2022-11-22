@@ -9,10 +9,10 @@ public class BackendServer {
     // Change host to your own AWS machine public IP address
     // DON'T MODIFY THE OTHER VALUES
     public BackendServer() {
-        this.host = "52.12.152.71";
-        this.port = "8080";
+        this.host = "54.201.228.84";
+        this.port = "8443";
         this.domain = "cs-122b-group-37";
-        this.baseURL = "http://" + host + ":" + port + "/" + domain;
+        this.baseURL = "https://" + host + ":" + port + "/" + domain;
     }
 
     public String getBaseURL() { return baseURL; }

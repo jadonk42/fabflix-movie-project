@@ -121,7 +121,7 @@ public class MovieListActivity extends AppCompatActivity {
         int finalPageNum = pageNum;
         final StringRequest nextResults = new StringRequest(
                 Request.Method.GET,
-                baseURL + "/api/movies" + "?method=fsSearch&full_text=" + query + "&sortBy=ratingDesc&limit=20&page=" + finalPageNum,
+                baseURL + "/api/movies" + "?method=fsSearch&sortBy=ratingDesc&limit=20&page=" + finalPageNum + "&full_text=" + query,
                 response -> {
                     Log.d("search.success", response);
 
@@ -187,7 +187,7 @@ public class MovieListActivity extends AppCompatActivity {
         int finalPageNum = pageNum;
         final StringRequest prevResults = new StringRequest(
                 Request.Method.GET,
-                baseURL + "/api/movies" + "?method=fsSearch&full_text=" + query + "&sortBy=ratingDesc&limit=20&page=" + finalPageNum,
+                baseURL + "/api/movies" + "?method=fsSearch&sortBy=ratingDesc&limit=20&page=" + finalPageNum + "&full_text=" + query,
                 response -> {
                     Log.d("search.success", response);
 

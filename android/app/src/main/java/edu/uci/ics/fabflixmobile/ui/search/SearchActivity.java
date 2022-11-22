@@ -59,7 +59,7 @@ public class SearchActivity extends AppCompatActivity {
         // request type is GET
         final StringRequest searchRequest = new StringRequest(
                 Request.Method.GET,
-                baseURL + "/api/movies" + "?method=fsSearch&full_text=" + query + "&sortBy=ratingDesc&limit=20&page=1",
+                baseURL + "/api/movies" + "?method=fsSearch&sortBy=ratingDesc&limit=20&page=1&full_text=" + query,
                 response -> {
                     Log.d("search.success", response);
 
