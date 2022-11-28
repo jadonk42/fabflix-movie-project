@@ -43,7 +43,7 @@ public class FullTextSearchServlet extends HttpServlet{
         int page = Integer.parseInt(request.getParameter("page"));
         full_text = transformFullText(full_text);
 
-        try (Connection conn = dataSource.getConnection()) {
+        try (out; Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
                 statement = conn.prepareStatement(getQueryStatementForMoviesByRating(full_text, sortBy, limit, page));

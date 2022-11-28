@@ -47,7 +47,7 @@ public class SearchMovieServlet extends HttpServlet{
 
         PrintWriter out = response.getWriter();
 
-        try (Connection conn = dataSource.getConnection()) {
+        try (out; Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
                 statement = conn.prepareStatement(getQueryStatementForMoviesByRating(sortBy, name, year, director, star, limit, page));

@@ -37,7 +37,7 @@ public class AutocompleteSearchServlet extends HttpServlet{
         String full_text = request.getParameter("full_text");
         full_text = transformFullText(full_text);
 
-        try (Connection conn = dataSource.getConnection()) {
+        try (out; Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             statement = conn.prepareStatement(getQueryStatement(full_text));
 
