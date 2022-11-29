@@ -70,6 +70,16 @@
 
 - # JMeter TS/TJ Time Logs
     - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
+    - The log processing script is written using Python3
+    - The JMeter logs are stored as text files. The log processing script only supports text files
+    - To run log_processing.py, you need 2 parameters: directory/filename.txt and a positive integer representing the test case
+     ```
+        python3 log_processing.py <directory_name>/logfile.txt <integer case number>
+     ```
+    - If the log files are in the same directory as log_processing.py script, then the directory name does not need to be specified
+    ```
+        python3 log_processing.py logfile.txt <integer case number>
+    ```
 
 
 - # JMeter TS/TJ Time Measurement Report
