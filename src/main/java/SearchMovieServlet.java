@@ -1,5 +1,6 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import main.java.LogTimesToFile;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -20,6 +21,8 @@ public class SearchMovieServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
 
     private DataSource dataSource;
+    private long startDatabaseTime;
+    private long endDatabaseTime;
 
     public void init(ServletConfig config) {
         try {
@@ -31,6 +34,7 @@ public class SearchMovieServlet extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        long startSearchTime = System.nanoTime();
         //SAVE THE LAST SEEN MOVIE SEARCH IN THE SESSION
         HttpSession session = request.getSession(true);
         session.setAttribute("lastQueryString", request.getQueryString());
@@ -47,6 +51,7 @@ public class SearchMovieServlet extends HttpServlet{
 
         PrintWriter out = response.getWriter();
 
+        startDatabaseTime = System.nanoTime();
         try (out; Connection conn = dataSource.getConnection()) {
             PreparedStatement statement;
             if (sortBy.equals("ratingDesc") || sortBy.equals("ratingAsc")) {
@@ -56,6 +61,11 @@ public class SearchMovieServlet extends HttpServlet{
                 statement = conn.prepareStatement(getQueryStatementForMoviesByName(sortBy, name, year, director, star, limit, page));
             }
             else {
+                long endSearchTime = System.nanoTime();
+                endDatabaseTime = endSearchTime;
+                long totalSearchTime = endSearchTime - startSearchTime;
+                long totalDatabaseTime = endDatabaseTime - startDatabaseTime;
+                LogTimesToFile.writeToFile(totalSearchTime, totalDatabaseTime);
                 return;
             }
 
@@ -71,6 +81,7 @@ public class SearchMovieServlet extends HttpServlet{
 
             rs.close();
             statement.close();
+            endDatabaseTime = System.nanoTime();
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
 
@@ -86,6 +97,10 @@ public class SearchMovieServlet extends HttpServlet{
         } finally {
             out.close();
         }
+        long endSearchTime = System.nanoTime();
+        long totalSearchTime = endSearchTime - startSearchTime;
+        long totalDatabaseTime = endDatabaseTime - startDatabaseTime;
+        LogTimesToFile.writeToFile(totalSearchTime, totalDatabaseTime);
     }
 
     private JsonObject getMoviesAsJson(ResultSet rs) throws SQLException {
