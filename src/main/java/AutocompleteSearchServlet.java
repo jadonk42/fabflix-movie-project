@@ -48,6 +48,7 @@ public class AutocompleteSearchServlet extends HttpServlet{
 
             System.out.println(statement);
             ResultSet rs = statement.executeQuery();
+            endDatabaseTime = System.nanoTime();
             JsonArray jsonArray = new JsonArray();
 
             while (rs.next()) {
@@ -61,7 +62,6 @@ public class AutocompleteSearchServlet extends HttpServlet{
 
             rs.close();
             statement.close();
-            endDatabaseTime = System.nanoTime();
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
 
