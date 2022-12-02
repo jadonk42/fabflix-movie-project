@@ -57,7 +57,7 @@
       - WebContent/META-INF/context.xml
 
     - #### Explain how Connection Pooling is utilized in the Fabflix code.
-    - Connection Pooling is utilized in the Search servlets since those require user input. Based on the updated configurations in the context.xml file, the Prepared Statements for each servlet is cached so more than one JDBC connection can utilize these statements. Caching the Prepared Statements is needed since Prepared Statements are usually associated with one Connection.
+    - Connection Pooling is utilized in the Search servlets for the JMeter tests. The connection pool configurations are in the context.xml file. The max number of pool connections is 100. The max number of idle connections is 30. The maximum timeout period for a connection is 10000 ms. Additionally, the Prepared Statements for each servlet is cached so more than one JDBC connection can utilize these statements. Caching the Prepared Statements is needed since Prepared Statements are usually associated with one Connection. Once all the Prepared Statements are executed, the database connection closes.
 
     - #### Explain how Connection Pooling works with two backend SQL.
 
