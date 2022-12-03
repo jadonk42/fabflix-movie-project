@@ -67,6 +67,7 @@
     - Connection Pooling is utilized in the Search servlets for the JMeter tests. The connection pool configurations are in the context.xml file. The max number of pool connections is 100. The max number of idle connections is 30. The maximum timeout period for a connection is 10000 ms. Additionally, the Prepared Statements for each servlet is cached so more than one JDBC connection can utilize these statements. Caching the Prepared Statements is needed since Prepared Statements are usually associated with one Connection. Once all the Prepared Statements are executed, the database connection closes.
 
     - #### Explain how Connection Pooling works with two backend SQL.
+    - Since there are 2 backend instances, there will also be 2 database instances when the connection pools are created. When both the master and slave connections are opened, and a new connection is created in slave or master, the connection pool will direct to where the new connection is created. These connections are added to the connection pool for reusability but are separated by the database.   
 
 
 - # Master/Slave
