@@ -84,12 +84,12 @@
 
 - # JMeter TS/TJ Time Measurement Report
 
-| **Single-instance Version Test Plan**          | **Graph Results Screenshot**                | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
-|------------------------------------------------|---------------------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](Jmeter/Single-Instance-Test-Case-1.png) | 45                         | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](Jmeter/Single-Instance-Test-Case-2.png) | 288                        | ??                                  | ??                        | ??           |
-| Case 3: HTTPS/10 threads                       | ![](Jmeter/Single-Instance-Test-Case-3.png) | 323                        | ??                                  | ??                        | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | ![](Jmeter/Single-Instance-Test-Case-4.png) | 239                        | ??                                  | ??                        | ??           |
+| **Single-instance Version Test Plan**          | **Graph Results Screenshot**                     | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|--------------------------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1: HTTP/1 thread                          | [Case 1](Jmeter/Single-Instance-Test-Case-1.png) | 45                         | ??                                  | ??                        | ??           |
+| Case 2: HTTP/10 threads                        | [Case 2](Jmeter/Single-Instance-Test-Case-2.png) | 288                        | ??                                  | ??                        | ??           |
+| Case 3: HTTPS/10 threads                       | [Case 3](Jmeter/Single-Instance-Test-Case-3.png) | 323                        | ??                                  | ??                        | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | [Case 4](Jmeter/Single-Instance-Test-Case-4.png) | 239                        | ??                                  | ??                        | ??           |
 
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
