@@ -70,9 +70,10 @@
 
 - # Master/Slave
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
+    WebContent/META-INF/context.xml
 
     - #### How read/write requests were routed to Master/Slave SQL?
-
+    For the Slave Instance, if it is given a write request, it uses a different connection and connects to the Master database rather than the localhost (its own). So even if it still receives write requests which is intended, it will write to the other database using the different connection.
 
 - # JMeter TS/TJ Time Logs
     - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
@@ -97,9 +98,9 @@
 | Case 3: HTTPS/10 threads                       | [Case 3](JMeter/graph_results/Single-Instance-Test-Case-3.png) | 323                        | ??                                  | ??                        | ??           |
 | Case 4: HTTP/10 threads/No connection pooling  | [Case 4](JMeter/graph_results/Single-Instance-Test-Case-4.png) | 239                        | ??                                  | ??                        | ??           |
 
-| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
-|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| **Scaled Version Test Plan**                   | **Graph Results Screenshot**                                    | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis**                                                                                                                                                                                           |
+|------------------------------------------------|-----------------------------------------------------------------|----------------------------|-------------------------------------|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Case 1: HTTP/1 thread                          | ![Case 1](JMeter/graph_results/Scaled-Instance-Test-Case-1.PNG) | 181                        | ??                                  | ??                        | With only 1 thread, the timing was the same as 10 threads with no pooling. This is likely because connection pooling only helps when there's a lot of traffic.                                         |
+| Case 2: HTTP/10 threads                        | ![Case 2](JMeter/graph_results/Scaled-Instance-Test-Case-2.PNG) | 178                        | ??                                  | ??                        | With pooling it was slightly faster and despite there being 10 threads.                                                                                                                                |
+| Case 3: HTTP/10 threads/No connection pooling  | ![Case 3](JMeter/graph_results/Scaled-Instance-Test-Case-3.PNG) | 181                        | ??                                  | ??                        | With 10 threads, it was not that much slower than 1 thread, but it was still not as fast as with the connection pooling. So the connection pooling appears to help only when there's a lot of traffic. |
 
