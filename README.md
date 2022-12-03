@@ -46,7 +46,13 @@
 
     - #### Collaborations and Work Distribution:
       - ##### Yaseen Khan
+      - Set up Connection Pooling
+      - Performed Single-Instance JMeter tests
+      - Wrote log_processing.py script
       - ##### Jadon Kwan
+      - Set Up Master/Slave instances
+      - Set Up Load Balancer
+      - Performed Scaled JMeter tests
 
 
 - # Connection Pooling
@@ -84,12 +90,12 @@
 
 - # JMeter TS/TJ Time Measurement Report
 
-| **Single-instance Version Test Plan**          | **Graph Results Screenshot**                     | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
-|------------------------------------------------|--------------------------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | [Case 1](Jmeter/Single-Instance-Test-Case-1.png) | 45                         | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | [Case 2](Jmeter/Single-Instance-Test-Case-2.png) | 288                        | ??                                  | ??                        | ??           |
-| Case 3: HTTPS/10 threads                       | [Case 3](Jmeter/Single-Instance-Test-Case-3.png) | 323                        | ??                                  | ??                        | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | [Case 4](Jmeter/Single-Instance-Test-Case-4.png) | 239                        | ??                                  | ??                        | ??           |
+| **Single-instance Version Test Plan**          | **Graph Results Screenshot**                                   | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|----------------------------------------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1: HTTP/1 thread                          | [Case 1](JMeter/graph_results/Single-Instance-Test-Case-1.png) | 45                         | ??                                  | ??                        | ??           |
+| Case 2: HTTP/10 threads                        | [Case 2](JMeter/graph_results/Single-Instance-Test-Case-2.png) | 288                        | ??                                  | ??                        | ??           |
+| Case 3: HTTPS/10 threads                       | [Case 3](JMeter/graph_results/Single-Instance-Test-Case-3.png) | 323                        | ??                                  | ??                        | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | [Case 4](JMeter/graph_results/Single-Instance-Test-Case-4.png) | 239                        | ??                                  | ??                        | ??           |
 
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
